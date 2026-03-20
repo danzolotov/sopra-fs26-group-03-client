@@ -25,10 +25,13 @@ RUN npm config set cache /app/.npm-cache --global
 USER 3301
 # Set container working directory to /app
 WORKDIR /app
-# Copy node modules and app
-COPY --chown=node:node --from=build /app/node_modules /app/node_modules
-COPY --chown=node:node --from=build /app/dist build
-# Expose port for serve
+# Copy needed files and directories
+COPY --chown=node:node --from=build /app/node_modules ./node_modules
+COPY --chown=node:node --from=build /app/.next ./.next
+COPY --chown=node:node --from=build /app/public ./public
+COPY --chown=node:node --from=build /app/package.json ./package.json
+
+# Expose port
 EXPOSE 3000
 # Start app
-CMD [ "npx", "serve", "-s", "build" ]
+CMD [ "npm", "run", "start" ]
