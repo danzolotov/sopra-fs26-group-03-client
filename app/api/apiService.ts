@@ -3,7 +3,9 @@ import { ApplicationError } from "@/types/error";
 
 export class ApiService {
   private baseURL: string;
-  private defaultHeaders: HeadersInit;
+  private defaultHeaders: HeadersInit = {
+  "Content-Type": "application/json",
+};
 
   constructor() {
     this.baseURL = getApiDomain();
@@ -65,6 +67,7 @@ export class ApiService {
     const res = await fetch(url, {
       method: "GET",
       headers: this.defaultHeaders,
+      credentials: "include",
     });
     return this.processResponse<T>(
       res,
