@@ -30,12 +30,12 @@ reason).
 
 ---
 
-## Contributions Week 1 - [Begin Date] to [End Date]
+## Contributions Week 1 - [23.03.2026] to [29.03.2026]
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@MarcHonegger]** | 26.03.2026   | [e68f6b2](https://github.com/danzolotov/sopra-fs26-group-03-server/pull/58/commits/e68f6b20bb7cbe3631065970265d17a40ece4ebe) | Add Authentication | Needed for security |
+|                    | 26.03.2026   | [e53955f](https://github.com/danzolotov/sopra-fs26-group-03-server/pull/58/commits/e53955f77b9b1da5731f7593eedb33c71197fd3f) | Allow users to change Data | Needed for e.g. username change |
 | **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
