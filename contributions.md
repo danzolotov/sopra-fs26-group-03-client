@@ -36,8 +36,8 @@ reason).
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **[@MarcHonegger]** | 26.03.2026   | [e68f6b2](https://github.com/danzolotov/sopra-fs26-group-03-server/pull/58/commits/e68f6b20bb7cbe3631065970265d17a40ece4ebe) | Add Authentication | Needed for security |
 |                    | 26.03.2026   | [e53955f](https://github.com/danzolotov/sopra-fs26-group-03-server/pull/58/commits/e53955f77b9b1da5731f7593eedb33c71197fd3f) | Allow users to change Data | Needed for e.g. username change |
-| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@klitvinova]** | [26.03.2026]   | [5b436c0](https://github.com/danzolotov/sopra-fs26-group-03-server/commit/5b436c090bd8066ac517dc7beeb74435d1f9d420))| [Added Ingredients list repo + Shopping list DTOs and Mapper] | [Shopping list User story + partially reusable components for Pantry list] |
+|                    | [29.03.2026]   | [8e9fa9a](https://github.com/danzolotov/sopra-fs26-group-03-server/commit/8e9fa9af42897cb57c861a9da95a131dd6db2798) | [Business logic for Shopping list + controller] | [Unblocks shopping list integration with frontend] |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
