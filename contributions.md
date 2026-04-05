@@ -45,8 +45,9 @@ reason).
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@MarcHonegger]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@MarcHonegger]** | 05.04.2026   | [PR #33](https://github.com/danzolotov/sopra-fs26-group-03-client/pull/33) | Finish Register Logic | Finish registration process started by Ceyda |
+|                    | 30.03.2026   | [PR #58](https://github.com/danzolotov/sopra-fs26-group-03-server/pull/58) | Fix Pull Request & Merge | Make authentication work & fix SonarCube for requirements |
+|                    | 05.04.2026   | No commit yet | Local probing, reading & IAM for API | API is a requirement, needed to implement cleanly later |
 | **[@klitvinova]** | 05.04.2026   | [97af2f9](https://github.com/danzolotov/sopra-fs26-group-03-server/pull/61/changes/97af2f9c859db4da42ae818322a013a1d2141376) | Added group management logic| Unlocks proper management of shopping and pantry lists |
 |                    | 05.04.2026   | [b38b084](https://github.com/danzolotov/sopra-fs26-group-03-server/pull/63/changes/b38b084057a37ee33a128b822f677bf1d7cab79e) | Added Pantry management (similar to Shopping)| One of the key functionalities for the app |
 | **[@danzolotov]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
