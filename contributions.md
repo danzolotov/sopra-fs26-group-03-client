@@ -47,8 +47,8 @@ reason).
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **[@MarcHonegger]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@klitvinova]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@klitvinova]** | 05.04.2026   | [97af2f9](https://github.com/danzolotov/sopra-fs26-group-03-server/pull/61/changes/97af2f9c859db4da42ae818322a013a1d2141376) | Added group management logic| Unlocks proper management of shopping and pantry lists |
+|                    | 05.04.2026   | [b38b084](https://github.com/danzolotov/sopra-fs26-group-03-server/pull/63/changes/b38b084057a37ee33a128b822f677bf1d7cab79e) | Added Pantry management (similar to Shopping)| One of the key functionalities for the app |
 | **[@danzolotov]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 
