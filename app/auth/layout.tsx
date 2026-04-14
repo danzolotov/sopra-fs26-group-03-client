@@ -26,7 +26,7 @@ export default function Home({
 					</div>
 					<nav className="flex items-center gap-3 text-sm font-medium sm:text-base">
 						<button
-							className="flex items-center gap-2 rounded-full px-3 py-1.5 transition-colors hover:bg-orange-500/10 hover:text-orange-400"
+							className="pm-button flex items-center gap-2"
 							onClick={() => goTo("/")}
 							type="button"
 						>

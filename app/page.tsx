@@ -22,7 +22,7 @@ export default function Home() {
 					</div>
 					<nav className="flex items-center text-sm font-medium sm:text-base">
 						<button
-							className="flex items-center gap-2 rounded-full px-3 py-1.5 transition-colors hover:bg-orange-500/10 hover:text-orange-400"
+							className="pm-button flex items-center gap-2"
 							onClick={() => goTo("/auth/login")}
 							type="button"
 						>
@@ -32,14 +32,12 @@ export default function Home() {
 					</nav>
 				</div>
 			</header>
-			<body>
-				<div className="flex min-h-screen items-center justify-center px-4 py-10">
-					<div className="text-center">
-						<h1 className="text-4xl font-bold text-primary-600">Welcome to PlateMate!</h1>
-						<p className="mt-4 text-lg text-accent-500">Your ultimate recipe companion.</p>
-					</div>
+			<div className="flex min-h-screen items-center justify-center px-4 py-10">
+				<div className="text-center">
+					<h1 className="text-4xl font-bold text-primary-600">Welcome to PlateMate!</h1>
+					<p className="mt-4 text-lg text-accent-500">Your ultimate recipe companion.</p>
 				</div>
-			</body>
+			</div>
 		</div>
 	);
 }

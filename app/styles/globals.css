@@ -3,6 +3,10 @@
 @theme {
 	--font-sans: Arial, Helvetica, sans-serif;
 
+	--color-primary-100: #ffedd5;
+	--color-primary-200: #fed7aa;
+	--color-primary-300: #fdba74;
+	--color-primary-400: #f3a04b;
 	--color-primary-500: #ea580c;
 	--color-primary-600: #c2410c;
 	--color-accent-500: #fb923c;
@@ -61,7 +65,11 @@
 
 	.login-button,
 	.register-button {
-		@apply w-full rounded-full;
+		@apply w-full rounded-full border border-primary-200 bg-primary-100 text-primary-600 hover:bg-primary-200 hover:ring hover:ring-accent-500;
+	}
+
+	.pm-button {
+		@apply rounded-full border border-primary-200 bg-primary-100 px-3 py-1.5 text-sm font-medium text-primary-600 transition-colors hover:bg-primary-200 hover:ring hover:ring-accent-500 sm:text-base;
 	}
 
 	.register-form .ant-input,
@@ -161,11 +169,20 @@
 		margin-bottom: 12px !important;
 	}
 
+	.dashboard-sidebar-menu .ant-menu-item:not(.ant-menu-item-selected):hover {
+		background-color: #fed7aa !important;
+		box-shadow: 0 0 0 1px #fb923c !important;
+	}
+
 	.dashboard-sidebar-menu .ant-menu-item-selected {
-		background-color: #fb923c !important;
-		border-color: #f97316 !important;
-		color: #ffffff !important;
+		background-color: #fed7aa !important;
+		border-color: #fdba74 !important;
+		color: #9a3412 !important;
 		font-weight: 700;
+	}
+
+	.dashboard-sidebar-menu .ant-menu-item-selected:hover {
+		box-shadow: none !important;
 	}
 
 	.dashboard-mini-calendar.ant-card {
@@ -200,7 +217,7 @@
 	}
 
 	.dashboard-mini-calendar .ant-picker-cell-today .ant-picker-cell-inner {
-		background-color: #fff7ed !important;
+		background-color: #ffe3bf !important;
 		border-color: #fdba74 !important;
 		color: #9a3412 !important;
 	}

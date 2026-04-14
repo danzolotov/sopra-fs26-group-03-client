@@ -10,28 +10,11 @@ interface PageHeaderProps {
 }
 
 interface GroupMeResponse {
+	id?: number;
 	name?: string;
-	groupName?: string;
-	group?: string | { name?: string; groupName?: string };
-}
-
-function extractGroupLabel(payload: GroupMeResponse): string {
-	if (payload.groupName) {
-		return payload.groupName;
-	}
-	if (payload.name) {
-		return payload.name;
-	}
-	if (typeof payload.group === "string") {
-		return payload.group;
-	}
-	if (payload.group?.groupName) {
-		return payload.group.groupName;
-	}
-	if (payload.group?.name) {
-		return payload.group.name;
-	}
-	return "No Group";
+	inviteCode?: string;
+	createdAt?: string;
+	members?: unknown[];
 }
 
 export default function PageHeader({ title }: PageHeaderProps) {
@@ -43,10 +26,10 @@ export default function PageHeader({ title }: PageHeaderProps) {
 		const fetchGroup = async () => {
 			try {
 				const group = await apiService.get<GroupMeResponse>("/groups/me");
-				setYourGroup(extractGroupLabel(group));
+				setYourGroup(group.name ?? "Join Group");
 			} catch (error) {
 				console.error("Could not fetch current group", error);
-				setYourGroup("No Group");
+				setYourGroup("Join Group");
 			}
 		};
 
@@ -57,7 +40,7 @@ export default function PageHeader({ title }: PageHeaderProps) {
 		<header className="border-b border-gray-200 bg-white">
 			<div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
 				<div className="flex items-center gap-3">
-					<div className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
+					<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100">
 						<Image alt="PlateMate logo" height={20} src="/favicon.svg" width={20} />
 					</div>
 					<div>
@@ -66,13 +49,12 @@ export default function PageHeader({ title }: PageHeaderProps) {
 					</div>
 				</div>
 				<button
-					className="flex items-center gap-3 rounded-full px-3 py-1.5 text-sm font-medium transition-colors hover:bg-orange-500/10 hover:text-orange-400 sm:text-base"
+					className="pm-button flex items-center gap-3"
 					onClick={() => router.push("/groups")}
 					type="button"
 				>
 					{yourGroup}
 				</button>
-				<div className="flex items-center gap-3 text-sm font-medium sm:text-base">USERNAME</div>
 			</div>
 		</header>
 	);

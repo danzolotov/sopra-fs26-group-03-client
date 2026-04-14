@@ -33,9 +33,9 @@ const Login: React.FC = () => {
 	};
 	return (
 		<div className="flex min-h-[calc(100dvh-4rem)] items-center justify-center bg-gradient-to-b from-orange-50 to-white px-4 py-6">
-			<Card className="w-full max-w-md rounded-3xl border border-orange-100 shadow-xl">
+			<Card className="w-full max-w-md rounded-[2rem] border border-primary-500/20 bg-white/90 shadow-xl backdrop-blur">
 				<div className="mb-6 text-center">
-					<h1 className="text-2xl font-semibold text-slate-900">Welcome back!</h1>
+					<h1 className="text-2xl font-semibold text-primary-600">Welcome back!</h1>
 					<p className="mt-1 text-sm text-slate-500">Log in to continue to PlateMate.</p>
 				</div>
 				<Form
@@ -66,7 +66,7 @@ const Login: React.FC = () => {
 						<Button
 							type="primary"
 							htmlType="submit"
-							className="login-button !h-11 !rounded-full !font-semibold"
+							className="login-button !h-11 !font-semibold"
 						>
 							Log in
 						</Button>
@@ -74,7 +74,7 @@ const Login: React.FC = () => {
 					<Form.Item className="mb-0">
 						<Button
 							htmlType="button"
-							className="register-button !h-11 !rounded-full !border-orange-300 !text-orange-700 hover:!border-orange-400 hover:!text-orange-800"
+							className="register-button !h-11 !font-semibold"
 							onClick={() => router.push("/auth/register")}
 						>
 							Create account
