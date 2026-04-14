@@ -21,15 +21,24 @@ export default function PageHeader({ title }: PageHeaderProps) {
 	const apiService = useApi();
 	const router = useRouter();
 	const [yourGroup, setYourGroup] = useState<string>("Loading...");
+	const [hasGroup, setHasGroup] = useState(false);
 
 	useEffect(() => {
 		const fetchGroup = async () => {
 			try {
 				const group = await apiService.get<GroupMeResponse>("/groups/me");
-				setYourGroup(group.name ?? "Join Group");
+				const groupName = group.name?.trim();
+				if (groupName) {
+					setYourGroup(groupName);
+					setHasGroup(true);
+				} else {
+					setYourGroup("Join Group");
+					setHasGroup(false);
+				}
 			} catch (error) {
 				console.error("Could not fetch current group", error);
 				setYourGroup("Join Group");
+				setHasGroup(false);
 			}
 		};
 
@@ -50,7 +59,7 @@ export default function PageHeader({ title }: PageHeaderProps) {
 				</div>
 				<button
 					className="pm-button flex items-center gap-3"
-					onClick={() => router.push("/groups")}
+					onClick={() => router.push(hasGroup ? "/groups/me" : "/groups")}
 					type="button"
 				>
 					{yourGroup}

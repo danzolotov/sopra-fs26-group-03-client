@@ -1,98 +1,83 @@
 "use client";
 
-import React from "react";
-import { Layout, Menu, Typography, Calendar, Card } from "antd";
-import { useRouter } from "next/navigation";
-import {
-	AppstoreOutlined,
-	ShoppingOutlined,
-	FileTextOutlined,
-	ReadOutlined,
-	CalendarOutlined,
-} from "@ant-design/icons";
+import React, { useState } from "react";
+import { Alert, Button, Card, Form, Input } from "antd";
+import { useApi } from "@/hooks/useApi";
 import PageHeader from "@/components/page-header";
 
-const { Sider, Content } = Layout;
-const { Title } = Typography;
+interface CreateGroupFormValues {
+	name: string;
+}
 
-const menuRoutes: Record<string, string> = {
-	"1": "/dashboard",
-	"2": "/groups",
-	"3": "/shopping-lists",
-	"4": "/recipes",
-	"5": "/meal-plan",
-};
+interface GroupGetDTO {
+	id?: number;
+	name?: string;
+	inviteCode?: string;
+}
 
-const Dashboard: React.FC = () => {
-	const userName = "Name";
-	const router = useRouter();
+const GroupsPage: React.FC = () => {
+	const apiService = useApi();
+	const [form] = Form.useForm<CreateGroupFormValues>();
+	const [successMessage, setSuccessMessage] = useState<string>("");
+	const [errorMessage, setErrorMessage] = useState<string>("");
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const handleMenuClick = ({ key }: { key: string }) => {
-		const route = menuRoutes[key];
-		if (route) {
-			router.push(route);
+	const handleCreateGroup = async (values: CreateGroupFormValues) => {
+		setErrorMessage("");
+		setSuccessMessage("");
+		setIsSubmitting(true);
+
+		try {
+			const createdGroup = await apiService.post<GroupGetDTO>("/groups", {
+				name: values.name,
+			});
+
+			setSuccessMessage(`Group \"${createdGroup.name ?? values.name}\" was created.`);
+			form.resetFields();
+		} catch (error) {
+			if (error instanceof Error) {
+				setErrorMessage(error.message);
+			} else {
+				setErrorMessage("An unknown error occurred while creating the group.");
+			}
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
 	return (
 		<div className="flex min-h-screen flex-col bg-gradient-to-b from-orange-50 to-white">
-			<PageHeader title="Dashboard" />
-			<Layout className="flex-1 bg-transparent" style={{ background: "transparent" }}>
-				{/* LEFT PANEL */}
-				<Sider
-					width={300}
-					theme="light"
-					style={{
-						borderRight: "1px solid #fed7aa",
-						padding: "20px 10px",
-						background: "#fff7ed",
-					}}
-				>
-					<div style={{ marginBottom: "20px", textAlign: "center" }}>
-						<Title level={3} style={{ color: "#c2410c", marginBottom: 0 }}>
-							PlateMate
-						</Title>
-					</div>
+			<PageHeader title="Groups" />
+			<div className="flex flex-1 items-center justify-center px-4 py-8">
+				<Card className="w-full max-w-md rounded-[2rem] border border-primary-500/20 bg-white/90 shadow-xl backdrop-blur">
+					<h1 className="mb-1 text-2xl font-semibold text-primary-600">Create a group</h1>
+					<p className="mb-6 text-sm text-slate-500">Enter a name and create your group.</p>
 
-					<Menu
-						mode="inline"
-						defaultSelectedKeys={["1"]}
-						onClick={handleMenuClick}
-						style={{ borderRight: 0 }}
-						items={[
-							{ key: "1", icon: <AppstoreOutlined />, label: "Dashboard" },
-							{ key: "2", icon: <ShoppingOutlined />, label: "Pantry" },
-							{ key: "3", icon: <FileTextOutlined />, label: "Shopping List" },
-							{ key: "4", icon: <ReadOutlined />, label: "Recipes" },
-							{ key: "5", icon: <CalendarOutlined />, label: "Meal Plan" },
-						]}
-						// Using CSS to get those rounded buttons from your image
-						className="dashboard-sidebar-menu"
-					/>
+					{successMessage ? <Alert className="mb-4" message={successMessage} showIcon type="success" /> : null}
+					{errorMessage ? <Alert className="mb-4" message={errorMessage} showIcon type="error" /> : null}
 
-					{/* CALENDAR MINI-VIEW */}
-					<div style={{ marginTop: "40px", padding: "0 10px," }}>
-						<Card size="small" className="dashboard-mini-calendar">
-							<Calendar fullscreen={false} headerRender={() => null} />
-						</Card>
-					</div>
-				</Sider>
+					<Form form={form} layout="vertical" name="create-group" onFinish={handleCreateGroup}>
+						<Form.Item
+							label="Group name"
+							name="name"
+							rules={[
+								{ required: true, message: "Please enter a group name." },
+								{ min: 2, message: "Group name must be at least 2 characters." },
+							]}
+						>
+							<Input placeholder="My awesome group" />
+						</Form.Item>
 
-				{/* MAIN CONTENT AREA */}
-				<Content style={{ padding: "40px" }}>
-					{/* WELCOME TEXT */}
-					<div style={{ marginBottom: "32px" }}>
-						<Title level={2} style={{ margin: 0, color: "#0f172a" }}>
-							Good morning, {userName}
-						</Title>
-					</div>
-
-					{/* REST OF DASHBOARD GOES HERE */}
-					<div className="dashboard-grid">{/* Quick Actions, Upcoming, etc. */}</div>
-				</Content>
-			</Layout>
+						<Form.Item className="mb-0">
+							<Button className="login-button !h-11 !font-semibold" htmlType="submit" loading={isSubmitting} type="primary">
+								Create group
+							</Button>
+						</Form.Item>
+					</Form>
+				</Card>
+			</div>
 		</div>
 	);
 };
 
-export default Dashboard;
+export default GroupsPage;
