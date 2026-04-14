@@ -136,3 +136,17 @@ yarn-error.log*
 # misc
 .DS_Store
 *.pem
+/.editorconfig
+/.prettierignore
+/.prettierrc.json
+/.idea/copilot.data.migration.agent.xml
+/.idea/copilot.data.migration.ask2agent.xml
+/.idea/copilot.data.migration.edit.xml
+/.idea/jsLinters/eslint.xml
+/.idea/modules.xml
+/.idea/prettier.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/sopra-fs26-group-03-client.iml
+/.idea/shelf/Uncommitted_changes_before_Update_at_05_04_2026__09_03__Changes_.xml
+/.idea/vcs.xml
+/.idea/workspace.xml

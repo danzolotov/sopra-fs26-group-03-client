@@ -15,12 +15,13 @@ installation, therefore, save and close all your other work and programs
 1. Download the following [powershell script](./windows.ps1)\
    ![downloadWindowsScript](https://github.com/user-attachments/assets/7372e029-8bed-41e4-80b7-b7079b0856be)
 
-
 ---
-2. Open a new powershell terminal **with admin privileges** and run the following command and follow the instructions. Make sure that you open the powershell terminal at the path where you have downloaded the powershell script, otherwise the command will not work because it can not find the script. You can list currently accessible files in the powershell terminal with ```dir``` and you can use ```cd``` to navigate between directories
+
+2. Open a new powershell terminal **with admin privileges** and run the following command and follow the instructions. Make sure that you open the powershell terminal at the path where you have downloaded the powershell script, otherwise the command will not work because it can not find the script. You can list currently accessible files in the powershell terminal with `dir` and you can use `cd` to navigate between directories
    ```shell
    C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File .\windows.ps1
    ```
+
 ---
 
 3. If you experience any issues, try re-running the script a couple of times. If
@@ -29,19 +30,21 @@ installation, therefore, save and close all your other work and programs
    OLAT forum
 
 ---
+
 4. After successful installation, you can open WSL/Ubuntu. You will need to choose a username and password, although no characters will be shown on the screen when typing the password but the system recognizes your input, no worries :) After these four steps your setup should look similar to this
-![initialUbuntuScreen](https://github.com/user-attachments/assets/ecd4d4c2-1239-4717-87af-a476e425d734)
+   ![initialUbuntuScreen](https://github.com/user-attachments/assets/ecd4d4c2-1239-4717-87af-a476e425d734)
 
 <br>
 <br>
 <br>
 
 # Installation
+
 1. Open a new MacOS, Linux or WSL(Windows-Subsystem-Linux) terminal. Make sure you have git installed, you can check that by running
    ```shell
    git --version
    ```
-   The output should be something similar to ```git version X.XX.X```, if not, try to install git in one of the following ways
+   The output should be something similar to `git version X.XX.X`, if not, try to install git in one of the following ways
    #### MacOS
    ```shell
    brew install --formulae git
@@ -51,6 +54,7 @@ installation, therefore, save and close all your other work and programs
    sudo apt-get install git
    ```
    If you are not using Ubuntu, you will need to install git with your package manager of choice
+
 ---
 
 2. Clone the repository with git using the following command
@@ -59,7 +63,9 @@ installation, therefore, save and close all your other work and programs
    ```
 
 ---
-3. Navigate to the cloned directory in the terminal, in example with ```cd sopra-fs26-student-client```
+
+3. Navigate to the cloned directory in the terminal, in example with `cd sopra-fs26-student-client`
+
 ---
 
 4. Inside the repository folder (with `ls` you can list files) there is a bash
@@ -71,7 +77,6 @@ installation, therefore, save and close all your other work and programs
 
 The screenshot below shows an example of how this looks
 ![sourceScript](https://github.com/user-attachments/assets/9f804291-85b2-4a49-8da0-c6c95db390f3)
-
 
 The installation script _setup.sh_ can take a few minutes, please be patient and
 do not abort the process. If you encounter any issues, please close the terminal
@@ -105,10 +110,12 @@ a couple of times did not help, try running the following steps manually
    manager of choice
 
 ---
+
 2. Download Determinate Nix
    ```shell
    curl --proto '=https' --tlsv1.2 -ssf --progress-bar -L https://install.determinate.systems/nix -o install-nix.sh
    ```
+
 ---
 
 3. Install Determinate Nix
@@ -117,6 +124,7 @@ a couple of times did not help, try running the following steps manually
    ```
 
 ---
+
 4. Install direnv using nix
    ```shell
    nix profile install nixpkgs#direnv
@@ -125,6 +133,7 @@ a couple of times did not help, try running the following steps manually
    ```shell
    sudo nix profile install nixpkgs#direnv
    ```
+
 ---
 
 5. Find out what shell you are using
@@ -133,7 +142,9 @@ a couple of times did not help, try running the following steps manually
    ```
 
 ---
+
 6. Hook direnv into your shell according to [this guide](https://github.com/direnv/direnv/blob/master/docs/hook.md)
+
 ---
 
 7. Allow direnv to access the repository
@@ -216,29 +227,32 @@ npm run dev
 # Docker
 
 ### Introduction
+
 This year Docker will be used to ease the process of deployment.\
 Docker is a tool that uses containers as isolated environments, ensuring that the application runs consistently and uniformly across different devices.\
 Everything in this repository is already set up to minimize your effort for deployment.\
 All changes to the main branch will automatically be pushed to dockerhub and optimized for production.
 
 ### Setup
+
 1. **One** member of the team should create an account on [dockerhub](https://hub.docker.com/), _incorporating the group number into the account name_, for example, `SoPra_group_XX`.\
 2. This account then creates a repository on dockerhub with the _same name as the group's Github repository name_.\
 3. Finally, the person's account details need to be added as [secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) to the group's repository:
-    - dockerhub_username (the username of the dockerhub account from step 1, for example, `SoPra_group_XX`)
-    - dockerhub_password (a generated PAT([personal access token](https://docs.docker.com/docker-hub/access-tokens/)) of the account with read and write access)
-    - dockerhub_repo_name (the name of the dockerhub repository from step 2)
+   - dockerhub_username (the username of the dockerhub account from step 1, for example, `SoPra_group_XX`)
+   - dockerhub_password (a generated PAT([personal access token](https://docs.docker.com/docker-hub/access-tokens/)) of the account with read and write access)
+   - dockerhub_repo_name (the name of the dockerhub repository from step 2)
 
 ### Pull and run
+
 Once the image is created and has been successfully pushed to dockerhub, the image can be run on any machine.\
 Ensure that [Docker](https://www.docker.com/) is installed on the machine you wish to run the container.\
 First, pull (download) the image with the following command, replacing your username and repository name accordingly.
 
-```docker pull <dockerhub_username>/<dockerhub_repo_name>```
+`docker pull <dockerhub_username>/<dockerhub_repo_name>`
 
 Then, run the image in a container with the following command, again replacing _<dockerhub_username>_ and _<dockerhub_repo_name>_ accordingly.
 
-```docker run -p 3000:3000 <dockerhub_username>/<dockerhub_repo_name>```
+`docker run -p 3000:3000 <dockerhub_username>/<dockerhub_repo_name>`
 
 <br>
 <br>
@@ -280,13 +294,13 @@ and add the package path to the `shellHook''` section
           shellHook = ''
             export HOST_PROJECT_PATH="$(pwd)"
             export COMPOSE_PROJECT_NAME=sopra-fs26-template-client
-            
+
             export PATH="${pkgs.nodejs}/bin:$PATH"
             export PATH="${pkgs.git}/bin:$PATH"
             export PATH="${pkgs.deno}/bin:$PATH"
             export PATH="${pkgs.watchman}/bin:$PATH"
             export PATH="${pkgs.docker}/bin:$PATH" ### <- added docker path here
-            
+
             ### rest of code ###
         };
 ```
@@ -378,13 +392,17 @@ filesystem. You can do this either by
    current directory (.) as the _target_file_, thus the dot at the end of the
    command. If you happen to not be in the home folder, you can also run the
    command with explicitly copying to the home folder as such:
+
    ```bash
    cp -ar /mnt/c/your-path /home/your-username
    ```
+
    Else you can run
+
    ```bash
    cp -ar /mnt/c/your-path .
    ```
+
    with . indicating to copy to the current path (in this case your home
    folder). You can check if the repository was successfully copied over using
    `ls` to list folders and files, as visible in the screenshot. You can then
