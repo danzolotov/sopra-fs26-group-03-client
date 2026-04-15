@@ -6,19 +6,18 @@ import DashboardShell from "@/components/dashboard-shell";
 
 const { Title } = Typography;
 
-const Dashboard: React.FC = () => {
-
+const PantryPage: React.FC = () => {
 	return (
-		<DashboardShell headerTitle="Recipes" selectedMenuKey="4">
+		<DashboardShell headerTitle="Pantry" selectedMenuKey="2">
 			<div style={{ marginBottom: "32px" }}>
 				<Title level={2} style={{ margin: 0, color: "#0f172a" }}>
-					Recipes
+					Pantry
 				</Title>
 			</div>
-
-			<div className="dashboard-grid">{/* Recipe content goes here. */}</div>
+			jölkn
+			<div className="dashboard-grid">{/* Pantry content goes here. */}</div>
 		</DashboardShell>
 	);
 };
 
-export default Dashboard;
+export default PantryPage;
