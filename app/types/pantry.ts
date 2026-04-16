@@ -1,4 +1,4 @@
-import type { Unit } from "@/types/shopping-list";
+import type { Unit } from "@/types/unit";
 
 export interface PantryItemGetDTO {
 	id: number;
@@ -23,4 +23,3 @@ export interface PantryItemPutDTO {
 	ingredientId: number;
 	quantity: number;
 }
-

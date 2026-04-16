@@ -1,13 +1,4 @@
-export type Unit =
-	| "GRAM"
-	| "KILOGRAM"
-	| "MILLILITER"
-	| "CENTILITER"
-	| "LITER"
-	| "PIECE"
-	| "TABLESPOON"
-	| "TEASPOON"
-	| "CUP";
+import type { Unit } from "@/types/unit";
 
 export interface ShoppingListItemGetDTO {
 	id: number;
