@@ -7,17 +7,16 @@ import DashboardShell from "@/components/dashboard-shell";
 const { Title } = Typography;
 
 const Dashboard: React.FC = () => {
-	const userName = "Name";
 
 	return (
-		<DashboardShell headerTitle="Dashboard" selectedMenuKey="1">
+		<DashboardShell headerTitle="Recipes" selectedMenuKey="4">
 			<div style={{ marginBottom: "32px" }}>
 				<Title level={2} style={{ margin: 0, color: "#0f172a" }}>
-					Good morning, {userName}
+					Recipes
 				</Title>
 			</div>
 
-			<div className="dashboard-grid">{/* Quick Actions, Upcoming, etc. */}</div>
+			<div className="dashboard-grid">{/* Recipe content goes here. */}</div>
 		</DashboardShell>
 	);
 };

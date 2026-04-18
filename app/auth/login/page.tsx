@@ -19,7 +19,7 @@ const Login: React.FC = () => {
 
 	const handleLogin = async (values: FormFieldProps) => {
 		try {
-			await apiService.post<User>("/login", values);
+			await apiService.post<User>("/auth/login", values);
 
 			// Navigate to the user overview
 			router.push("/dashboard");
@@ -32,9 +32,12 @@ const Login: React.FC = () => {
 		}
 	};
 	return (
-		<div className="login-container">
-			<Card className="dashboard-container">
-				<p style={{ fontSize: "24px", textAlign: "center", marginBottom: "24px" }}>Welcome back!</p>
+		<div className="flex min-h-[calc(100dvh-4rem)] items-center justify-center bg-gradient-to-b from-orange-50 to-white px-4 py-6">
+			<Card className="w-full max-w-md rounded-[2rem] border border-primary-500/20 bg-white/90 shadow-xl backdrop-blur">
+				<div className="mb-6 text-center">
+					<h1 className="text-2xl font-semibold text-primary-600">Welcome back!</h1>
+					<p className="mt-1 text-sm text-slate-500">Log in to continue to PlateMate.</p>
+				</div>
 				<Form
 					form={form}
 					name="login"
@@ -45,23 +48,35 @@ const Login: React.FC = () => {
 					layout="vertical"
 				>
 					<Form.Item
+						className="mb-4"
 						name="username"
-						// label="Username"
 						rules={[{ required: true, message: "Please input your username!" }]}
 					>
 						<Input placeholder="Username" />
 					</Form.Item>
 					<Form.Item
+						className="mb-3"
 						name="password"
-						// label="Name"
 						rules={[{ required: true, message: "Please input your password!" }]}
 					>
 						<Input.Password placeholder="Password" />
 					</Form.Item>
 					<a className="forgot-password">Forgot password?</a>
-					<Form.Item>
-						<Button type="primary" htmlType="submit" className="login-button">
+					<Form.Item className="mb-3">
+						<Button
+							htmlType="submit"
+							className="login-button !h-11 !font-semibold"
+						>
 							Log in
+						</Button>
+					</Form.Item>
+					<Form.Item className="mb-0">
+						<Button
+							htmlType="button"
+							className="register-button !h-11 !font-semibold"
+							onClick={() => router.push("/auth/register")}
+						>
+							Create account
 						</Button>
 					</Form.Item>
 				</Form>

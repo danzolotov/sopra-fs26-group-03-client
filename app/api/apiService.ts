@@ -90,10 +90,28 @@ export class ApiService {
 		const url = `${this.baseURL}${endpoint}`;
 		const res = await fetch(url, {
 			method: "PUT",
+			credentials: "include",
 			headers: this.defaultHeaders,
 			body: JSON.stringify(data),
 		});
 		return this.processResponse<T>(res, "An error occurred while updating the data.\n");
+	}
+
+	/**
+	 * PATCH request.
+	 * @param endpoint - The API endpoint (e.g. "/users/123").
+	 * @param data - The payload to patch.
+	 * @returns JSON data of type T.
+	 */
+	public async patch<T>(endpoint: string, data: unknown): Promise<T> {
+		const url = `${this.baseURL}${endpoint}`;
+		const res = await fetch(url, {
+			method: "PATCH",
+			credentials: "include",
+			headers: this.defaultHeaders,
+			body: JSON.stringify(data),
+		});
+		return this.processResponse<T>(res, "An error occurred while patching the data.\n");
 	}
 
 	/**
@@ -105,6 +123,7 @@ export class ApiService {
 		const url = `${this.baseURL}${endpoint}`;
 		const res = await fetch(url, {
 			method: "DELETE",
+			credentials: "include",
 			headers: this.defaultHeaders,
 		});
 		return this.processResponse<T>(res, "An error occurred while deleting the data.\n");
