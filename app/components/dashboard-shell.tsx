@@ -33,7 +33,6 @@ const menuRoutes: Record<string, string> = {
 	"1": "/dashboard",
 	"2": "/pantry",
 	"3": "/shopping-lists",
-	"4": "/recipes",
 	"5": "/meal-plan",
 };
 
@@ -41,7 +40,6 @@ const menuItems: MenuItem[] = [
 	{ key: "1", icon: <AppstoreOutlined />, label: "Dashboard" },
 	{ key: "2", icon: <ShoppingOutlined />, label: "Pantry" },
 	{ key: "3", icon: <FileTextOutlined />, label: "Shopping List" },
-	{ key: "4", icon: <ReadOutlined />, label: "Recipes" },
 	{ key: "5", icon: <CalendarOutlined />, label: "Meal Plan" },
 ];
 

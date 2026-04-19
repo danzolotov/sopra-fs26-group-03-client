@@ -99,7 +99,11 @@ const ShoppingListsPage: React.FC = () => {
 				const data = await apiService.get<ShoppingListGetDTO>("/groups/me/shopping-list");
 				setShoppingList(data);
 			} catch (error) {
-				if (error instanceof Error) {
+				// If status is 404, it likely means no group, which is an expected "Individual" state now.
+				if (error && typeof error === "object" && "status" in error && error.status === 404) {
+					console.debug("No shopping list found - user likely not in a group.");
+					setShoppingList(null);
+				} else if (error instanceof Error) {
 					setErrorMessage(error.message);
 				} else {
 					setErrorMessage("Could not load the shopping list.");
@@ -504,7 +508,7 @@ const ShoppingListsPage: React.FC = () => {
 						columns={columns}
 						dataSource={items}
 						pagination={{ pageSize: 8 }}
-						rowKey={(record, index) => `${record.id ?? "temp"}-${index}`}
+						rowKey={(record) => record.id ?? `temp-${record.ingredientId}`}
 					/>
 				)}
 			</Card>

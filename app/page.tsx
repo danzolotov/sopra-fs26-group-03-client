@@ -32,7 +32,7 @@ export default function Home() {
 			<div className="flex min-h-screen items-center justify-center px-4 py-10">
 				<div className="text-center">
 					<h1 className="text-4xl font-bold text-primary-600">Welcome to PlateMate!</h1>
-					<p className="mt-4 text-lg text-accent-500">Your ultimate recipe companion.</p>
+					<p className="mt-4 text-lg text-accent-500">Your ultimate kitchen assistant for pantry and shopping list management.</p>
 				</div>
 			</div>
 		</div>

@@ -14,7 +14,7 @@ import {
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
-import PageHeader from "@/components/page-header";
+import DashboardShell from "@/components/dashboard-shell";
 import { Group, GroupRole } from "@/types/group";
 import { User } from "@/types/user";
 
@@ -156,9 +156,8 @@ export default function GroupMePage() {
 	};
 
 	return (
-		<div className="flex min-h-screen flex-col bg-gradient-to-b from-orange-50 to-white">
-			<PageHeader title="Group Management" />
-			<div className="flex flex-1 flex-col items-center px-4 py-8">
+		<DashboardShell headerTitle="Group Management" selectedMenuKey="6">
+			<div className="flex flex-col items-center">
 				<Card className="w-full max-w-2xl rounded-[2rem] border border-primary-500/20 bg-white/90 shadow-xl backdrop-blur">
 					{joinedMessage ? <Alert className="mb-6" message={joinedMessage} showIcon type="success" /> : null}
 
@@ -320,7 +319,7 @@ export default function GroupMePage() {
 					)}
 				</Card>
 			</div>
-		</div>
+		</DashboardShell>
 	);
 }
 
