@@ -70,16 +70,16 @@ reason).
 ## Contributions Week 5 - 20.04.2026 to 26.04.2026
 
 TODO:
-- API (Marc)
-- Test Realtime (Karina)
-- Ingredient Management / Autocomplete (Marc)
-- Meal Planning (Karina)
-- Test & Improve (Both)
-- Check Mail in Register (Marc)
-- Add common recipes (Karina)
-- Edit Dashboard (Karina)
-- Redesign Lists (Marc)
-- Delete Calendar (Both)
+- [ ] API (Marc)
+- [ ] Test Realtime (Karina)
+- [ ] Ingredient Management / Autocomplete (Marc)
+- [ ] Meal Planning (Karina)
+- [ ] Test & Improve (Both)
+- [X] Check Mail in Register (Marc)
+- [ ] Add common recipes (Karina)
+- [ ] Edit Dashboard (Karina)
+- [ ] Redesign Lists (Marc)
+- [ ] Delete Calendar (Both)
 
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
