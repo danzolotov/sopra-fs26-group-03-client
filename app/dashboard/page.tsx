@@ -15,23 +15,25 @@ import {
 import {
   CalendarOutlined,
   RightOutlined,
-  CoffeeOutlined,
-  FireOutlined,
-  StarOutlined,
 } from "@ant-design/icons";
 import DashboardShell from "@/components/dashboard-shell";
+import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import { PantryGetDTO } from "@/types/pantry";
 import { ShoppingListGetDTO } from "@/types/shopping-list";
+import { MealPlan } from "@/types/meal-plan";
+import dayjs from "dayjs";
 
 const { Title, Text, Paragraph } = Typography;
 
 const Dashboard: React.FC = () => {
 	const apiService = useApi();
+	const router = useRouter();
 	const [user, setUser] = useState<User | null>(null);
 	const [pantry, setPantry] = useState<PantryGetDTO | null>(null);
 	const [shoppingList, setShoppingList] = useState<ShoppingListGetDTO | null>(null);
+	const [todayMeals, setTodayMeals] = useState<MealPlan[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
@@ -61,6 +63,15 @@ const Dashboard: React.FC = () => {
 					setShoppingList(null);
 				}
 
+				try {
+					const today = dayjs().format("YYYY-MM-DD");
+					const meals = await apiService.get<MealPlan[]>(`/meal-plans?startDate=${today}&endDate=${today}`);
+					setTodayMeals(meals);
+				} catch {
+					console.debug("Failed to fetch today's meals");
+					setTodayMeals([]);
+				}
+
 			} catch {
 				setError("Failed to load profile data");
 			} finally {
@@ -73,6 +84,16 @@ const Dashboard: React.FC = () => {
 
 	const pantryItemCount = pantry?.items?.length ?? 0;
 	const shoppingListItemCount = (shoppingList?.items ?? shoppingList?.shoppingListItems ?? []).filter(item => !item.isBought).length;
+
+	const getMealIcon = (type: string) => {
+		switch (type) {
+			case "BREAKFAST": return "☕";
+			case "LUNCH": return "🍱";
+			case "DINNER": return "🍽️";
+			case "SNACK": return "🍎";
+			default: return "🥣";
+		}
+	};
 
 	if (isLoading) {
 		return (
@@ -87,12 +108,17 @@ const Dashboard: React.FC = () => {
   return (
     <DashboardShell headerTitle="Dashboard" selectedMenuKey="1">
       <div className="mb-10">
-        <Text className="text-slate-400 font-medium uppercase tracking-wider text-xs">
-          Overview
-        </Text>
-        <Title level={2} className="!mt-1 !text-slate-900">
-          Welcome back, {userName}! 👋
-        </Title>
+        <div className="flex items-center justify-between">
+          <div>
+            <Text className="text-slate-400 font-medium uppercase tracking-wider text-xs">
+              Overview
+            </Text>
+            <Title level={2} className="!mt-1 !text-slate-900">
+              Welcome back, {user?.username || "Guest"}! 👋
+            </Title>
+          </div>
+          {error && <Tag color="error" className="rounded-full px-4">{error}</Tag>}
+        </div>
         <Paragraph className="text-slate-500 max-w-2xl">
           Here&apos;s what&apos;s happening today in your kitchen. Track your
           meals and manage your pantry with ease.
@@ -120,7 +146,7 @@ const Dashboard: React.FC = () => {
             className="shadow-sm rounded-2xl border-slate-200 h-full"
             headStyle={{ borderBottom: "1px solid #f1f5f9" }}
           >
-            {loading ? (
+            {isLoading ? (
               <div className="py-20 text-center">
                 <Spin />
               </div>
@@ -182,7 +208,7 @@ const Dashboard: React.FC = () => {
                   Smart Pantry
                 </Title>
                 <Paragraph className="text-slate-400 mt-2 mb-6">
-                  You have 4 items expiring soon.
+                  You have {pantryItemCount} item{pantryItemCount === 1 ? "" : "s"} in your pantry.
                 </Paragraph>
                 <Button
                   ghost
@@ -205,6 +231,7 @@ const Dashboard: React.FC = () => {
               <List
                 split={false}
                 dataSource={[
+                  `You have ${shoppingListItemCount} item${shoppingListItemCount === 1 ? "" : "s"} to buy.`,
                   "Schedule your week on Sundays to save time.",
                   "Add missing items to shopping list with one click.",
                   "Check your pantry before going out.",

@@ -40,7 +40,7 @@ export class ApiService {
       } catch {
         // If parsing fails, keep using res.statusText
       }
-      const detailedMessage = errorDetail;
+      const detailedMessage = `${errorMessage}${errorDetail}`;
       const error: ApplicationError = new Error(
         detailedMessage,
       ) as ApplicationError;

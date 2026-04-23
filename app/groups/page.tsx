@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Alert, Button, Card, Form, Input, Spin } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { Alert, Button, Card, Form, Input, Modal, Spin, message } from "antd";
+import { InfoCircleOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import PageHeader from "@/components/page-header";
@@ -99,6 +99,32 @@ const GroupsPage: React.FC = () => {
     }
   };
 
+  const handleLeaveGroup = () => {
+    Modal.confirm({
+      title: "Leave group?",
+      icon: <LogoutOutlined className="text-red-500" />,
+      content: "You will lose access to the shared pantry and shopping list.",
+      okText: "Leave",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk: async () => {
+        setIsSubmitting(true);
+        try {
+          await apiService.delete("/groups/me/members/me");
+          message.success("You left the group.");
+          setExistingGroup(null);
+          router.refresh();
+        } catch (error) {
+          message.error(
+            error instanceof Error ? error.message : "Failed to leave group.",
+          );
+        } finally {
+          setIsSubmitting(false);
+        }
+      },
+    });
+  };
+
 	if (isLoading) {
 		return (
 			<div className="flex min-h-screen flex-col bg-gradient-to-b from-orange-50 to-white">
@@ -131,6 +157,12 @@ const GroupsPage: React.FC = () => {
 							onClick={() => router.push("/groups/me")}
 						>
 							Manage Your Group
+						</Button>
+						<Button
+							className="pm-button !mt-4 !h-12 w-full !border-red-200 !bg-white !text-lg !font-semibold !text-red-500 hover:!border-red-500 hover:!bg-red-50"
+							onClick={handleLeaveGroup}
+						>
+							Leave Group
 						</Button>
 					</Card>
 				</div>
