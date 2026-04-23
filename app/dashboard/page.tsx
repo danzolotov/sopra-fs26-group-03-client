@@ -62,7 +62,7 @@ const Dashboard: React.FC = () => {
 		return (
 			<DashboardShell headerTitle="Dashboard" selectedMenuKey="1">
 				<div className="flex items-center justify-center py-20">
-					<Spin size="large" description="Preparing your kitchen dashboard..." />
+					<Spin size="large" tip="Preparing your kitchen dashboard..." />
 				</div>
 			</DashboardShell>
 		);
@@ -71,8 +71,8 @@ const Dashboard: React.FC = () => {
 	return (
 		<DashboardShell headerTitle="Dashboard" selectedMenuKey="1">
 			<div className="mb-8">
-				<Title level={2} className="!m-0 !text-slate-900">
-					Good morning, {userName}
+				<Title level={2} style={{ margin: 0, color: "#0f172a" }}>
+					Good morning, {user?.username ?? "Chef"}
 				</Title>
 				<Text className="text-secondary-600">Welcome to your kitchen. Here&apos;s your current status.</Text>
 			</div>
