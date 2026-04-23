@@ -56,7 +56,7 @@ export default function PageHeader({ title }: PageHeaderProps) {
   return (
     <header className="border-b border-gray-200 bg-white">
       <div className="mx-auto grid h-16 w-full max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-6">
-        <div 
+        <div
           className="flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80"
           onClick={() => router.push("/dashboard")}
         >
