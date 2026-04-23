@@ -4,8 +4,6 @@ import { useRouter } from "next/navigation"; // use NextJS router for navigation
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import { Button, Form, Input, Card } from "antd";
-// Optionally, you can import a CSS module or file for additional styling:
-// import styles from "@/styles/page.module.css";
 
 interface FormFieldProps {
   label: string;
