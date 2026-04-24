@@ -84,7 +84,6 @@ const Dashboard: React.FC = () => {
 	}, [apiService]);
 
 	const pantryItemCount = pantry?.items?.length ?? 0;
-	const shoppingListItemCount = (shoppingList?.items ?? shoppingList?.shoppingListItems ?? []).filter(item => !item.isBought).length;
 
 	const getMealIcon = (type: string) => {
 		switch (type) {
@@ -203,7 +202,7 @@ const Dashboard: React.FC = () => {
 
         <Col xs={24} lg={8}>
           <div className="flex flex-col gap-6 h-full">
-            <Card 
+            <Card
               className="shadow-sm rounded-2xl border-slate-200"
               title={
                 <div className="flex items-center gap-2">
