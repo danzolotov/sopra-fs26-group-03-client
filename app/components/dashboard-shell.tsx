@@ -10,10 +10,7 @@ import {
   RightOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
-import { Button, Calendar, Card, Select, Spin } from "antd";
-import type { CalendarProps } from "antd";
-import dayjs from "dayjs";
-import type { Dayjs } from "dayjs";
+import { Spin } from "antd";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import PageHeader from "@/components/page-header";
@@ -68,54 +65,7 @@ export default function DashboardShell({
     verifyAuth();
   }, [api, router]);
 
-  const renderCalendarHeader: CalendarProps<Dayjs>["headerRender"] = ({
-    value,
-    onChange,
-  }) => {
-    const currentYear = value.year();
-    const yearOptions = Array.from({ length: 11 }, (_, index) => {
-      const year = currentYear - 5 + index;
-      return { label: `${year}`, value: year };
-    });
 
-    const monthOptions = Array.from({ length: 12 }, (_, index) => ({
-      label: dayjs().month(index).format("MMMM"),
-      value: index,
-    }));
-
-    return (
-      <div className="mb-3 rounded-xl border border-primary-200 bg-primary-100 p-2">
-        <div className="flex items-center justify-between gap-2">
-          <Button
-            type="text"
-            icon={<LeftOutlined />}
-            onClick={() => onChange(value.clone().subtract(1, "month"))}
-            className="!h-8 !w-8 !rounded-full !text-primary-600 hover:!bg-primary-200"
-          />
-          <div className="flex flex-1 items-center gap-2">
-            <Select
-              className="flex-1"
-              options={monthOptions}
-              value={value.month()}
-              onChange={(month) => onChange(value.clone().month(month))}
-            />
-            <Select
-              className="w-24"
-              options={yearOptions}
-              value={currentYear}
-              onChange={(year) => onChange(value.clone().year(year))}
-            />
-          </div>
-          <Button
-            type="text"
-            icon={<RightOutlined />}
-            onClick={() => onChange(value.clone().add(1, "month"))}
-            className="!h-8 !w-8 !rounded-full !text-primary-600 hover:!bg-primary-200"
-          />
-        </div>
-      </div>
-    );
-  };
 
   const handleMenuClick = (key: string) => {
     const route = menuRoutes[key];
@@ -164,14 +114,7 @@ export default function DashboardShell({
             })}
           </nav>
 
-          <div className="mt-10 px-2.5">
-            <Card size="small" className="dashboard-mini-calendar">
-              <Calendar
-                fullscreen={false}
-                headerRender={renderCalendarHeader}
-              />
-            </Card>
-          </div>
+
         </aside>
 
         <main className="flex-1 p-10">{children}</main>

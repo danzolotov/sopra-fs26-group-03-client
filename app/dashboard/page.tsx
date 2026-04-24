@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   Typography,
   Card,
-  Badge,
   List,
   Button,
   Spin,
@@ -83,7 +82,7 @@ const Dashboard: React.FC = () => {
 		fetchDashboardData();
 	}, [apiService]);
 
-	const pantryItemCount = pantry?.items?.length ?? 0;
+
 
 	const getMealIcon = (type: string) => {
 		switch (type) {
@@ -244,27 +243,7 @@ const Dashboard: React.FC = () => {
               />
             </Card>
 
-            <Card className="shadow-sm rounded-2xl border-slate-200 flex-1">
-              <Title level={4} className="!m-0 !text-slate-800">
-                Quick Tips
-              </Title>
-              <Divider className="my-4 border-slate-50" />
-              <List
-                split={false}
-                dataSource={[
-                  `You have ${pantryItemCount} item${pantryItemCount === 1 ? "" : "s"} in your pantry.`,
-                  "Schedule your week on Sundays to save time.",
-                  "Add missing items to shopping list with one click.",
-                  "Check your pantry before going out.",
-                ]}
-                renderItem={(item) => (
-                  <List.Item className="px-0 py-2 items-start">
-                    <Badge status="processing" className="mt-2.5 mr-3" />
-                    <Text className="text-slate-500 text-sm">{item}</Text>
-                  </List.Item>
-                )}
-              />
-            </Card>
+
           </div>
         </Col>
       </Row>
@@ -272,8 +251,6 @@ const Dashboard: React.FC = () => {
   );
 };
 
-const Divider = ({ className }: { className?: string }) => (
-  <div className={`h-[1px] w-full ${className}`} />
-);
+
 
 export default Dashboard;
