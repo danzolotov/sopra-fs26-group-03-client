@@ -18,7 +18,7 @@ import {
 	Typography,
 	Select,
 } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusOutlined, CloseOutlined } from "@ant-design/icons";
 import DashboardShell from "@/components/dashboard-shell";
 import { useApi } from "@/hooks/useApi";
 import type {
@@ -531,8 +531,8 @@ const PantryPage: React.FC = () => {
 						<Select className="min-w-28" options={unitOptions} placeholder="Choose" />
 					</Form.Item>
 					<Form.Item>
-						<Button className="pm-button" htmlType="submit" loading={isAdding}>
-							Save entry
+						<Button className="pm-button" htmlType="submit" icon={<PlusOutlined />} loading={isAdding}>
+							Add Item
 						</Button>
 					</Form.Item>
 				</Form>
@@ -563,7 +563,7 @@ const PantryPage: React.FC = () => {
 				footer={
 					detectedIngredients.length > 0
 						? [
-								<Button key="cancel" onClick={resetDetectModal}>
+								<Button key="cancel" icon={<CloseOutlined />} onClick={resetDetectModal}>
 									Cancel
 								</Button>,
 								<Button key="detect" onClick={handleDetectIngredients} loading={isDetecting}>
@@ -573,6 +573,7 @@ const PantryPage: React.FC = () => {
 									key="add"
 									type="primary"
 									className="pm-button"
+									icon={<PlusOutlined />}
 									onClick={handleAddDetectedIngredients}
 									loading={isAddingDetected}
 								>
@@ -580,7 +581,7 @@ const PantryPage: React.FC = () => {
 								</Button>,
 							]
 						: [
-								<Button key="cancel" onClick={resetDetectModal}>
+								<Button key="cancel" icon={<CloseOutlined />} onClick={resetDetectModal}>
 									Cancel
 								</Button>,
 								<Button
