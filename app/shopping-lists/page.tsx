@@ -18,50 +18,32 @@ import {
   Typography,
   Select,
 } from "antd";
+import { PlusCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import DashboardShell from "@/components/dashboard-shell";
 import { useApi } from "@/hooks/useApi";
 import type {
-  ItemPatchDTO,
-  ItemPutDTO,
-  ShoppingListGetDTO,
-  ShoppingListItemGetDTO,
-  ShoppingListItemPostDTO,
+	ItemPatchDTO,
+	ItemPutDTO,
+	ShoppingListGetDTO,
+	ShoppingListItemGetDTO,
+	ShoppingListItemPostDTO,
 } from "@/types/shopping-list";
 import type { Unit } from "@/types/unit";
+import { AddItemFormValues, IngredientGetDTO, IngredientPostDTO } from "@/types/ingredientCategory";
 
 const { Title } = Typography;
 
-interface IngredientGetDTO {
-  id?: number;
-  ingredientName?: string;
-  ingredientDescription?: string;
-  unit?: Unit;
-}
-
-interface IngredientPostDTO {
-  ingredientName: string;
-  ingredientDescription: string;
-  unit: Unit;
-}
-
-interface AddItemFormValues {
-  ingredientName: string;
-  ingredientDescription: string;
-  quantity: number;
-  unit: Unit;
-}
-
 const unitOptions: Array<{ label: string; value: Unit }> = [
-  { label: "g", value: "GRAM" },
-  { label: "kg", value: "KILOGRAM" },
-  { label: "ml", value: "MILLILITER" },
-  { label: "cl", value: "CENTILITER" },
-  { label: "l", value: "LITER" },
-  { label: "piece", value: "PIECE" },
-  { label: "tbsp", value: "TABLESPOON" },
-  { label: "tsp", value: "TEASPOON" },
-  { label: "cup", value: "CUP" },
+	{ label: "g", value: "GRAM" },
+	{ label: "kg", value: "KILOGRAM" },
+	{ label: "ml", value: "MILLILITER" },
+	{ label: "cl", value: "CENTILITER" },
+	{ label: "l", value: "LITER" },
+	{ label: "piece", value: "PIECE" },
+	{ label: "tbsp", value: "TABLESPOON" },
+	{ label: "tsp", value: "TEASPOON" },
+	{ label: "cup", value: "CUP" },
 ];
 
 const getItemsFromList = (
@@ -202,10 +184,11 @@ const ShoppingListsPage: React.FC = () => {
         return;
       }
 
-      const shoppingPayload: ShoppingListItemPostDTO = {
-        ingredientId: ingredient.id,
-        quantity: values.quantity,
-      };
+			const shoppingPayload: ShoppingListItemPostDTO = {
+				ingredientId: ingredient.id,
+				quantity: values.quantity,
+				ingredientCategory: values.ingredientCategory,
+			};
 
       await apiService.post<ShoppingListItemGetDTO>(
         "/groups/me/shopping-list/items",
@@ -361,76 +344,77 @@ const ShoppingListsPage: React.FC = () => {
     }
   };
 
-  const columns: TableColumnsType<ShoppingListItemGetDTO> = [
-    {
-      title: "Bought",
-      key: "isBought",
-      render: (_, record) => (
-        <Space>
-          <Checkbox
-            checked={Boolean(record.isBought)}
-            disabled={!record.id || busyItemIds.includes(record.id)}
-            onChange={(event) =>
-              handleToggleBought(record, event.target.checked)
-            }
-          />
-        </Space>
-      ),
-    },
-    {
-      title: "Ingredient",
-      key: "ingredient",
-      render: (_, record) => (
-        <span className={record.isBought ? "line-through text-slate-400" : ""}>
-          {record.ingredientName ?? `Ingredient #${record.ingredientId ?? "-"}`}
-        </span>
-      ),
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-      render: (value: number | undefined, record) => (
-        <span className={record.isBought ? "line-through text-slate-400" : ""}>
-          {value ?? "-"}{" "}
-          {unitOptions.find((option) => option.value === record.unit)?.label}
-        </span>
-      ),
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (_, record) => (
-        <Space wrap>
-          <Button
-            aria-label="Edit item"
-            className="pm-button !h-9 !w-9 !min-w-9 !p-0"
-            icon={<EditOutlined />}
-            onClick={() => handleOpenEdit(record.id)}
-            size="small"
-          />
-          <Popconfirm
-            title="Delete this item?"
-            onConfirm={() => handleDeleteItem(record.id)}
-            okText="Delete"
-            cancelText="Cancel"
-          >
-            <Button
-              aria-label="Delete item"
-              className="pm-button !h-9 !w-9 !min-w-9 !p-0"
-              danger
-              icon={<DeleteOutlined />}
-              disabled={
-                !record.id ||
-                (record.id ? busyItemIds.includes(record.id) : false)
-              }
-              size="small"
-            />
-          </Popconfirm>
-        </Space>
-      ),
-    },
-  ];
+	const columns: TableColumnsType<ShoppingListItemGetDTO> = [
+		{
+			title: "Bought",
+			key: "isBought",
+			render: (_, record) => (
+				<Space>
+					<Checkbox
+						checked={Boolean(record.isBought)}
+						disabled={!record.id || busyItemIds.includes(record.id)}
+						onChange={(event) => handleToggleBought(record, event.target.checked)}
+					/>
+				</Space>
+			),
+		},
+		{
+			title: "Ingredient",
+			key: "ingredient",
+			render: (_, record) => (
+				<span className={record.isBought ? "line-through text-slate-400" : ""}>
+					{record.ingredientName ?? `Ingredient #${record.ingredientId ?? "-"}`}
+				</span>
+			),
+		},
+		{
+			title: "Category",
+			key: "category",
+			render: (_, record) => (
+				<span>{record.ingredientCategory ?? `${record.ingredientCategory ?? "-"}`}</span>
+			),
+		},
+		{
+			title: "Quantity",
+			dataIndex: "quantity",
+			key: "quantity",
+			render: (value: number | undefined, record) => (
+				<span className={record.isBought ? "line-through text-slate-400" : ""}>
+					{value ?? "-"} {unitOptions.find((option) => option.value === record.unit)?.label}
+				</span>
+			),
+		},
+		{
+			title: "Actions",
+			key: "actions",
+			render: (_, record) => (
+				<Space wrap>
+					<Button
+						aria-label="Edit item"
+						className="pm-button !h-9 !w-9 !min-w-9 !p-0"
+						icon={<EditOutlined />}
+						onClick={() => handleOpenEdit(record.id)}
+						size="small"
+					/>
+					<Popconfirm
+						title="Delete this item?"
+						onConfirm={() => handleDeleteItem(record.id)}
+						okText="Delete"
+						cancelText="Cancel"
+					>
+						<Button
+							aria-label="Delete item"
+							className="pm-button !h-9 !w-9 !min-w-9 !p-0"
+							danger
+							icon={<DeleteOutlined />}
+							disabled={!record.id || (record.id ? busyItemIds.includes(record.id) : false)}
+							size="small"
+						/>
+					</Popconfirm>
+				</Space>
+			),
+		},
+	];
 
   const ingredientOptions = ingredients.map((ingredient) => ({
     value: ingredient.ingredientName ?? "",
@@ -455,16 +439,40 @@ const ShoppingListsPage: React.FC = () => {
     }
   };
 
+	const [search, setSearch] = useState("");
+
+	const filteredOptions = ingredientOptions.filter((opt) =>
+		opt.label.toLowerCase().includes(search.toLowerCase()),
+	);
+
+	const [addFormVisible, setAddFormVisible] = useState(false);
+
+	const handleAddFormVisibleChange = () => {
+		setAddFormVisible(!addFormVisible);
+	};
+
   return (
     <DashboardShell headerTitle="Shopping Lists" selectedMenuKey="3">
       <div className="mb-8 flex items-center justify-between gap-4">
         <Title level={2} className="!m-0 !text-slate-900">
           Shopping Lists
         </Title>
-        <Button className="pm-button" onClick={() => fetchShoppingList(true)}>
-          Refresh
-        </Button>
+				<div className={"flex gap-2"}>
+					<Button className="pm-button" onClick={handleAddFormVisibleChange}>
+						{addFormVisible ? (
+							<div className={"flex items-center gap-2"}>
+								<PlusCircleOutlined />
+								Close Form
+							</div>
+						) : (
+							<div className={"flex items-center gap-2"}>
+								<CloseCircleOutlined />
+								Add Item
+							</div>
+						)}
+					</Button>
       </div>
+</div>
 
       {successMessage ? (
         <div className="mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-700">
@@ -477,57 +485,51 @@ const ShoppingListsPage: React.FC = () => {
         </div>
       ) : null}
 
-      <Card className="mb-6 rounded-3xl border border-primary-200 bg-white/90">
-        <Title level={4} className="!mt-0">
-          Add item to database and shopping list
-        </Title>
-        <Form form={addForm} layout="vertical" onFinish={handleAddItem}>
-          <Form.Item
-            label="Name"
-            name="ingredientName"
-            rules={[
-              { required: true, message: "Required" },
-              { whitespace: true, message: "Required" },
-            ]}
-          >
-            <AutoComplete
-              options={ingredientOptions}
-              onSelect={handleIngredientSelect}
-              placeholder={
-                isLoadingIngredients
-                  ? "Loading ingredients..."
-                  : "e.g. Tomatoes"
-              }
-            />
-          </Form.Item>
-          <Form.Item label="Description" name="ingredientDescription">
-            <Input placeholder="Short ingredient description" />
-          </Form.Item>
-          <Form.Item
-            label="Quantity"
-            name="quantity"
-            rules={[{ required: true, message: "Required" }]}
-          >
-            <InputNumber min={0.1} step={0.1} placeholder="e.g. 2" />
-          </Form.Item>
-          <Form.Item
-            label="Unit"
-            name="unit"
-            rules={[{ required: true, message: "Required" }]}
-          >
-            <Select
-              className="min-w-28"
-              options={unitOptions}
-              placeholder="Choose"
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button className="pm-button" htmlType="submit" loading={isAdding}>
-              Save entry
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
+			{addFormVisible && (
+				<Card className="rounded-3xl border border-primary-200 bg-white/90 addFormVisible:bg-black">
+					<Title level={4} className="!mt-0">
+						Add item to database and shopping list
+					</Title>
+					<Form form={addForm} layout="vertical" onFinish={handleAddItem}>
+						<Form.Item
+							label="Name"
+							name="ingredientName"
+							rules={[
+								{ required: true, message: "Required" },
+								{ whitespace: true, message: "Required" },
+							]}
+						>
+							<AutoComplete
+								options={filteredOptions}
+								onSelect={(value: string) => handleIngredientSelect(value)}
+								onChange={(value: string) => setSearch(value)}
+								placeholder={isLoadingIngredients ? "Loading ingredients..." : "e.g. Tomatoes"}
+							/>
+						</Form.Item>
+						<Form.Item label="Description" name="ingredientDescription">
+							<Input placeholder="Short ingredient description" />
+						</Form.Item>
+						<Form.Item
+							label="Quantity"
+							name="quantity"
+							rules={[{ required: true, message: "Required" }]}
+						>
+							<InputNumber min={0.1} step={0.1} placeholder="e.g. 2" />
+						</Form.Item>
+						<Form.Item label="Category" name="ingredientCategory">
+							<Input placeholder="e.g. Vegetables" />
+						</Form.Item>
+						<Form.Item label="Unit" name="unit" rules={[{ required: true, message: "Required" }]}>
+							<Select className="min-w-28" options={unitOptions} placeholder="Choose" />
+						</Form.Item>
+						<Form.Item>
+							<Button className="pm-button" htmlType="submit" loading={isAdding}>
+								Save entry
+							</Button>
+						</Form.Item>
+					</Form>
+				</Card>
+			)}
 
       <Card className="rounded-3xl border border-primary-200 bg-white/90">
         <Title level={4} className="!mt-0">
