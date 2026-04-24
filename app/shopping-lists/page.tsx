@@ -17,6 +17,7 @@ import {
   type TableColumnsType,
   Typography,
   Select,
+  List,
 } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import DashboardShell from "@/components/dashboard-shell";
@@ -27,6 +28,7 @@ import type {
   ShoppingListGetDTO,
   ShoppingListItemGetDTO,
   ShoppingListItemPostDTO,
+  AutoDetectedIngredientGetDTO,
 } from "@/types/shopping-list";
 import type { Unit } from "@/types/unit";
 
@@ -91,36 +93,43 @@ const ShoppingListsPage: React.FC = () => {
   const [selectedItem, setSelectedItem] =
     useState<ShoppingListItemGetDTO | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDetectOpen, setIsDetectOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [detectedIngredients, setDetectedIngredients] = useState<
+    AutoDetectedIngredientGetDTO[]
+  >([]);
+  const [isDetecting, setIsDetecting] = useState(false);
+  const [isAddingDetected, setIsAddingDetected] = useState(false);
 
   const items = useMemo(() => getItemsFromList(shoppingList), [shoppingList]);
 
-	const fetchShoppingList = useCallback(
-		async (showLoader = true) => {
-			if (showLoader) {
-				setIsLoadingList(true);
-			}
-			setErrorMessage("");
-			try {
-				const data = await apiService.get<ShoppingListGetDTO>("/groups/me/shopping-list");
-				setShoppingList(data);
-			} catch (error) {
-				// If status is 404, it likely means no group, which is an expected "Individual" state now.
-				if (error && typeof error === "object" && "status" in error && error.status === 404) {
-					console.debug("No shopping list found - user likely not in a group.");
-					setShoppingList(null);
-				} else if (error instanceof Error) {
-					setErrorMessage(error.message);
-				} else {
-					setErrorMessage("Could not load the shopping list.");
-				}
-			} finally {
-				if (showLoader) {
-					setIsLoadingList(false);
-				}
-			}
-		},
-		[apiService],
-	);
+  const fetchShoppingList = useCallback(
+    async (showLoader = true) => {
+      if (showLoader) {
+        setIsLoadingList(true);
+      }
+      setErrorMessage("");
+      try {
+        const data = await apiService.get<ShoppingListGetDTO>("/groups/me/shopping-list");
+        setShoppingList(data);
+      } catch (error) {
+        // If status is 404, it likely means no group, which is an expected "Individual" state now.
+        if (error && typeof error === "object" && "status" in error && error.status === 404) {
+          console.debug("No shopping list found - user likely not in a group.");
+          setShoppingList(null);
+        } else if (error instanceof Error) {
+          setErrorMessage(error.message);
+        } else {
+          setErrorMessage("Could not load the shopping list.");
+        }
+      } finally {
+        if (showLoader) {
+          setIsLoadingList(false);
+        }
+      }
+    },
+    [apiService],
+  );
 
   const fetchIngredients = useCallback(async () => {
     setIsLoadingIngredients(true);
@@ -164,7 +173,12 @@ const ShoppingListsPage: React.FC = () => {
       setErrorMessage("Ingredient name must be provided.");
       return;
     }
-    const cleanDescription = (values.ingredientDescription ?? "").trim();
+    const cleanDescription = values.ingredientDescription.trim();
+    if (!cleanDescription) {
+      setErrorMessage("Ingredient description must be provided.");
+      return;
+    }
+
     setErrorMessage("");
     setSuccessMessage("");
     setIsAdding(true);
@@ -356,6 +370,84 @@ const ShoppingListsPage: React.FC = () => {
     }
   };
 
+  const resetDetectModal = () => {
+    setIsDetectOpen(false);
+    setSelectedImage(null);
+    setDetectedIngredients([]);
+  };
+
+  const handleDetectIngredients = async () => {
+    if (!selectedImage) {
+      setErrorMessage("Please choose an image first.");
+      return;
+    }
+    setErrorMessage("");
+    setSuccessMessage("");
+    setIsDetecting(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedImage);
+      const detected = await apiService.postFormData<
+        AutoDetectedIngredientGetDTO[]
+      >("/shoppings-list/auto-detect", formData);
+      setDetectedIngredients(detected ?? []);
+      if (!detected?.length) {
+        setSuccessMessage("No ingredients were detected in the image.");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage("Could not detect ingredients from the image.");
+      }
+    } finally {
+      setIsDetecting(false);
+    }
+  };
+
+  const handleAddDetectedIngredients = async () => {
+    const ingredientsWithId = detectedIngredients.filter((ing) => ing.id);
+    if (!ingredientsWithId.length) {
+      setErrorMessage(
+        "Detected ingredients are missing ids and cannot be added.",
+      );
+      return;
+    }
+    setErrorMessage("");
+    setSuccessMessage("");
+    setIsAddingDetected(true);
+    try {
+      await Promise.all(
+        ingredientsWithId.map((ingredient) =>
+          apiService.post<ShoppingListItemGetDTO>(
+            "/groups/me/shopping-list/items",
+            {
+              ingredientId: ingredient.id,
+              quantity:
+                ingredient.quantity && ingredient.quantity > 0
+                  ? ingredient.quantity
+                  : 1,
+            },
+          ),
+        ),
+      );
+      setSuccessMessage(
+        `Added ${ingredientsWithId.length} detected ingredient${ingredientsWithId.length === 1 ? "" : "s"} to shopping list.`,
+      );
+      resetDetectModal();
+      await fetchIngredients();
+      await fetchShoppingList(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage("Could not add detected ingredients to shopping list.");
+      }
+    } finally {
+      setIsAddingDetected(false);
+    }
+  };
+
   const columns: TableColumnsType<ShoppingListItemGetDTO> = [
     {
       title: "Bought",
@@ -456,9 +548,14 @@ const ShoppingListsPage: React.FC = () => {
         <Title level={2} className="!m-0 !text-slate-900">
           Shopping Lists
         </Title>
-        <Button className="pm-button" onClick={() => fetchShoppingList(true)}>
-          Refresh
-        </Button>
+        <Space>
+          <Button className="pm-button" onClick={() => setIsDetectOpen(true)}>
+            Detect from image
+          </Button>
+          <Button className="pm-button" onClick={() => fetchShoppingList(true)}>
+            Refresh
+          </Button>
+        </Space>
       </div>
 
       {successMessage ? (
@@ -566,6 +663,89 @@ const ShoppingListsPage: React.FC = () => {
             <InputNumber className="w-full" min={0.1} step={0.1} />
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        title="Detect ingredients from image"
+        open={isDetectOpen}
+        onCancel={resetDetectModal}
+        footer={
+          detectedIngredients.length > 0
+            ? [
+                <Button key="cancel" onClick={resetDetectModal}>
+                  Cancel
+                </Button>,
+                <Button
+                  key="detect"
+                  onClick={handleDetectIngredients}
+                  loading={isDetecting}
+                >
+                  Detect again
+                </Button>,
+                <Button
+                  key="add"
+                  type="primary"
+                  className="pm-button"
+                  onClick={handleAddDetectedIngredients}
+                  loading={isAddingDetected}
+                >
+                  Add detected ingredients
+                </Button>,
+              ]
+            : [
+                <Button key="cancel" onClick={resetDetectModal}>
+                  Cancel
+                </Button>,
+                <Button
+                  key="detect"
+                  type="primary"
+                  className="pm-button"
+                  onClick={handleDetectIngredients}
+                  loading={isDetecting}
+                  disabled={!selectedImage}
+                >
+                  Detect ingredients
+                </Button>,
+              ]
+        }
+      >
+        <div className="space-y-4">
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={(event) => {
+              const file = event.target.files?.[0] ?? null;
+              setSelectedImage(file);
+              setDetectedIngredients([]);
+            }}
+          />
+          {detectedIngredients.length > 0 ? (
+            <List
+              size="small"
+              header={<span>Detected ingredients</span>}
+              dataSource={detectedIngredients}
+              renderItem={(ingredient) => (
+                <List.Item>
+                  <div className="w-full">
+                    <div className="font-medium">
+                      {ingredient.ingredientName ??
+                        `Ingredient #${ingredient.id ?? "-"}`}
+                    </div>
+                    <div className="text-sm text-slate-600">
+                      Quantity: {ingredient.quantity ?? 1} | Unit:{" "}
+                      {ingredient.unit ?? "-"}
+                    </div>
+                    {ingredient.ingredientDescription ? (
+                      <div className="text-sm text-slate-500">
+                        {ingredient.ingredientDescription}
+                      </div>
+                    ) : null}
+                  </div>
+                </List.Item>
+              )}
+            />
+          ) : null}
+        </div>
       </Modal>
     </DashboardShell>
   );

@@ -28,3 +28,11 @@ export interface ItemPutDTO {
 export interface ItemPatchDTO {
   isBought: boolean;
 }
+
+export interface AutoDetectedIngredientGetDTO {
+  id?: number;
+  ingredientName?: string;
+  ingredientDescription?: string;
+  unit?: Unit;
+  quantity?: number;
+}
