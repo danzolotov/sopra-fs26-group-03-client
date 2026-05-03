@@ -179,11 +179,11 @@ const ShoppingListsPage: React.FC = () => {
         return;
       }
 
-			const shoppingPayload: ShoppingListItemPostDTO = {
-				ingredientId: ingredient.id,
-				quantity: values.quantity,
-				ingredientCategory: values.ingredientCategory,
-			};
+		const shoppingPayload: ShoppingListItemPostDTO = {
+			ingredientId: ingredient.id,
+			quantity: values.quantity,
+        category: values.category,
+		};
 
       await apiService.post<ShoppingListItemGetDTO>(
         "/groups/me/shopping-list/items",
@@ -366,7 +366,7 @@ const ShoppingListsPage: React.FC = () => {
 			title: "Category",
 			key: "category",
 			render: (_, record) => (
-				<span>{record.ingredientCategory ?? `${record.ingredientCategory ?? "-"}`}</span>
+				<span>{record.category ?? "-"}</span>
 			),
 		},
 		{
@@ -511,10 +511,10 @@ const ShoppingListsPage: React.FC = () => {
 						>
 							<InputNumber min={0.1} step={0.1} placeholder="e.g. 2" />
 						</Form.Item>
-						<Form.Item label="Category" name="ingredientCategory">
-							<Input placeholder="e.g. Vegetables" />
-						</Form.Item>
-              <Form.Item label="Unit" name="standardUnit" rules={[{ required: true, message: "Required" }]}> 
+					<Form.Item label="Category" name="category">
+						<Input placeholder="e.g. Vegetables" />
+					</Form.Item>
+                                <Form.Item label="Unit" name="standardUnit" rules={[{ required: true, message: "Required" }]}>
 							<Select className="min-w-28" options={unitOptions} placeholder="Choose" />
 						</Form.Item>
 						<Form.Item>

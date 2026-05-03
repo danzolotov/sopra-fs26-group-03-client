@@ -21,20 +21,20 @@ export interface IngredientGetDTO {
 	ingredientName?: string;
 	ingredientDescription?: string;
 	standardUnit: Unit;
-	ingredientCategory?: IngredientCategory;
+	category?: IngredientCategory;
 }
 
 export interface IngredientPostDTO {
 	ingredientName: string;
 	ingredientDescription: string;
 	standardUnit: Unit;
-	ingredientCategory?: IngredientCategory;
+	category?: IngredientCategory;
 }
 
 export interface AddItemFormValues {
 	ingredientName: string;
 	ingredientDescription: string;
-	ingredientCategory: IngredientCategory;
+	category: IngredientCategory;
 	quantity: number;
 	standardUnit: Unit;
 }
