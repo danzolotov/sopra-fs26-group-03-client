@@ -53,11 +53,13 @@ const RecipesPage: React.FC = () => {
                 title={recipe.name}
                 hoverable
                 className="h-full shadow-sm rounded-xl border-slate-200"
-                bodyStyle={{
+                      styles={{
+                        body: {
                   display: "flex",
                   flexDirection: "column",
                   height: "100%",
-                }}
+                        },
+                      }}
               >
                 <Paragraph
                   ellipsis={{ rows: 2 }}
@@ -77,7 +79,7 @@ const RecipesPage: React.FC = () => {
                         className="rounded-full px-3 border-none bg-blue-50 text-blue-600"
                       >
                         {ing.ingredientName}: {ing.quantity}{" "}
-                        {ing.unit.toLowerCase()}
+                        {ing.unit?.toLowerCase() ?? "-"}
                       </Tag>
                     ))}
                   </div>

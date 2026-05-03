@@ -151,7 +151,7 @@ const ShoppingListsPage: React.FC = () => {
     setSuccessMessage("");
     setIsAdding(true);
     try {
-      const cleanUnit = values.unit;
+      const cleanUnit = values.standardUnit;
       const normalizedName = cleanName.toLowerCase();
       let ingredient = ingredients.find(
         (item) =>
@@ -162,7 +162,7 @@ const ShoppingListsPage: React.FC = () => {
         const createPayload: IngredientPostDTO = {
           ingredientName: cleanName,
           ingredientDescription: cleanDescription,
-          unit: cleanUnit,
+          standardUnit: cleanUnit,
         };
 
         const createdIngredient = await apiService.post<IngredientGetDTO>(
@@ -429,8 +429,8 @@ const ShoppingListsPage: React.FC = () => {
         selectedIngredient.ingredientDescription.trim(),
       );
     }
-    if (selectedIngredient.unit?.trim()) {
-      addForm.setFieldValue("unit", selectedIngredient.unit);
+    if (selectedIngredient.standardUnit?.trim()) {
+      addForm.setFieldValue("standardUnit", selectedIngredient.standardUnit);
     }
   };
 
@@ -514,7 +514,7 @@ const ShoppingListsPage: React.FC = () => {
 						<Form.Item label="Category" name="ingredientCategory">
 							<Input placeholder="e.g. Vegetables" />
 						</Form.Item>
-						<Form.Item label="Unit" name="unit" rules={[{ required: true, message: "Required" }]}>
+              <Form.Item label="Unit" name="standardUnit" rules={[{ required: true, message: "Required" }]}> 
 							<Select className="min-w-28" options={unitOptions} placeholder="Choose" />
 						</Form.Item>
 						<Form.Item>
@@ -539,7 +539,7 @@ const ShoppingListsPage: React.FC = () => {
             columns={columns}
             dataSource={items}
             pagination={{ pageSize: 8 }}
-            rowKey={(record, index) => `${record.id ?? "temp"}-${index}`}
+                rowKey={(record) => `${record.id ?? record.ingredientId ?? record.ingredientName ?? "temp"}`}
           />
         )}
       </Card>

@@ -250,7 +250,7 @@ const MealPlanPage: React.FC = () => {
                       className="m-0 rounded-full border-none bg-orange-50 text-orange-600 font-bold"
                     >
                       {item.missingQuantity}{" "}
-                      {item.ingredient.unit.toLowerCase()}
+                      {item.ingredient.standardUnit.toLowerCase()}
                     </Tag>
                   </div>
                 </List.Item>
