@@ -304,10 +304,10 @@ const PantryPage: React.FC = () => {
     }
     const cleanDescription = (values.ingredientDescription ?? "").trim();
     setErrorMessage("");
-    setSuccessMessage("");
+	setSuccessMessage("");
     setIsAdding(true);
-	try {
-	  const cleanUnit = values.standardUnit;
+    try {
+      const cleanUnit = values.standardUnit;
       const normalizedName = cleanName.toLowerCase();
       let ingredient = ingredients.find(
         (item) =>
@@ -315,11 +315,11 @@ const PantryPage: React.FC = () => {
       );
 
       if (!ingredient?.id) {
-		const createPayload: IngredientPostDTO = {
-		  ingredientName: cleanName,
-		  ingredientDescription: cleanDescription,
-		  standardUnit: cleanUnit,
-		};
+        const createPayload: IngredientPostDTO = {
+          ingredientName: cleanName,
+          ingredientDescription: cleanDescription,
+          standardUnit: cleanUnit,
+        };
 
         const createdIngredient = await apiService.post<IngredientGetDTO>(
           "/ingredients",
@@ -338,7 +338,7 @@ const PantryPage: React.FC = () => {
       const shoppingPayload: PantryItemPostDTO = {
         ingredientId: ingredient.id,
         quantity: values.quantity,
-				ingredientCategory: values.ingredientCategory,
+		category: values.category,
       };
 
       await apiService.post<PantryItemGetDTO>(
@@ -551,7 +551,7 @@ const PantryPage: React.FC = () => {
 			title: "Category",
 			key: "category",
 			render: (_, record) => (
-				<span>{record.ingredientCategory ?? `${record.ingredientCategory ?? "-"}`}</span>
+				<span>{record.category ?? "-"}</span>
 			),
 		},
     {
@@ -685,7 +685,7 @@ const PantryPage: React.FC = () => {
 					<Form.Item label="Unit" name="standardUnit" rules={[{ required: true, message: "Required" }]}>
 						<Select className="min-w-28" options={unitOptions} placeholder="Choose" />
 					</Form.Item>
-				<Form.Item label="Category" name="ingredientCategory">
+				<Form.Item label="Category" name="category">
 					<Input placeholder="e.g. Vegetables" />
 				</Form.Item>
 					<Form.Item>

@@ -196,7 +196,6 @@ const MealPlanPage: React.FC = () => {
 
           <Card
             className="shadow-sm rounded-2xl border-slate-200 overflow-hidden"
-            bodyStyle={{ padding: 0 }}
           >
             {loading && !mealPlans.length ? (
               <div className="flex justify-center py-40">
@@ -225,10 +224,12 @@ const MealPlanPage: React.FC = () => {
               </div>
             }
             className="shadow-sm rounded-2xl border-slate-200 sticky top-10"
-            headStyle={{
-              borderBottom: "1px solid #f1f5f9",
-              paddingTop: 16,
-              paddingBottom: 16,
+            styles={{
+              header: {
+                borderBottom: "1px solid #f1f5f9",
+                paddingTop: 16,
+                paddingBottom: 16,
+              },
             }}
           >
             <Paragraph className="text-slate-400 text-sm mb-4">
@@ -304,7 +305,7 @@ const MealPlanPage: React.FC = () => {
         }}
         cancelButtonProps={{ className: "h-10 rounded-lg" }}
         width={400}
-        destroyOnClose
+        destroyOnHidden
       >
         <Form
           form={form}
@@ -341,15 +342,10 @@ const MealPlanPage: React.FC = () => {
             <Select
               placeholder="Select a recipe"
               showSearch
-              optionFilterProp="children"
+              options={recipes.map((recipe) => ({ label: recipe.name, value: recipe.id }))}
+              optionFilterProp="label"
               className="h-10"
-            >
-              {recipes.map((r) => (
-                <Option key={r.id} value={r.id}>
-                  {r.name}
-                </Option>
-              ))}
-            </Select>
+            />
           </Form.Item>
         </Form>
       </Modal>
