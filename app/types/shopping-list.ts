@@ -29,7 +29,7 @@ export interface ShoppingListItemPostDTO {
 
 export interface ItemPutDTO {
 	ingredientId: number;
-	category: IngredientCategory;
+	category?: IngredientCategory;
 	quantity: number;
 }
 
