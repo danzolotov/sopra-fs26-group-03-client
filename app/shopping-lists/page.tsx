@@ -199,8 +199,8 @@ const ShoppingListsPage: React.FC = () => {
 
 			const shoppingPayload: ShoppingListItemPostDTO = {
 				ingredientId: ingredient.id,
-				ingredientName: ingredient.ingredientName ?? cleanName,
-				ingredientDescription: ingredient.ingredientDescription ?? cleanDescription,
+				ingredientName: cleanName ?? ingredient.ingredientName,
+				ingredientDescription: cleanDescription ?? ingredient.ingredientDescription,
 				quantity: values.quantity,
 				category: cleanCategory ?? ingredient.category,
 				unit: cleanUnit ?? ingredient.standardUnit,
