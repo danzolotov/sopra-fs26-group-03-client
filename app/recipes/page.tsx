@@ -50,15 +50,7 @@ const RecipesPage: React.FC = () => {
 							key={recipe.id}
 							title={recipe.name}
 							hoverable
-							className="h-full overflow-hidden shadow-sm rounded-xl border-slate-200"
-							styles={{
-								body: {
-									display: "flex",
-									flexDirection: "column",
-									height: "100%",
-									minWidth: 0,
-								},
-							}}
+							className="h-full overflow-hidden shadow-sm rounded-xl border-slate-200 [&_.ant-card-body]:flex [&_.ant-card-body]:h-full [&_.ant-card-body]:min-w-0 [&_.ant-card-body]:flex-col"
 						>
 							<Paragraph ellipsis={{ rows: 2 }} className="text-slate-500 mb-4">
 								{recipe.description}
