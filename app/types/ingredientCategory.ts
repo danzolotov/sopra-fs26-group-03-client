@@ -20,14 +20,14 @@ export interface IngredientGetDTO {
 	id?: number;
 	ingredientName?: string;
 	ingredientDescription?: string;
-	unit: Unit;
+	standardUnit: Unit;
 	ingredientCategory?: IngredientCategory;
 }
 
 export interface IngredientPostDTO {
 	ingredientName: string;
 	ingredientDescription: string;
-	unit: Unit;
+	standardUnit: Unit;
 	ingredientCategory?: IngredientCategory;
 }
 
@@ -36,5 +36,5 @@ export interface AddItemFormValues {
 	ingredientDescription: string;
 	ingredientCategory: IngredientCategory;
 	quantity: number;
-	unit: Unit;
+	standardUnit: Unit;
 }

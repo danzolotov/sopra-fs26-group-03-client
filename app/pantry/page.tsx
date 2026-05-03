@@ -155,8 +155,8 @@ const DetectedIngredientRow: React.FC<DetectedIngredientRowProps> = ({
 		}
 		form.setFieldValue(["ingredients", field.name, "id"], ingredient.id);
 		form.setFieldValue(["ingredients", field.name, "ingredientName"], ingredient.ingredientName ?? value);
-		if (ingredient.unit?.trim()) {
-			form.setFieldValue(["ingredients", field.name, "unit"], ingredient.unit);
+		if (ingredient.standardUnit?.trim()) {
+			form.setFieldValue(["ingredients", field.name, "unit"], ingredient.standardUnit);
 		}
 	};
 
@@ -306,8 +306,8 @@ const PantryPage: React.FC = () => {
     setErrorMessage("");
     setSuccessMessage("");
     setIsAdding(true);
-    try {
-      const cleanUnit = values.unit;
+	try {
+	  const cleanUnit = values.standardUnit;
       const normalizedName = cleanName.toLowerCase();
       let ingredient = ingredients.find(
         (item) =>
@@ -315,11 +315,11 @@ const PantryPage: React.FC = () => {
       );
 
       if (!ingredient?.id) {
-        const createPayload: IngredientPostDTO = {
-          ingredientName: cleanName,
-          ingredientDescription: cleanDescription,
-          unit: cleanUnit,
-        };
+		const createPayload: IngredientPostDTO = {
+		  ingredientName: cleanName,
+		  ingredientDescription: cleanDescription,
+		  standardUnit: cleanUnit,
+		};
 
         const createdIngredient = await apiService.post<IngredientGetDTO>(
           "/ingredients",
@@ -666,8 +666,8 @@ const PantryPage: React.FC = () => {
 										ingredient.ingredientDescription.trim(),
 									);
 								}
-								if (ingredient.unit?.trim()) {
-									addForm.setFieldValue("unit", ingredient.unit);
+																	if (ingredient.standardUnit?.trim()) {
+																		addForm.setFieldValue("standardUnit", ingredient.standardUnit);
 								}
 							}}
 						/>
@@ -682,7 +682,7 @@ const PantryPage: React.FC = () => {
 					>
 						<InputNumber min={0.1} step={0.1} placeholder="e.g. 2" />
 					</Form.Item>
-					<Form.Item label="Unit" name="unit" rules={[{ required: true, message: "Required" }]}>
+					<Form.Item label="Unit" name="standardUnit" rules={[{ required: true, message: "Required" }]}>
 						<Select className="min-w-28" options={unitOptions} placeholder="Choose" />
 					</Form.Item>
 				<Form.Item label="Category" name="ingredientCategory">
