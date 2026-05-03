@@ -67,6 +67,146 @@ const getItemsFromList = (list: PantryGetDTO | null): PantryItemGetDTO[] => {
   return list.items ?? [];
 };
 
+const findIngredientByName = (
+	ingredients: IngredientGetDTO[],
+	value: string,
+): IngredientGetDTO | undefined =>
+	ingredients.find(
+		(ingredient) => (ingredient.ingredientName?.trim().toLowerCase() ?? "") === value.trim().toLowerCase(),
+	);
+
+interface IngredientAutocompleteInputProps {
+	ingredients: IngredientGetDTO[];
+	value?: string;
+	isLoadingIngredients: boolean;
+	placeholder: string;
+	onChange?: (value: string) => void;
+	onIngredientSelect?: (ingredient: IngredientGetDTO, value: string) => void;
+}
+
+const IngredientAutocompleteInput: React.FC<IngredientAutocompleteInputProps> = ({
+	ingredients,
+	value,
+	isLoadingIngredients,
+	placeholder,
+	onChange,
+	onIngredientSelect,
+}) => {
+	const [search, setSearch] = useState(value ?? "");
+
+	useEffect(() => {
+		setSearch(value ?? "");
+	}, [value]);
+
+	const options = useMemo(
+		() =>
+			ingredients
+				.map((ingredient) => ({
+					value: ingredient.ingredientName ?? "",
+					label: ingredient.ingredientName ?? "",
+				}))
+				.filter((opt) => opt.label.toLowerCase().includes(search.toLowerCase())),
+		[ingredients, search],
+	);
+
+	const handleChange = (nextValue: string) => {
+		setSearch(nextValue);
+		onChange?.(nextValue);
+	};
+
+	const handleSelect = (selectedName: string) => {
+		const selectedIngredient = findIngredientByName(ingredients, selectedName);
+		const resolvedValue = selectedIngredient?.ingredientName ?? selectedName;
+		setSearch(resolvedValue);
+		onChange?.(resolvedValue);
+		if (selectedIngredient) {
+			onIngredientSelect?.(selectedIngredient, resolvedValue);
+		}
+	};
+
+	return (
+		<AutoComplete
+			options={options}
+			onChange={handleChange}
+			onSelect={handleSelect}
+			placeholder={isLoadingIngredients ? "Loading ingredients..." : placeholder}
+			value={value}
+		/>
+	);
+};
+
+interface DetectedIngredientRowProps {
+	field: { key: number; name: number };
+	ingredients: IngredientGetDTO[];
+	isLoadingIngredients: boolean;
+}
+
+const DetectedIngredientRow: React.FC<DetectedIngredientRowProps> = ({
+	field,
+	ingredients,
+	isLoadingIngredients,
+}) => {
+	const form = Form.useFormInstance();
+	const ingredientName = Form.useWatch(["ingredients", field.name, "ingredientName"], form) as string | undefined;
+
+	const handleIngredientSelect = (ingredient: IngredientGetDTO, value: string) => {
+		if (!ingredient.id) {
+			return;
+		}
+		form.setFieldValue(["ingredients", field.name, "id"], ingredient.id);
+		form.setFieldValue(["ingredients", field.name, "ingredientName"], ingredient.ingredientName ?? value);
+		if (ingredient.unit?.trim()) {
+			form.setFieldValue(["ingredients", field.name, "unit"], ingredient.unit);
+		}
+	};
+
+	const handleIngredientChange = (value: string) => {
+		form.setFieldValue(["ingredients", field.name, "ingredientName"], value);
+		const selectedIngredient = findIngredientByName(ingredients, value);
+		form.setFieldValue(["ingredients", field.name, "id"], selectedIngredient?.id);
+	};
+
+	return (
+		<Card key={field.key} size="small" className="rounded-2xl">
+			<Form.Item name={[field.name, "id"]} hidden>
+				<Input />
+			</Form.Item>
+			<Form.Item
+				label="Ingredient"
+				name={[field.name, "ingredientName"]}
+				rules={[{ required: true, message: "Required" }]}
+			>
+				<IngredientAutocompleteInput
+					ingredients={ingredients}
+					value={ingredientName}
+					isLoadingIngredients={isLoadingIngredients}
+					placeholder="e.g. Tomatoes"
+					onChange={handleIngredientChange}
+					onIngredientSelect={handleIngredientSelect}
+				/>
+			</Form.Item>
+
+			<div className="grid grid-cols-2 gap-3">
+				<Form.Item
+					label="Quantity"
+					name={[field.name, "quantity"]}
+					rules={[{ required: true, message: "Required" }]}
+				>
+					<InputNumber min={0} className="w-full" />
+				</Form.Item>
+
+				<Form.Item
+					label="Unit"
+					name={[field.name, "unit"]}
+					rules={[{ required: true, message: "Required" }]}
+				>
+					<Select className="min-w-28" options={unitOptions} placeholder="Choose" />
+				</Form.Item>
+			</div>
+		</Card>
+	);
+};
+
 const PantryPage: React.FC = () => {
 	const apiService = useApi();
 	const [addForm] = Form.useForm<AddItemFormValues>();
@@ -348,11 +488,13 @@ const PantryPage: React.FC = () => {
 	};
 
 	const handleAddDetectedIngredients = async (values: DetectedIngredientFormValues) => {
-		const ingredientsWithId = (values.ingredients ?? detectedIngredients).filter(
-			(ingredient) => ingredient.id,
-		);
-		if (!ingredientsWithId.length) {
+		const ingredientsToAdd = values.ingredients ?? [];
+		if (!ingredientsToAdd.length) {
 			setErrorMessage("Detected ingredients are missing ids and cannot be added.");
+			return;
+		}
+		if (ingredientsToAdd.some((ingredient) => !ingredient.id)) {
+			setErrorMessage("Please choose an ingredient from autocomplete for each detected item.");
 			return;
 		}
 		setErrorMessage("");
@@ -360,7 +502,7 @@ const PantryPage: React.FC = () => {
 		setIsAddingDetected(true);
 		try {
 			await Promise.all(
-				ingredientsWithId.map((ingredient) =>
+				ingredientsToAdd.map((ingredient) =>
 					apiService.post<PantryItemGetDTO>("/groups/me/pantry/items", {
 						ingredientId: ingredient.id,
 						quantity: ingredient.quantity && ingredient.quantity > 0 ? ingredient.quantity : 1,
@@ -368,7 +510,7 @@ const PantryPage: React.FC = () => {
 				),
 			);
 			setSuccessMessage(
-				`Added ${ingredientsWithId.length} detected ingredient${ingredientsWithId.length === 1 ? "" : "s"} to pantry.`,
+				`Added ${ingredientsToAdd.length} detected ingredient${ingredientsToAdd.length === 1 ? "" : "s"} to pantry.`,
 			);
 			resetDetectModal();
 			await fetchIngredients();
@@ -447,35 +589,6 @@ const PantryPage: React.FC = () => {
     },
   ];
 
-  const ingredientOptions = ingredients.map((ingredient) => ({
-    value: ingredient.ingredientName ?? "",
-    label: ingredient.ingredientName ?? "",
-  }));
-
-  const handleIngredientSelect = (value: string) => {
-    const selectedIngredient = ingredients.find(
-      (ingredient) => ingredient.ingredientName === value,
-    );
-    if (!selectedIngredient) {
-      return;
-    }
-    if (selectedIngredient.ingredientDescription?.trim()) {
-      addForm.setFieldValue(
-        "ingredientDescription",
-        selectedIngredient.ingredientDescription.trim(),
-      );
-    }
-    if (selectedIngredient.unit?.trim()) {
-      addForm.setFieldValue("unit", selectedIngredient.unit);
-    }
-  };
-
-	const [search, setSearch] = useState("");
-
-	const filteredOptions = ingredientOptions.filter((opt) =>
-		opt.label.toLowerCase().includes(search.toLowerCase()),
-	);
-
 	const [addFormVisible, setAddFormVisible] = useState(false);
 
 	const handleAddFormVisibleChange = () => {
@@ -541,11 +654,22 @@ const PantryPage: React.FC = () => {
 							{ whitespace: true, message: "Required" },
 						]}
 					>
-						<AutoComplete
-							options={filteredOptions}
-							onSelect={(value: string) => handleIngredientSelect(value)}
-							onChange={(value: string) => setSearch(value)}
-							placeholder={isLoadingIngredients ? "Loading ingredients..." : "e.g. Tomatoes"}
+						<IngredientAutocompleteInput
+							ingredients={ingredients}
+							isLoadingIngredients={isLoadingIngredients}
+							placeholder="e.g. Tomatoes"
+							onChange={(value: string) => addForm.setFieldValue("ingredientName", value)}
+							onIngredientSelect={(ingredient) => {
+								if (ingredient.ingredientDescription?.trim()) {
+									addForm.setFieldValue(
+										"ingredientDescription",
+										ingredient.ingredientDescription.trim(),
+									);
+								}
+								if (ingredient.unit?.trim()) {
+									addForm.setFieldValue("unit", ingredient.unit);
+								}
+							}}
 						/>
 					</Form.Item>
 					<Form.Item label="Description" name="ingredientDescription">
@@ -651,37 +775,13 @@ const PantryPage: React.FC = () => {
 							<Form.List name="ingredients">
 								{(fields) => (
 									<div className="space-y-3">
-										{fields.map((field, index) => (
-											<Card key={field.key} size="small" className="rounded-2xl">
-												<Form.Item name={[field.name, "id"]} hidden>
-													<Input />
-												</Form.Item>
-												<Form.Item
-													label="Ingredient"
-													name={[field.name, "ingredientName"]}
-													rules={[{ required: true, message: "Required" }]}
-												>
-													<Input placeholder={`Ingredient #${index + 1}`} />
-												</Form.Item>
-
-												<div className="grid grid-cols-2 gap-3">
-													<Form.Item
-														label="Quantity"
-														name={[field.name, "quantity"]}
-														rules={[{ required: true, message: "Required" }]}
-													>
-														<InputNumber min={0} className="w-full" />
-													</Form.Item>
-
-													<Form.Item
-														label="Unit"
-														name={[field.name, "unit"]}
-														rules={[{ required: true, message: "Required" }]}
-													>
-														<Select className="min-w-28" options={unitOptions} placeholder="Choose" />
-													</Form.Item>
-												</div>
-											</Card>
+										{fields.map((field) => (
+											<DetectedIngredientRow
+												key={field.key}
+												field={field}
+												ingredients={ingredients}
+												isLoadingIngredients={isLoadingIngredients}
+											/>
 										))}
 									</div>
 								)}
