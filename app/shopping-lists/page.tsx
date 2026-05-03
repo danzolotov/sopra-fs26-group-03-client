@@ -456,12 +456,12 @@ const ShoppingListsPage: React.FC = () => {
 					<Button className="pm-button" onClick={handleAddFormVisibleChange}>
 						{addFormVisible ? (
 							<div className={"flex items-center gap-2"}>
-								<PlusCircleOutlined />
+								<CloseCircleOutlined />
 								Close Form
 							</div>
 						) : (
 							<div className={"flex items-center gap-2"}>
-								<CloseCircleOutlined />
+								<PlusCircleOutlined />
 								Add Item
 							</div>
 						)}

@@ -9,7 +9,6 @@ import {
 	Input,
 	InputNumber,
 	Modal,
-	List,
 	Popconfirm,
 	Space,
 	Spin,
@@ -43,6 +42,10 @@ interface AutoDetectedIngredientGetDTO {
 	ingredientDescription?: string;
 	unit?: Unit;
 	quantity?: number;
+}
+
+interface DetectedIngredientFormValues {
+	ingredients?: Array<AutoDetectedIngredientGetDTO>;
 }
 
 const unitOptions: Array<{ label: string; value: Unit }> = [
@@ -344,8 +347,10 @@ const PantryPage: React.FC = () => {
 		}
 	};
 
-	const handleAddDetectedIngredients = async () => {
-		const ingredientsWithId = detectedIngredients.filter((ingredient) => ingredient.id);
+	const handleAddDetectedIngredients = async (values: DetectedIngredientFormValues) => {
+		const ingredientsWithId = (values.ingredients ?? detectedIngredients).filter(
+			(ingredient) => ingredient.id,
+		);
 		if (!ingredientsWithId.length) {
 			setErrorMessage("Detected ingredients are missing ids and cannot be added.");
 			return;
@@ -477,6 +482,14 @@ const PantryPage: React.FC = () => {
 		setAddFormVisible(!addFormVisible);
 	};
 
+	const [detectedIngredientsForm] = Form.useForm();
+
+	useEffect(() => {
+		if (detectedIngredients.length > 0) {
+			detectedIngredientsForm.setFieldsValue({ ingredients: detectedIngredients });
+		}
+	}, [detectedIngredients, detectedIngredientsForm]);
+
 	return (
 		<DashboardShell headerTitle="Pantry" selectedMenuKey="2">
 			<div className="mb-8 flex items-center justify-between gap-4">
@@ -487,12 +500,12 @@ const PantryPage: React.FC = () => {
 					<Button className="pm-button" onClick={handleAddFormVisibleChange}>
 						{addFormVisible ? (
 							<div className={"flex items-center gap-2"}>
-								<PlusCircleOutlined />
+								<CloseCircleOutlined />
 								Close Form
 							</div>
 						) : (
 							<div className={"flex items-center gap-2"}>
-								<CloseCircleOutlined />
+								<PlusCircleOutlined />
 								Add Item
 							</div>
 						)}
@@ -595,7 +608,7 @@ const PantryPage: React.FC = () => {
 									key="add"
 									type="primary"
 									className="pm-button"
-									onClick={handleAddDetectedIngredients}
+															onClick={() => detectedIngredientsForm.submit()}
 									loading={isAddingDetected}
 								>
 									Add detected ingredients
@@ -629,28 +642,51 @@ const PantryPage: React.FC = () => {
 						}}
 					/>
 					{detectedIngredients.length > 0 ? (
-						<List
-							size="small"
-							header={<span>Detected ingredients</span>}
-							dataSource={detectedIngredients}
-							renderItem={(ingredient) => (
-								<List.Item>
-									<div className="w-full">
-										<div className="font-medium">
-											{ingredient.ingredientName ?? `Ingredient #${ingredient.id ?? "-"}`}
-										</div>
-										<div className="text-sm text-slate-600">
-											Quantity: {ingredient.quantity ?? 1} | Unit: {ingredient.unit ?? "-"}
-										</div>
-										{ingredient.ingredientDescription ? (
-											<div className="text-sm text-slate-500">
-												{ingredient.ingredientDescription}
-											</div>
-										) : null}
+						<Form
+							form={detectedIngredientsForm}
+							layout="vertical"
+							initialValues={{ ingredients: detectedIngredients }}
+							onFinish={handleAddDetectedIngredients}
+						>
+							<Form.List name="ingredients">
+								{(fields) => (
+									<div className="space-y-3">
+										{fields.map((field, index) => (
+											<Card key={field.key} size="small" className="rounded-2xl">
+												<Form.Item name={[field.name, "id"]} hidden>
+													<Input />
+												</Form.Item>
+												<Form.Item
+													label="Ingredient"
+													name={[field.name, "ingredientName"]}
+													rules={[{ required: true, message: "Required" }]}
+												>
+													<Input placeholder={`Ingredient #${index + 1}`} />
+												</Form.Item>
+
+												<div className="grid grid-cols-2 gap-3">
+													<Form.Item
+														label="Quantity"
+														name={[field.name, "quantity"]}
+														rules={[{ required: true, message: "Required" }]}
+													>
+														<InputNumber min={0} className="w-full" />
+													</Form.Item>
+
+													<Form.Item
+														label="Unit"
+														name={[field.name, "unit"]}
+														rules={[{ required: true, message: "Required" }]}
+													>
+														<Select className="min-w-28" options={unitOptions} placeholder="Choose" />
+													</Form.Item>
+												</div>
+											</Card>
+										))}
 									</div>
-								</List.Item>
-							)}
-						/>
+								)}
+							</Form.List>
+						</Form>
 					) : null}
 				</div>
 			</Modal>
