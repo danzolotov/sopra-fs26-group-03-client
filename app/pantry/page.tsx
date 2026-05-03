@@ -378,10 +378,17 @@ const PantryPage: React.FC = () => {
 				return;
 			}
 
+			const resolvedIngredientName =
+				cleanName.trim() !== "" ? cleanName : (ingredient.ingredientName ?? cleanName);
+			const resolvedIngredientDescription =
+				cleanDescription.trim() !== ""
+					? cleanDescription
+					: (ingredient.ingredientDescription ?? cleanDescription);
+
 			const shoppingPayload: PantryItemPostDTO = {
 				ingredientId: ingredient.id,
-				ingredientName: ingredient.ingredientName ?? cleanName,
-				ingredientDescription: ingredient.ingredientDescription ?? cleanDescription,
+				ingredientName: resolvedIngredientName,
+				ingredientDescription: resolvedIngredientDescription,
 				quantity: values.quantity,
 				category: cleanCategory ?? ingredient.category,
 				unit: cleanUnit ?? ingredient.standardUnit,
