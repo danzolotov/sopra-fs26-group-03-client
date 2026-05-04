@@ -224,9 +224,12 @@ const DetectedIngredientRow: React.FC<DetectedIngredientRowProps> = ({
 				<Form.Item
 					label="Quantity"
 					name={[field.name, "quantity"]}
-					rules={[{ required: true, message: "Required" }]}
+					rules={[
+						{ required: true, message: "Required" },
+						{ type: "number", min: 1, message: "Quantity must be at least 1" },
+					]}
 				>
-					<InputNumber min={0} className="w-full" />
+				<InputNumber min={0.1} className="w-full" />
 				</Form.Item>
 
 				<Form.Item
@@ -533,7 +536,7 @@ const PantryPage: React.FC = () => {
 	const handleAddDetectedIngredients = async (values: DetectedIngredientFormValues) => {
 		const ingredientsToAdd = values.ingredients ?? [];
 		if (!ingredientsToAdd.length) {
-			setErrorMessage("Detected ingredients are missing ids and cannot be added.");
+			setErrorMessage("No detected ingredients to add.");
 			return;
 		}
 		if (ingredientsToAdd.some((ingredient) => !ingredient.id)) {
