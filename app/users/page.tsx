@@ -1,3 +1,5 @@
+/*
+
 // this code is part of S2 to display a list of all registered users
 // clicking on a user in this list will display /app/users/[id]/page.tsx
 "use client"; // For components that need React hooks and browser APIs, SSR (server side rendering) has to be disabled. Read more here: https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering
@@ -79,13 +81,13 @@ const Dashboard: React.FC = () => {
       >
         {users && (
           <>
-            {/* antd Table: pass the columns and data, plus a rowKey for stable row identity */}
+            {antd Table: pass the columns and data, plus a rowKey for stable row identity}
             <Table<User>
               columns={columns}
               dataSource={users}
               rowKey="id"
               onRow={(row) => ({
-                onClick: () => router.push(`/users/${row.id}`),
+                onClick: () => router.push(`/users/${row.userID}`),
               })}
             />
             <Button className="pm-button" onClick={handleLogout}>
@@ -99,3 +101,5 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
+
+*/

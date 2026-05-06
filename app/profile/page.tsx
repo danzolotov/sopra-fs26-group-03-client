@@ -41,8 +41,7 @@ const ProfilePage: React.FC = () => {
 
 	const handleSave = async () => {
 		try {
-			// Call API to update user
-			await apiService.put<User>("/users/me", editedUser);
+			await apiService.patch<User>("/users/me", editedUser);
 			setUser(editedUser);
 			setIsEditOpen(false);
 		} catch (err) {
