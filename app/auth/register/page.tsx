@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"; // use NextJS router for navigation
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import { Button, Card, Form, Input, App } from "antd";
+import Image from "next/image";
 
 interface RegisterFormValues {
   username: string;

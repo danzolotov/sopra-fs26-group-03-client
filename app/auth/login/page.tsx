@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"; // use NextJS router for navigation
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import { Button, Form, Input, Card, App } from "antd";
+import Image from "next/image";
 
 interface LoginFormValues {
   username: string;
@@ -105,7 +106,7 @@ const Login: React.FC = () => {
             >
               Create one now
             </Button>
-          </div>
+          </Form.Item>
         </Form>
       </Card>
 

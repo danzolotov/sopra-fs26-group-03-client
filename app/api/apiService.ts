@@ -118,22 +118,6 @@ export class ApiService {
     });
     return this.processResponse<T>(res, "An error occurred while posting the form data.\n");
   }
-	/**
-	 * POST request with multipart/form-data payload.
-	 * @param endpoint - The API endpoint (e.g. "/uploads").
-	 * @param data - The FormData payload.
-	 * @returns JSON data of type T.
-	 */
-	public async postFormData<T>(endpoint: string, data: FormData): Promise<T> {
-		const url = `${this.baseURL}${endpoint}`;
-		const res = await fetch(url, {
-			method: "POST",
-			credentials: "include",
-			headers: {},
-			body: data,
-		});
-		return this.processResponse<T>(res, "An error occurred while posting the form data.\n");
-	}
 
   /**
    * PUT request.
