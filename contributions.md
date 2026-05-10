@@ -100,13 +100,12 @@ TODO:
 
 ---
 
-## Contributions Week 7 - [Begin Date] to [End Date]
+## Contributions Week 7 - 04.05.2026 to 10.05.2026
 
 | **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
 | ------------------- | ---------- | ------------------ | --------------- | ------------- |
-| **[@MarcHonegger]** | xx.xx.xxxx | commits            | What            | Why           |
-|                     | xx.xx.xxxx | commits            | What            | Why           |
-|                     | xx.xx.xxxx | commits            | What            | Why           |
+| **[@MarcHonegger]** | 04.05.2026 | Multiple           | Smaller commits and merges            | Important to continue           |
+|                     | 06.05.2026 | [PR49]([url](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/49))            | Adding profile and ingredients overview            | Important user story, one of the last features           |
 | **[@klitvinova]**   | xx.xx.xxxx | commits            | What            | Why           |
 |                     | xx.xx.xxxx | commits            | What            | Why           |
 |                     | xx.xx.xxxx | commits            | What            | Why           |
