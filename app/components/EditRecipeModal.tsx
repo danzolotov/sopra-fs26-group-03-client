@@ -1,7 +1,16 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Modal, Form, Input, InputNumber, Select, Button, Typography, Card } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Button,
+  Typography,
+  Card,
+} from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Recipe, RecipePutDTO } from "@/types/recipe";
 import { IngredientCategory } from "@/types/ingredientCategory";
@@ -29,9 +38,22 @@ const unitOptions = [
 ];
 
 const categoryOptions = [
-  "VEGETABLE", "FRUIT", "MEAT", "FISH", "DAIRY", "EGGS", "PLANT_PROTEIN",
-  "GRAIN", "BAKERY", "BAKING", "HERB", "SPICE", "OIL", "CONDIMENT", "OTHER"
-].map(cat => ({ label: cat, value: cat as IngredientCategory }));
+  "VEGETABLE",
+  "FRUIT",
+  "MEAT",
+  "FISH",
+  "DAIRY",
+  "EGGS",
+  "PLANT_PROTEIN",
+  "GRAIN",
+  "BAKERY",
+  "BAKING",
+  "HERB",
+  "SPICE",
+  "OIL",
+  "CONDIMENT",
+  "OTHER",
+].map((cat) => ({ label: cat, value: cat as IngredientCategory }));
 
 const EditRecipeModal: React.FC<EditRecipeModalProps> = ({
   open,
@@ -47,7 +69,7 @@ const EditRecipeModal: React.FC<EditRecipeModalProps> = ({
       form.setFieldsValue({
         name: recipe.name,
         description: recipe.description,
-        ingredients: recipe.ingredients.map(ing => ({
+        ingredients: recipe.ingredients.map((ing) => ({
           ingredientName: ing.ingredientName,
           ingredientDescription: ing.ingredientDescription || "",
           quantity: ing.quantity || 1,
@@ -61,13 +83,16 @@ const EditRecipeModal: React.FC<EditRecipeModalProps> = ({
   }, [open, recipe, form]);
 
   const handleOk = () => {
-    form.validateFields().then((values) => {
-      if (recipe) {
-        onSave(recipe.id, values);
-      }
-    }).catch(info => {
-      console.log('Validate Failed:', info);
-    });
+    form
+      .validateFields()
+      .then((values) => {
+        if (recipe) {
+          onSave(recipe.id, values);
+        }
+      })
+      .catch((info) => {
+        console.log("Validate Failed:", info);
+      });
   };
 
   return (
@@ -117,41 +142,41 @@ const EditRecipeModal: React.FC<EditRecipeModalProps> = ({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
                     <Form.Item
                       {...restField}
-                      name={[name, 'ingredientName']}
+                      name={[name, "ingredientName"]}
                       label="Ingredient Name"
-                      rules={[{ required: true, message: 'Required' }]}
+                      rules={[{ required: true, message: "Required" }]}
                     >
                       <Input placeholder="e.g. Tomato" />
                     </Form.Item>
                     <Form.Item
                       {...restField}
-                      name={[name, 'ingredientDescription']}
+                      name={[name, "ingredientDescription"]}
                       label="Description"
                     >
                       <Input placeholder="e.g. Fresh, diced" />
                     </Form.Item>
                     <Form.Item
                       {...restField}
-                      name={[name, 'quantity']}
+                      name={[name, "quantity"]}
                       label="Quantity"
-                      rules={[{ required: true, message: 'Required' }]}
+                      rules={[{ required: true, message: "Required" }]}
                     >
                       <InputNumber min={0.1} step={0.1} className="w-full" />
                     </Form.Item>
                     <div className="grid grid-cols-2 gap-2">
                       <Form.Item
                         {...restField}
-                        name={[name, 'unit']}
+                        name={[name, "unit"]}
                         label="Unit"
-                        rules={[{ required: true, message: 'Required' }]}
+                        rules={[{ required: true, message: "Required" }]}
                       >
                         <Select options={unitOptions} />
                       </Form.Item>
                       <Form.Item
                         {...restField}
-                        name={[name, 'category']}
+                        name={[name, "category"]}
                         label="Category"
-                        rules={[{ required: true, message: 'Required' }]}
+                        rules={[{ required: true, message: "Required" }]}
                       >
                         <Select options={categoryOptions} />
                       </Form.Item>
@@ -160,7 +185,20 @@ const EditRecipeModal: React.FC<EditRecipeModalProps> = ({
                 </Card>
               ))}
               <Form.Item>
-                <Button type="dashed" onClick={() => add({ ingredientName: '', quantity: 1, unit: 'PIECE', category: 'OTHER', ingredientDescription: '' })} block icon={<PlusOutlined />}>
+                <Button
+                  type="dashed"
+                  onClick={() =>
+                    add({
+                      ingredientName: "",
+                      quantity: 1,
+                      unit: "PIECE",
+                      category: "OTHER",
+                      ingredientDescription: "",
+                    })
+                  }
+                  block
+                  icon={<PlusOutlined />}
+                >
                   Add Ingredient
                 </Button>
               </Form.Item>
