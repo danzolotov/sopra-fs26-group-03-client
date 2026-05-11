@@ -67,7 +67,7 @@ export class ApiService {
 
   private getHeaders(omitContentType = false): HeadersInit {
     const headers: Record<string, string> = { ...this.defaultHeaders } as Record<string, string>;
-    
+
     if (omitContentType) {
       delete headers["Content-Type"];
     }
