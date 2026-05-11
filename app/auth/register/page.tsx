@@ -133,16 +133,6 @@ const Register: React.FC = () => {
           </div>
         </Form>
       </Card>
-
-      <div className="mt-12">
-        <Button
-          type="text"
-          className="text-slate-400 hover:text-slate-600 font-medium"
-          onClick={() => router.push("/")}
-        >
-          ← Back to home
-        </Button>
-      </div>
     </div>
   );
 };
