@@ -80,7 +80,7 @@ reason).
 
 ---
 
-## Contributions Week 6 - [Begin Date] to [End Date]
+## Contributions Week 6 - 27.04.2026 to 03.05.2026
 
 | **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
 | ------------------- | ---------- | ------------------ | --------------- | ------------- |
@@ -93,13 +93,12 @@ reason).
 
 ---
 
-## Contributions Week 7 - [Begin Date] to [End Date]
+## Contributions Week 7 - 04.05.2026 to 10.05.2026
 
 | **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
 | ------------------- | ---------- | ------------------ | --------------- | ------------- |
-| **[@MarcHonegger]** | xx.xx.xxxx | commits            | What            | Why           |
-|                     | xx.xx.xxxx | commits            | What            | Why           |
-|                     | xx.xx.xxxx | commits            | What            | Why           |
-| **[@klitvinova]**   | xx.xx.xxxx | commits            | What            | Why           |
-|                     | xx.xx.xxxx | commits            | What            | Why           |
-|                     | xx.xx.xxxx | commits            | What            | Why           |
+| **[@MarcHonegger]** | 04.05.2026 | Multiple           | Smaller commits and merges            | Important to continue           |
+|                     | 06.05.2026 | [PR49]([url](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/49))            | Adding profile and ingredients overview            | Important user story, one of the last features           |
+| **[@klitvinova]**   | 08.05.2026 | [69b0f66](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/52/changes/69b0f668f8f58cbf358e6b55d9adbaad78a821fd)            | Improving the error handling on frontend            | To fix buggy registration           |
+|                     | 07.05.2026| [1a35dff](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/91/changes/1a35dfffb494dc65cca7d19e34ee9d59cc2ab7c7)            | Error message and test for duplicating user registration            | To fix buggy registration           |
+|                     | 08.05.2026 | [PR93](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/93)            | Extending Test Suite            | To inrease test coverage           |
