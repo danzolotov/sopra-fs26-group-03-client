@@ -85,6 +85,8 @@ const RecipesPage: React.FC = () => {
                     <Button
                       type="text"
                       icon={<EditOutlined />}
+                      aria-label="Edit recipe"
+                      title="Edit recipe"
                       onClick={() => handleEditClick(recipe)}
                       className="text-slate-400 hover:text-blue-500"
                     />
