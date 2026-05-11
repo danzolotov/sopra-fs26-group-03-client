@@ -107,7 +107,13 @@ const EditRecipeModal: React.FC<EditRecipeModalProps> = ({
               {fields.map(({ key, name, ...restField }) => (
                 <Card size="small" key={key} className="mb-4 border-slate-200">
                   <div className="flex justify-end">
-                    <MinusCircleOutlined onClick={() => remove(name)} className="text-red-500 hover:text-red-700 cursor-pointer" />
+                    <Button
+                      type="text"
+                      onClick={() => remove(name)}
+                      aria-label="Remove ingredient"
+                      icon={<MinusCircleOutlined />}
+                      className="text-red-500 hover:text-red-700"
+                    />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
                     <Form.Item
