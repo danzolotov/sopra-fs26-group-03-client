@@ -7,7 +7,13 @@ The ultimate companion for modern home cooks and shared households:
 - Reduce food waste and save money
 
 ## Technologies
-React, Google Cloud, Supabase, TailwindCSS, Antd
+- Next.js
+- React
+- TypeScript
+- TailwindCSS
+- Ant Design
+- ESLint
+- Prettier
 
 ## High-level components
 How are they correlated? Reference the main class, file, or function in the README text
