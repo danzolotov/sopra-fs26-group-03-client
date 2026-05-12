@@ -105,7 +105,7 @@ reason).
 
 ---
 
-## Contributions Week 8 - [Begin Date] to [End Date]
+## Contributions Week 8 - 11.05.2025 to 17.05.2025
 
 | **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
 | ------------------- | ---------- | ------------------ | --------------- | ------------- |
@@ -118,7 +118,7 @@ reason).
 
 ---
 
-## Contributions Week 9 - [Begin Date] to [End Date]
+## Contributions Week 9 - 18.05.2025 to 24.05.2025
 
 | **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
 | ------------------- | ---------- | ------------------ | --------------- | ------------- |
