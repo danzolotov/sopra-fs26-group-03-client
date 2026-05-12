@@ -27,7 +27,6 @@ const GroupsPage: React.FC = () => {
 	const router = useRouter();
 	const [form] = Form.useForm<CreateGroupFormValues>();
 	const [joinForm] = Form.useForm<JoinGroupFormValues>();
-	const [successMessage, setSuccessMessage] = useState<string>("");
 	const [errorMessage, setErrorMessage] = useState<string>("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
   const {
@@ -39,7 +38,6 @@ const GroupsPage: React.FC = () => {
 
   const handleCreateGroup = async (values: CreateGroupFormValues) => {
     setErrorMessage("");
-    setSuccessMessage("");
     setIsSubmitting(true);
 
     try {
@@ -47,11 +45,11 @@ const GroupsPage: React.FC = () => {
         name: values.name,
       });
 
-      setSuccessMessage(
-        `Group \"${createdGroup.name ?? values.name}\" was created.`,
-      );
       form.resetFields();
-      router.push("/groups/me");
+      const createdName = createdGroup.name?.trim() || values.name.trim();
+      router.push(
+        `/groups/me?action=created&groupName=${encodeURIComponent(createdName)}`,
+      );
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(error.message);
@@ -65,7 +63,6 @@ const GroupsPage: React.FC = () => {
 
   const handleJoinGroup = async (values: JoinGroupFormValues) => {
     setErrorMessage("");
-    setSuccessMessage("");
     setIsSubmitting(true);
 
     try {
@@ -76,7 +73,7 @@ const GroupsPage: React.FC = () => {
       joinForm.resetFields();
       const joinedName = joinedGroup.name?.trim() || "your group";
       router.push(
-        `/groups/me?joined=1&groupName=${encodeURIComponent(joinedName)}`,
+        `/groups/me?action=joined&groupName=${encodeURIComponent(joinedName)}`,
       );
     } catch (error) {
       if (error instanceof Error) {
@@ -171,15 +168,6 @@ const GroupsPage: React.FC = () => {
             <p className="mb-6 text-sm text-secondary-700">
               Enter a name and create your group.
             </p>
-
-            {successMessage ? (
-              <Alert
-                className="mb-4"
-                message={successMessage}
-                showIcon
-                type="success"
-              />
-            ) : null}
             {errorMessage ? (
               <Alert
                 className="mb-4"
@@ -229,14 +217,6 @@ const GroupsPage: React.FC = () => {
               Enter your invite code to join an existing group.
             </p>
 
-            {successMessage ? (
-              <Alert
-                className="mb-4"
-                message={successMessage}
-                showIcon
-                type="success"
-              />
-            ) : null}
             {errorMessage ? (
               <Alert
                 className="mb-4"
