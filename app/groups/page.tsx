@@ -5,6 +5,7 @@ import { Alert, Button, Card, Form, Input, Modal, Spin, message } from "antd";
 import { InfoCircleOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
+import { useGroupMembership } from "@/hooks/useGroupMembership";
 import PageHeader from "@/components/page-header";
 
 interface CreateGroupFormValues {
@@ -29,23 +30,12 @@ const GroupsPage: React.FC = () => {
 	const [successMessage, setSuccessMessage] = useState<string>("");
 	const [errorMessage, setErrorMessage] = useState<string>("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [existingGroup, setExistingGroup] = useState<GroupGetDTO | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
-
-	React.useEffect(() => {
-		const checkMembership = async () => {
-			setIsLoading(true);
-			try {
-				const group = await apiService.get<GroupGetDTO>("/groups/me");
-				setExistingGroup(group);
-			} catch {
-				setExistingGroup(null);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-		checkMembership();
-	}, [apiService]);
+  const {
+    group: existingGroup,
+    hasGroup,
+    isLoading,
+    refetch: refetchMembership,
+  } = useGroupMembership();
 
   const handleCreateGroup = async (values: CreateGroupFormValues) => {
     setErrorMessage("");
@@ -112,8 +102,7 @@ const GroupsPage: React.FC = () => {
         try {
           await apiService.delete("/groups/me/members/me");
           message.success("You left the group.");
-          setExistingGroup(null);
-          router.refresh();
+					await refetchMembership();
         } catch (error) {
           message.error(
             error instanceof Error ? error.message : "Failed to leave group.",
@@ -136,7 +125,7 @@ const GroupsPage: React.FC = () => {
 		);
 	}
 
-	if (existingGroup) {
+  if (hasGroup && existingGroup) {
 		return (
 			<div className="flex min-h-screen flex-col bg-gradient-to-b from-orange-50 to-white">
 				<PageHeader title="Groups" />
