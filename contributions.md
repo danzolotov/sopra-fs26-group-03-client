@@ -98,7 +98,33 @@ reason).
 | **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
 | ------------------- | ---------- | ------------------ | --------------- | ------------- |
 | **[@MarcHonegger]** | 04.05.2026 | Multiple           | Smaller commits and merges            | Important to continue           |
-|                     | 06.05.2026 | [PR49]([url](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/49))            | Adding profile and ingredients overview            | Important user story, one of the last features           |
+|                     | 06.05.2026 | [PR49](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/49)            | Adding profile and ingredients overview            | Important user story, one of the last features           |
 | **[@klitvinova]**   | 08.05.2026 | [69b0f66](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/52/changes/69b0f668f8f58cbf358e6b55d9adbaad78a821fd)            | Improving the error handling on frontend            | To fix buggy registration           |
 |                     | 07.05.2026| [1a35dff](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/91/changes/1a35dfffb494dc65cca7d19e34ee9d59cc2ab7c7)            | Error message and test for duplicating user registration            | To fix buggy registration           |
 |                     | 08.05.2026 | [PR93](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/93)            | Extending Test Suite            | To inrease test coverage           |
+
+---
+
+## Contributions Week 8 - [Begin Date] to [End Date]
+
+| **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
+| ------------------- | ---------- | ------------------ | --------------- | ------------- |
+| **[@MarcHonegger]** | 12.05.2026 | [PR69](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/69)            | Improve Group Management            | Based on Feedback reveiced from TA & other group           |
+|                     | 12.05.2026 | [PR70](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/70)            | Unifiy Error Messages            | Consistency & better UX           |
+|                     | xx.xx.xxxx | commits            | What            | Why           |
+| **[@klitvinova]**   | xx.xx.xxxx | commits            | What            | Why           |
+|                     | xx.xx.xxxx | commits            | What            | Why           |
+|                     | xx.xx.xxxx | commits            | What            | Why           |
+
+---
+
+## Contributions Week 9 - [Begin Date] to [End Date]
+
+| **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
+| ------------------- | ---------- | ------------------ | --------------- | ------------- |
+| **[@MarcHonegger]** | xx.xx.xxxx | commits            | What            | Why           |
+|                     | xx.xx.xxxx | commits            | What            | Why           |
+|                     | xx.xx.xxxx | commits            | What            | Why           |
+| **[@klitvinova]**   | xx.xx.xxxx | commits            | What            | Why           |
+|                     | xx.xx.xxxx | commits            | What            | Why           |
+|                     | xx.xx.xxxx | commits            | What            | Why           |
