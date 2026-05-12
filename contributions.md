@@ -111,7 +111,7 @@ reason).
 | ------------------- | ---------- | ------------------ | --------------- | ------------- |
 | **[@MarcHonegger]** | 12.05.2026 | [PR69](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/69)            | Improve Group Management            | Based on Feedback reveiced from TA & other group           |
 |                     | 12.05.2026 | [PR70](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/70)            | Unifiy Error Messages            | Consistency & better UX           |
-|                     | 12.05.2026 | [85bf2d5](https://github.com/klitvinova/sopra-fs26-group-03-client/commit/85bf2d5361c5cf28c7f123141621d1637d25f3b5)            | Prototype for README            | Criteria for M4           |
+|                     | 12.05.2026 | [Frontend](https://github.com/klitvinova/sopra-fs26-group-03-client/tree/README) & [Backend](https://github.com/klitvinova/sopra-fs26-group-03-server/tree/README)       | Prototype for README            | Criteria for M4           |
 | **[@klitvinova]**   | xx.xx.xxxx | commits            | What            | Why           |
 |                     | xx.xx.xxxx | commits            | What            | Why           |
 |                     | xx.xx.xxxx | commits            | What            | Why           |
