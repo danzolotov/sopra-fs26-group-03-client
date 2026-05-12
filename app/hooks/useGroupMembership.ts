@@ -33,7 +33,7 @@ export const useGroupMembership = (): UseGroupMembershipResult => {
   }, [fetchMembership]);
 
   const hasGroup = useMemo(() => {
-    return Boolean(group?.id ?? group?.name?.trim());
+    return group != null;
   }, [group]);
 
   return {
