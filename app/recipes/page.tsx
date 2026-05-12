@@ -75,7 +75,7 @@ const RecipesPage: React.FC = () => {
           grid={{ gutter: 24, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3 }}
           dataSource={recipes}
           renderItem={(recipe) => (
-            <List.Item>
+            <List.Item key={recipe.id}>
               <Card
                 title={recipe.name}
                 hoverable
