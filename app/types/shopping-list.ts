@@ -20,10 +20,7 @@ export interface ShoppingListGetDTO {
 
 export interface ShoppingListItemPostDTO {
 	ingredientId: number;
-	ingredientName: string;
-	ingredientDescription: string;
-	category: IngredientCategory;
-	unit: Unit;
+	ingredientCategory: IngredientCategory;
 	quantity: number;
 }
 
