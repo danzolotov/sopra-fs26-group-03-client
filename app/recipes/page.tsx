@@ -7,6 +7,7 @@ import GroupRequired from "@/components/group-required";
 import { useApi } from "@/hooks/useApi";
 import { useGroupMembership } from "@/hooks/useGroupMembership";
 import { Recipe } from "@/types/recipe";
+import { getCategoryEmoji, formatCategoryName } from "@/utils/categoryEmojis";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -131,7 +132,7 @@ const RecipesPage: React.FC = () => {
 												color="blue"
 												className="rounded-full px-3 border-none bg-blue-50 text-blue-600"
 											>
-												{ing.ingredientName}: {ing.quantity} {ing.unit?.toLowerCase() ?? "-"}
+												{ing.ingredientName}: {ing.quantity} {getCategoryEmoji(ing.category)} {ing.category && formatCategoryName(ing.category)}
 											</Tag>
 										))}
 									</div>

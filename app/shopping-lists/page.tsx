@@ -39,6 +39,7 @@ import {
 	IngredientGetDTO,
 	IngredientPostDTO,
 } from "@/types/ingredientCategory";
+import { getCategoryEmoji, formatCategoryName } from "@/utils/categoryEmojis";
 
 const { Title } = Typography;
 
@@ -55,20 +56,20 @@ const unitOptions: Array<{ label: string; value: Unit }> = [
 ];
 
 const categoryOptions: Array<{ label: string; value: IngredientCategory }> = [
-	{ label: "Vegetable", value: "VEGETABLE" },
-	{ label: "Fruit", value: "FRUIT" },
-	{ label: "Meat", value: "MEAT" },
-	{ label: "Fish", value: "FISH" },
-	{ label: "Dairy", value: "DAIRY" },
-	{ label: "Eggs", value: "EGGS" },
-	{ label: "Plant protein", value: "PLANT_PROTEIN" },
-	{ label: "Grain", value: "GRAIN" },
-	{ label: "Bakery", value: "BAKERY" },
-	{ label: "Baking", value: "BAKING" },
-	{ label: "Herb", value: "HERB" },
-	{ label: "Spice", value: "SPICE" },
-	{ label: "Oil", value: "OIL" },
-	{ label: "Condiment", value: "CONDIMENT" },
+	{ label: "🥦 Vegetable", value: "VEGETABLE" },
+	{ label: "🍎 Fruit", value: "FRUIT" },
+	{ label: "🥩 Meat", value: "MEAT" },
+	{ label: "🐟 Fish", value: "FISH" },
+	{ label: "🧀 Dairy", value: "DAIRY" },
+	{ label: "🥚 Eggs", value: "EGGS" },
+	{ label: "🌱 Plant protein", value: "PLANT_PROTEIN" },
+	{ label: "🌾 Grain", value: "GRAIN" },
+	{ label: "🍞 Bakery", value: "BAKERY" },
+	{ label: "🥐 Baking", value: "BAKING" },
+	{ label: "🌿 Herb", value: "HERB" },
+	{ label: "🌶️ Spice", value: "SPICE" },
+	{ label: "🫗 Oil", value: "OIL" },
+	{ label: "🍯 Condiment", value: "CONDIMENT" },
 ];
 
 const getItemsFromList = (list: ShoppingListGetDTO | null): ShoppingListItemGetDTO[] => {
@@ -488,7 +489,11 @@ const ShoppingListsPage: React.FC = () => {
 		{
 			title: "Category",
 			key: "category",
-			render: (_, record) => <span>{record.category ?? "-"}</span>,
+			render: (_, record) => (
+				<span className={record.isBought ? "line-through text-slate-400" : ""}>
+					{record.category ? `${getCategoryEmoji(record.category)} ${formatCategoryName(record.category)}` : "-"}
+				</span>
+			),
 		},
 		{
 			title: "Actions",

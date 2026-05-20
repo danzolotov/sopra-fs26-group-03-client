@@ -5,6 +5,7 @@ import { Modal, Form, Input, InputNumber, Select, Button, Typography, Card } fro
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Recipe, RecipePutDTO } from "@/types/recipe";
 import { IngredientCategory } from "@/types/ingredientCategory";
+import { getCategoryEmoji, formatCategoryName } from "@/utils/categoryEmojis";
 
 const { Text } = Typography;
 
@@ -44,7 +45,10 @@ const categoryOptions = [
 	"OIL",
 	"CONDIMENT",
 	"OTHER",
-].map((cat) => ({ label: cat, value: cat as IngredientCategory }));
+].map((cat) => ({
+	label: `${getCategoryEmoji(cat as IngredientCategory)} ${formatCategoryName(cat as IngredientCategory)}`,
+	value: cat as IngredientCategory,
+}));
 
 const EditRecipeModal: React.FC<EditRecipeModalProps> = ({
 	open,
