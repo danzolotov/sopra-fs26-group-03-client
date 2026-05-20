@@ -1,7 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Button, Card, Divider, Input, Modal, Space, Spin, Tag, Tooltip, Typography, notification } from "antd";
+import {
+	Button,
+	Card,
+	Divider,
+	Input,
+	Modal,
+	Space,
+	Spin,
+	Tag,
+	Tooltip,
+	Typography,
+	notification,
+} from "antd";
 import {
 	CopyOutlined,
 	DeleteOutlined,
@@ -32,36 +44,37 @@ export default function GroupMePage() {
 	const [newGroupName, setNewGroupName] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const isAdmin = group?.members?.find((m) => m.userID === currentUser?.userID)?.role === GroupRole.ADMIN;
+	const isAdmin =
+		group?.members?.find((m) => m.userID === currentUser?.userID)?.role === GroupRole.ADMIN;
 
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    const params = new URLSearchParams(window.location.search);
-    const action = params.get("action");
-    const groupName = params.get("groupName") ?? "the group";
+	useEffect(() => {
+		if (typeof window === "undefined") {
+			return;
+		}
+		const params = new URLSearchParams(window.location.search);
+		const action = params.get("action");
+		const groupName = params.get("groupName") ?? "the group";
 
-    if (action === "joined") {
-		notification.success({
-			message: "Joined group",
-			description: `You successfully joined ${groupName}.`,
-			placement: "topRight",
-		});
-	}
+		if (action === "joined") {
+			notification.success({
+				message: "Joined group",
+				description: `You successfully joined ${groupName}.`,
+				placement: "topRight",
+			});
+		}
 
-	if (action === "created") {
-		notification.success({
-			message: "Group created",
-			description: `Your group \"${groupName}\" is ready.`,
-			placement: "topRight",
-		});
-	}
+		if (action === "created") {
+			notification.success({
+				message: "Group created",
+				description: `Your group \"${groupName}\" is ready.`,
+				placement: "topRight",
+			});
+		}
 
-	if (action === "joined" || action === "created") {
-		window.history.replaceState({}, "", "/groups/me");
-	}
-  }, []);
+		if (action === "joined" || action === "created") {
+			window.history.replaceState({}, "", "/groups/me");
+		}
+	}, []);
 
 	const fetchData = useCallback(async () => {
 		setIsLoading(true);
@@ -146,17 +159,17 @@ export default function GroupMePage() {
 				try {
 					const updated = await apiService.post<Group>("/groups/me/invite-code", {});
 					setGroup(updated);
-				notification.success({
-					title: "Code Regenerated",
-					description: "Invite code regenerated!",
-					placement: "topRight",
-				});
-			} catch (error) {
-				notification.error({
-					title: "Failed to Regenerate Code",
-					description: error instanceof Error ? error.message : "Failed to regenerate code.",
-					placement: "topRight",
-				});
+					notification.success({
+						title: "Code Regenerated",
+						description: "Invite code regenerated!",
+						placement: "topRight",
+					});
+				} catch (error) {
+					notification.error({
+						title: "Failed to Regenerate Code",
+						description: error instanceof Error ? error.message : "Failed to regenerate code.",
+						placement: "topRight",
+					});
 				}
 			},
 		});
@@ -173,18 +186,18 @@ export default function GroupMePage() {
 			onOk: async () => {
 				try {
 					await apiService.delete("/groups/me/members/me");
-				notification.success({
-					title: "Left Group",
-					description: "You left the group.",
-					placement: "topRight",
-				});
+					notification.success({
+						title: "Left Group",
+						description: "You left the group.",
+						placement: "topRight",
+					});
 					router.push("/groups");
-			} catch (error) {
-				notification.error({
-					title: "Failed to Leave Group",
-					description: error instanceof Error ? error.message : "Failed to leave group.",
-					placement: "topRight",
-				});
+				} catch (error) {
+					notification.error({
+						title: "Failed to Leave Group",
+						description: error instanceof Error ? error.message : "Failed to leave group.",
+						placement: "topRight",
+					});
 				}
 			},
 		});
@@ -223,19 +236,18 @@ export default function GroupMePage() {
 			<PageHeader title="Group Management" />
 			<div className="flex flex-1 flex-col items-center px-4 py-8">
 				<Card className="w-full max-w-2xl rounded-[2rem] border border-primary-500/20 bg-white/90 shadow-xl backdrop-blur">
-
-				{isLoading ? (
-					<div className="flex items-center justify-center py-20">
-						<Spin size="large" description="Loading group settings..." />
-					</div>
-				) : !group ? (
-					<div className="py-10 text-center">
-						<Title level={4}>No group found</Title>
-						<Button className="mt-4 pm-button" onClick={() => router.push("/groups")}>
-							Join or Create a Group
-						</Button>
-					</div>
-				) : (
+					{isLoading ? (
+						<div className="flex items-center justify-center py-20">
+							<Spin size="large" description="Loading group settings..." />
+						</div>
+					) : !group ? (
+						<div className="py-10 text-center">
+							<Title level={4}>No group found</Title>
+							<Button className="mt-4 pm-button" onClick={() => router.push("/groups")}>
+								Join or Create a Group
+							</Button>
+						</div>
+					) : (
 						<div className="space-y-6">
 							<div className="flex items-center justify-between">
 								<div className="flex-1">
@@ -269,7 +281,8 @@ export default function GroupMePage() {
 										</div>
 									)}
 									<Text className="text-secondary-600" type="secondary">
-										Created on {group.createdAt ? new Date(group.createdAt).toLocaleDateString() : "-"}
+										Created on{" "}
+										{group.createdAt ? new Date(group.createdAt).toLocaleDateString() : "-"}
 									</Text>
 								</div>
 								{isAdmin ? (
@@ -289,7 +302,9 @@ export default function GroupMePage() {
 								<div className="mb-4 flex items-center justify-between">
 									<div>
 										<Text className="block font-semibold text-slate-900">Invite Code</Text>
-										<Text className="text-xs text-slate-500">Share this code with your teammates.</Text>
+										<Text className="text-xs text-slate-500">
+											Share this code with your teammates.
+										</Text>
 									</div>
 									<div className="flex items-center gap-2">
 										<div className="flex h-10 items-center justify-center rounded-lg border border-primary-200 bg-white px-4 font-mono text-lg font-bold tracking-widest text-primary-600">
@@ -310,16 +325,19 @@ export default function GroupMePage() {
 							<div>
 								<div className="mb-3 flex items-center gap-2">
 									<UserOutlined className="text-primary-600" />
-									<Text className="text-lg font-semibold">Members ({group.members?.length ?? 0})</Text>
+									<Text className="text-lg font-semibold">
+										Members ({group.members?.length ?? 0})
+									</Text>
 								</div>
 								<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 									{group.members?.map((member) => (
 										<div
 											key={member.userID}
-											className={`flex items-center justify-between rounded-xl border p-3 ${member.userID === currentUser?.userID
-												? "border-primary-300 bg-primary-50"
-												: "border-slate-100 bg-white"
-												}`}
+											className={`flex items-center justify-between rounded-xl border p-3 ${
+												member.userID === currentUser?.userID
+													? "border-primary-300 bg-primary-50"
+													: "border-slate-100 bg-white"
+											}`}
 										>
 											<div className="flex items-center gap-2">
 												<div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200">
@@ -364,7 +382,12 @@ export default function GroupMePage() {
 										Leave Group
 									</Button>
 									{isAdmin && (
-										<Button danger icon={<DeleteOutlined />} onClick={handleDeleteGroup} type="primary">
+										<Button
+											danger
+											icon={<DeleteOutlined />}
+											onClick={handleDeleteGroup}
+											type="primary"
+										>
 											Delete Group
 										</Button>
 									)}

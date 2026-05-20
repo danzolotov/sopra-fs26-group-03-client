@@ -44,8 +44,12 @@ const UserIngredientsPage: React.FC = () => {
 	const fetchIngredients = useCallback(async () => {
 		setIsLoading(true);
 		try {
-			const data = await apiService.get<IngredientGetDTO[]>('/ingredients');
-			setIngredients(Array.isArray(data) ? data.sort((a, b) => a.ingredientName.localeCompare(b.ingredientName)) : []);
+			const data = await apiService.get<IngredientGetDTO[]>("/ingredients");
+			setIngredients(
+				Array.isArray(data)
+					? data.sort((a, b) => a.ingredientName.localeCompare(b.ingredientName))
+					: [],
+			);
 		} catch (error) {
 			console.error("Could not load the ingredients.", error);
 		} finally {
@@ -73,7 +77,9 @@ const UserIngredientsPage: React.FC = () => {
 						columns={ingredientColumns}
 						dataSource={ingredients}
 						pagination={{ pageSize: 10 }}
-						rowKey={(record, index) => `${record.id ?? record.ingredientName ?? "ingredient"}-${index}`}
+						rowKey={(record, index) =>
+							`${record.id ?? record.ingredientName ?? "ingredient"}-${index}`
+						}
 					/>
 				) : (
 					<div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-slate-500">
@@ -82,8 +88,7 @@ const UserIngredientsPage: React.FC = () => {
 				)}
 			</Card>
 		</div>
-			);
+	);
 };
 
 export default UserIngredientsPage;
-

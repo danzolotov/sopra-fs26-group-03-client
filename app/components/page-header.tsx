@@ -7,75 +7,71 @@ import { useGroupMembership } from "@/hooks/useGroupMembership";
 import { UserOutlined } from "@ant-design/icons";
 
 interface PageHeaderProps {
-  title: string;
+	title: string;
 }
 
 export default function PageHeader({ title }: PageHeaderProps) {
-  const router = useRouter();
-  const { group, hasGroup, isLoading } = useGroupMembership();
+	const router = useRouter();
+	const { group, hasGroup, isLoading } = useGroupMembership();
 
-  const yourGroup = isLoading
-    ? "Loading..."
-    : hasGroup
-      ? `Group: ${group?.name?.trim() || "Your Group"}`
-      : "Manage Groups";
+	const yourGroup = isLoading
+		? "Loading..."
+		: hasGroup
+			? `Group: ${group?.name?.trim() || "Your Group"}`
+			: "Manage Groups";
 
-  const handleLogout = () => {
-    if (typeof window !== "undefined") {
-      globalThis.localStorage.removeItem("token");
-    }
-    router.push("/auth/login");
-  };
+	const handleLogout = () => {
+		if (typeof window !== "undefined") {
+			globalThis.localStorage.removeItem("token");
+		}
+		router.push("/auth/login");
+	};
 
+	return (
+		<header className="border-b border-orange-100 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+			<div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
+				<div
+					className="flex cursor-pointer items-center gap-3 transition-all hover:opacity-80"
+					onClick={() => router.push("/dashboard")}
+				>
+					<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500 shadow-lg shadow-orange-100">
+						<Image
+							alt="PlateMate logo"
+							height={22}
+							src="/favicon.svg"
+							width={22}
+							className="brightness-0 invert"
+						/>
+					</div>
+					<div>
+						<div className="text-2xl font-bold tracking-tight text-slate-900">
+							PlateMate<span className="text-orange-500">.</span>
+						</div>
+						<p className="text-[10px] font-bold uppercase tracking-[0.2em] text-orange-500/60 leading-none mt-1">
+							{title}
+						</p>
+					</div>
+				</div>
 
-  return (
-    <header className="border-b border-orange-100 bg-white/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
-        <div
-          className="flex cursor-pointer items-center gap-3 transition-all hover:opacity-80"
-          onClick={() => router.push("/dashboard")}
-        >
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500 shadow-lg shadow-orange-100">
-            <Image
-              alt="PlateMate logo"
-              height={22}
-              src="/favicon.svg"
-              width={22}
-              className="brightness-0 invert"
-            />
-          </div>
-          <div>
-            <div className="text-2xl font-bold tracking-tight text-slate-900">
-              PlateMate<span className="text-orange-500">.</span>
-            </div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-orange-500/60 leading-none mt-1">
-              {title}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Button
-            className="pm-button-secondary"
-            onClick={() => router.push(hasGroup ? "/groups/me" : "/groups")}
-          >
-            <span className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
-              {yourGroup}
-            </span>
-          </Button>
-          <div className="h-8 w-px bg-slate-100 mx-2" />
-          <Button
-            className="pm-button-secondary"
-            onClick={handleLogout}
-          >
-            Log out
-          </Button>
+				<div className="flex items-center gap-3">
+					<Button
+						className="pm-button-secondary"
+						onClick={() => router.push(hasGroup ? "/groups/me" : "/groups")}
+					>
+						<span className="flex items-center gap-2">
+							<div className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
+							{yourGroup}
+						</span>
+					</Button>
+					<div className="h-8 w-px bg-slate-100 mx-2" />
+					<Button className="pm-button-secondary" onClick={handleLogout}>
+						Log out
+					</Button>
 					<Button className="pm-button-secondary" onClick={() => router.push("/profile")}>
 						<UserOutlined className="text-orange-500 text-lg" />
 					</Button>
-        </div>
-      </div>
-    </header>
-  );
+				</div>
+			</div>
+		</header>
+	);
 }
