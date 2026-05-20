@@ -9,7 +9,6 @@ import {
 	Input,
 	InputNumber,
 	Modal,
-	Popconfirm,
 	Space,
 	Spin,
 	Table,
@@ -17,13 +16,9 @@ import {
 	Typography,
 	Select,
 	App,
+	Checkbox,
 } from "antd";
-import {
-	CloseCircleOutlined,
-	DeleteOutlined,
-	EditOutlined,
-	PlusCircleOutlined,
-} from "@ant-design/icons";
+import { CloseCircleOutlined, EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import DashboardShell from "@/components/dashboard-shell";
 import GroupRequired from "@/components/group-required";
 import { useApi } from "@/hooks/useApi";
@@ -232,7 +227,7 @@ const DetectedIngredientRow: React.FC<DetectedIngredientRowProps> = ({
 						{ type: "number", min: 1, message: "Quantity must be at least 1" },
 					]}
 				>
-				<InputNumber min={0.1} className="w-full" />
+					<InputNumber min={0.1} className="w-full" />
 				</Form.Item>
 
 				<Form.Item
@@ -267,7 +262,6 @@ const PantryPage: React.FC = () => {
 	const [isLoadingIngredients, setIsLoadingIngredients] = useState(true);
 	const [isAdding, setIsAdding] = useState(false);
 	const [isUpdating, setIsUpdating] = useState(false);
-	const [busyItemIds, setBusyItemIds] = useState<number[]>([]);
 	const [selectedItem, setSelectedItem] = useState<PantryItemGetDTO | null>(null);
 	const [isEditOpen, setIsEditOpen] = useState(false);
 	const [isDetectOpen, setIsDetectOpen] = useState(false);
@@ -277,6 +271,58 @@ const PantryPage: React.FC = () => {
 	);
 	const [isDetecting, setIsDetecting] = useState(false);
 	const [isAddingDetected, setIsAddingDetected] = useState(false);
+	const [pantryCheckedIds, setPantryCheckedIds] = useState<number[]>([]);
+	const [busyItemIds, setBusyItemIds] = useState<number[]>([]);
+
+	const markItemBusy = (itemId: number, isBusy: boolean) => {
+		setBusyItemIds((prev) => {
+			if (isBusy && !prev.includes(itemId)) {
+				return [...prev, itemId];
+			}
+			if (!isBusy) {
+				return prev.filter((id) => id !== itemId);
+			}
+			return prev;
+		});
+	};
+
+	const removePantryItemImmediate = async (itemId: number) => {
+		// immediate remove without delay
+		markItemBusy(itemId, true);
+		setPantryCheckedIds((prev) => (prev.includes(itemId) ? prev : [...prev, itemId]));
+		try {
+			await apiService.delete<void>(`/groups/me/pantry/items/${itemId}`);
+			notification.success({
+				message: "Item Removed",
+				description: "Item removed from pantry.",
+				placement: "topRight",
+			});
+			// remove from local state
+			setPantry((prev) => {
+				if (!prev) return prev;
+				const filteredItems = getItemsFromList(prev).filter((entry) => entry.id !== itemId);
+				return { ...prev, items: filteredItems };
+			});
+		} catch (error) {
+			// on failure, revert checked state and notify
+			setPantryCheckedIds((prev) => prev.filter((id) => id !== itemId));
+			if (error instanceof Error) {
+				notification.error({
+					message: "Failed to Remove Item",
+					description: error.message,
+					placement: "topRight",
+				});
+			} else {
+				notification.error({
+					message: "Failed to Remove Item",
+					description: "Could not remove the item.",
+					placement: "topRight",
+				});
+			}
+		} finally {
+			markItemBusy(itemId, false);
+		}
+	};
 
 	const items = useMemo(() => getItemsFromList(pantry), [pantry]);
 
@@ -354,18 +400,6 @@ const PantryPage: React.FC = () => {
 		}
 		fetchIngredients();
 	}, [fetchIngredients, hasGroup]);
-
-	const markItemBusy = (itemId: number, isBusy: boolean) => {
-		setBusyItemIds((prev) => {
-			if (isBusy && !prev.includes(itemId)) {
-				return [...prev, itemId];
-			}
-			if (!isBusy) {
-				return prev.filter((id) => id !== itemId);
-			}
-			return prev;
-		});
-	};
 
 	const handleAddItem = async (values: AddItemFormValues) => {
 		const cleanName = (values.ingredientName ?? "").trim();
@@ -537,48 +571,7 @@ const PantryPage: React.FC = () => {
 		}
 	};
 
-	const handleDeleteItem = async (itemId?: number) => {
-		if (!itemId) {
-			notification.error({
-				message: "Invalid Item",
-				description: "Item has no id and cannot be deleted.",
-				placement: "topRight",
-			});
-			return;
-		}
-		markItemBusy(itemId, true);
-		try {
-			await apiService.delete<void>(`/groups/me/pantry/items/${itemId}`);
-			notification.success({
-				message: "Item Deleted",
-				description: "Item deleted.",
-				placement: "topRight",
-			});
-			setPantry((prev) => {
-				if (!prev) {
-					return prev;
-				}
-				const filteredItems = getItemsFromList(prev).filter((entry) => entry.id !== itemId);
-				return { ...prev, items: filteredItems };
-			});
-		} catch (error) {
-			if (error instanceof Error) {
-				notification.error({
-					message: "Failed to Delete Item",
-					description: error.message,
-					placement: "topRight",
-				});
-			} else {
-				notification.error({
-					message: "Failed to Delete Item",
-					description: "Could not delete the item.",
-					placement: "topRight",
-				});
-			}
-		} finally {
-			markItemBusy(itemId, false);
-		}
-	};
+	// delete handler removed for pantry (delete button removed from UI)
 
 	const resetDetectModal = () => {
 		setIsDetectOpen(false);
@@ -702,10 +695,36 @@ const PantryPage: React.FC = () => {
 
 	const columns: TableColumnsType<PantryItemGetDTO> = [
 		{
+			title: "Used",
+			key: "has",
+			width: 80,
+			render: (_, record) => (
+				<Space>
+					<Checkbox
+						checked={pantryCheckedIds.includes(record.id)}
+						disabled={!record.id || busyItemIds.includes(record.id)}
+						onChange={async (e) => {
+							const isChecked = e.target.checked;
+							if (!record.id) return;
+							if (isChecked) {
+								// immediate remove when checked
+								await removePantryItemImmediate(record.id);
+							} else {
+								// clear checked state if user manually unchecks before removal
+								setPantryCheckedIds((prev) => prev.filter((id) => id !== record.id));
+							}
+						}}
+					/>
+				</Space>
+			),
+		},
+		{
 			title: "Ingredient",
 			key: "ingredient",
 			render: (_, record) => (
-				<span>{record.ingredientName ?? `Ingredient #${record.ingredientId ?? "-"}`}</span>
+				<span className={pantryCheckedIds.includes(record.id) ? "line-through text-slate-400" : ""}>
+					{record.ingredientName ?? `Ingredient #${record.ingredientId ?? "-"}`}
+				</span>
 			),
 		},
 		{
@@ -713,7 +732,7 @@ const PantryPage: React.FC = () => {
 			dataIndex: "quantity",
 			key: "quantity",
 			render: (value: number | undefined, record) => (
-				<span>
+				<span className={pantryCheckedIds.includes(record.id) ? "line-through text-slate-400" : ""}>
 					{value ?? "-"} {unitOptions.find((option) => option.value === record.unit)?.label}
 				</span>
 			),
@@ -721,7 +740,11 @@ const PantryPage: React.FC = () => {
 		{
 			title: "Category",
 			key: "category",
-			render: (_, record) => <span>{record.category ?? "-"}</span>,
+			render: (_, record) => (
+				<span className={pantryCheckedIds.includes(record.id) ? "line-through text-slate-400" : ""}>
+					{record.category ?? "-"}
+				</span>
+			),
 		},
 		{
 			title: "Actions",
@@ -734,22 +757,9 @@ const PantryPage: React.FC = () => {
 						icon={<EditOutlined />}
 						onClick={() => handleOpenEdit(record.id)}
 						size="small"
+						disabled={pantryCheckedIds.includes(record.id)}
 					/>
-					<Popconfirm
-						title="Delete this item?"
-						onConfirm={() => handleDeleteItem(record.id)}
-						okText="Delete"
-						cancelText="Cancel"
-					>
-						<Button
-							aria-label="Delete item"
-							className="pm-button !h-9 !w-9 !min-w-9 !p-0"
-							danger
-							icon={<DeleteOutlined />}
-							disabled={!record.id || (record.id ? busyItemIds.includes(record.id) : false)}
-							size="small"
-						/>
-					</Popconfirm>
+					{/* delete button removed per request */}
 				</Space>
 			),
 		},
@@ -790,9 +800,12 @@ const PantryPage: React.FC = () => {
 	return (
 		<DashboardShell headerTitle="Pantry" selectedMenuKey="2">
 			<div className="mb-8 flex items-center justify-between gap-4">
-				<Title level={2} className="!m-0 !text-slate-900">
-					Pantry
-				</Title>
+				<div className="flex items-center gap-3 bg-primary-100 border border-primary-200 rounded-lg px-3 py-2 shadow-sm">
+					<span className="text-4xl leading-none">🏠</span>
+					<Title level={2} className="!m-0 !text-slate-900">
+						Pantry
+					</Title>
+				</div>
 				<div className={"flex gap-2"}>
 					<Button className="pm-button" onClick={handleAddFormVisibleChange}>
 						{addFormVisible ? (
@@ -814,64 +827,80 @@ const PantryPage: React.FC = () => {
 			</div>
 
 			{addFormVisible && (
-				<Card className="mb-6 rounded-3xl border border-primary-200 bg-white/90">
+				<Card className="mb-6 rounded-3xl border border-primary-300 bg-primary-100/60 shadow-sm">
 					<Title level={4} className="!mt-0">
 						Add item to pantry
 					</Title>
 					<Form form={addForm} layout="vertical" onFinish={handleAddItem}>
-						<Form.Item
-							label="Name"
-							name="ingredientName"
-							rules={[
-								{ required: true, message: "Required" },
-								{ whitespace: true, message: "Required" },
-							]}
-						>
-							<IngredientAutocompleteInput
-								ingredients={ingredients}
-								isLoadingIngredients={isLoadingIngredients}
-								placeholder="e.g. Tomatoes"
-								onChange={(value: string) => addForm.setFieldValue("ingredientName", value)}
-								onIngredientSelect={(ingredient) => {
-									if (ingredient.ingredientDescription?.trim()) {
-										addForm.setFieldValue(
-											"ingredientDescription",
-											ingredient.ingredientDescription.trim(),
-										);
-									}
-									if (ingredient.standardUnit?.trim()) {
-										addForm.setFieldValue("standardUnit", ingredient.standardUnit);
-									}
-									if (ingredient.category) {
-										addForm.setFieldValue("category", ingredient.category);
-									}
-								}}
-							/>
-						</Form.Item>
+						{/* Row 1: Name & Quantity side-by-side */}
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+							<Form.Item
+								label="Name"
+								name="ingredientName"
+								rules={[
+									{ required: true, message: "Required" },
+									{ whitespace: true, message: "Required" },
+								]}
+							>
+								<IngredientAutocompleteInput
+									ingredients={ingredients}
+									isLoadingIngredients={isLoadingIngredients}
+									placeholder="e.g. Tomatoes"
+									onChange={(value: string) => addForm.setFieldValue("ingredientName", value)}
+									onIngredientSelect={(ingredient) => {
+										if (ingredient.ingredientDescription?.trim()) {
+											addForm.setFieldValue(
+												"ingredientDescription",
+												ingredient.ingredientDescription.trim(),
+											);
+										}
+										if (ingredient.standardUnit?.trim()) {
+											addForm.setFieldValue("standardUnit", ingredient.standardUnit);
+										}
+										if (ingredient.category) {
+											addForm.setFieldValue("category", ingredient.category);
+										}
+									}}
+								/>
+							</Form.Item>
+
+							<Form.Item
+								label="Quantity"
+								name="quantity"
+								rules={[{ required: true, message: "Required" }]}
+							>
+								<InputNumber min={0.1} step={0.1} className="w-full" placeholder="e.g. 2" />
+							</Form.Item>
+						</div>
+
+						{/* Row 2: Unit & Category side-by-side */}
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+							<Form.Item
+								label="Unit"
+								name="standardUnit"
+								rules={[{ required: true, message: "Required" }]}
+							>
+								<Select className="min-w-28 w-full" options={unitOptions} placeholder="Choose" />
+							</Form.Item>
+
+							<Form.Item
+								label="Category"
+								name="category"
+								rules={[{ required: true, message: "Required" }]}
+							>
+								<Select
+									className="min-w-40 w-full"
+									options={categoryOptions}
+									placeholder="Choose"
+								/>
+							</Form.Item>
+						</div>
+
+						{/* Row 3: Description full width */}
 						<Form.Item label="Description" name="ingredientDescription">
 							<Input placeholder="Short ingredient description" />
 						</Form.Item>
-						<Form.Item
-							label="Quantity"
-							name="quantity"
-							rules={[{ required: true, message: "Required" }]}
-						>
-							<InputNumber min={0.1} step={0.1} placeholder="e.g. 2" />
-						</Form.Item>
-						<Form.Item
-							label="Unit"
-							name="standardUnit"
-							rules={[{ required: true, message: "Required" }]}
-						>
-							<Select className="min-w-28" options={unitOptions} placeholder="Choose" />
-						</Form.Item>
-						<Form.Item
-							label="Category"
-							name="category"
-							rules={[{ required: true, message: "Required" }]}
-						>
-							<Select className="min-w-40" options={categoryOptions} placeholder="Choose" />
-						</Form.Item>
+
 						<Form.Item>
 							<Button className="pm-button" htmlType="submit" loading={isAdding}>
 								Save entry
@@ -881,21 +910,27 @@ const PantryPage: React.FC = () => {
 				</Card>
 			)}
 
-			<Card className="rounded-3xl border border-primary-200 bg-white/90">
-				<Title level={4} className="!mt-0">
-					Current items
+			<Card className="rounded-3xl border-l-4 border-primary-300 bg-primary-50/40 shadow-sm">
+				<Title level={4} className="!mt-0 text-primary-800">
+					Your pantry — Items you own
 				</Title>
 				{isLoadingList ? (
 					<div className="flex items-center justify-center py-10">
 						<Spin size="large" />
 					</div>
 				) : (
-					<Table<PantryItemGetDTO>
-						columns={columns}
-						dataSource={items}
-						pagination={{ pageSize: 8 }}
-						rowKey={(record) => record.id ?? `temp-${record.ingredientId}`}
-					/>
+					<div className="p-4 bg-primary-50/30 rounded-lg">
+						<Table<PantryItemGetDTO>
+							className="pantry-table bg-transparent"
+							columns={columns}
+							dataSource={items}
+							pagination={{ pageSize: 8 }}
+							rowKey={(record) => record.id ?? `temp-${record.ingredientId}`}
+							rowClassName={(record) =>
+								pantryCheckedIds.includes(record.id) ? "line-through text-slate-400" : ""
+							}
+						/>
+					</div>
 				)}
 			</Card>
 

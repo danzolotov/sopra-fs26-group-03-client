@@ -20,7 +20,7 @@ import {
 	App,
 } from "antd";
 import { PlusCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 import DashboardShell from "@/components/dashboard-shell";
 import GroupRequired from "@/components/group-required";
 import { useApi } from "@/hooks/useApi";
@@ -455,11 +455,12 @@ const ShoppingListsPage: React.FC = () => {
 		{
 			title: "Bought",
 			key: "isBought",
+			width: 80,
 			render: (_, record) => (
 				<Space>
 					<Checkbox
 						checked={Boolean(record.isBought)}
-						disabled={!record.id || busyItemIds.includes(record.id)}
+						disabled={!record.id || busyItemIds.includes(record.id) || record.isBought}
 						onChange={(event) => handleToggleBought(record, event.target.checked)}
 					/>
 				</Space>
@@ -475,11 +476,6 @@ const ShoppingListsPage: React.FC = () => {
 			),
 		},
 		{
-			title: "Category",
-			key: "category",
-			render: (_, record) => <span>{record.category ?? "-"}</span>,
-		},
-		{
 			title: "Quantity",
 			dataIndex: "quantity",
 			key: "quantity",
@@ -488,6 +484,11 @@ const ShoppingListsPage: React.FC = () => {
 					{value ?? "-"} {unitOptions.find((option) => option.value === record.unit)?.label}
 				</span>
 			),
+		},
+		{
+			title: "Category",
+			key: "category",
+			render: (_, record) => <span>{record.category ?? "-"}</span>,
 		},
 		{
 			title: "Actions",
@@ -500,22 +501,9 @@ const ShoppingListsPage: React.FC = () => {
 						icon={<EditOutlined />}
 						onClick={() => handleOpenEdit(record.id)}
 						size="small"
+						disabled={record.isBought}
 					/>
-					<Popconfirm
-						title="Delete this item?"
-						onConfirm={() => handleDeleteItem(record.id)}
-						okText="Delete"
-						cancelText="Cancel"
-					>
-						<Button
-							aria-label="Delete item"
-							className="pm-button !h-9 !w-9 !min-w-9 !p-0"
-							danger
-							icon={<DeleteOutlined />}
-							disabled={!record.id || (record.id ? busyItemIds.includes(record.id) : false)}
-							size="small"
-						/>
-					</Popconfirm>
+					{/* delete button removed per request */}
 				</Space>
 			),
 		},
@@ -562,8 +550,10 @@ const ShoppingListsPage: React.FC = () => {
 	if (isGroupLoading) {
 		return (
 			<DashboardShell headerTitle="Shopping Lists" selectedMenuKey="3">
-				<div className="flex items-center justify-center py-20">
-					<Spin size="large" />
+				<div className="shopping-page">
+					<div className="flex items-center justify-center py-20">
+						<Spin size="large" />
+					</div>
 				</div>
 			</DashboardShell>
 		);
@@ -579,126 +569,151 @@ const ShoppingListsPage: React.FC = () => {
 
 	return (
 		<DashboardShell headerTitle="Shopping Lists" selectedMenuKey="3">
-			<div className="mb-8 flex items-center justify-between gap-4">
-				<Title level={2} className="!m-0 !text-slate-900">
-					Shopping Lists
-				</Title>
-				<div className={"flex gap-2"}>
-					<Button className="pm-button" onClick={handleAddFormVisibleChange}>
-						{addFormVisible ? (
-							<div className={"flex items-center gap-2"}>
-								<CloseCircleOutlined />
-								Close Form
-							</div>
-						) : (
-							<div className={"flex items-center gap-2"}>
-								<PlusCircleOutlined />
-								Add Item
-							</div>
-						)}
-					</Button>
+			<div className="shopping-page">
+				<div className="mb-8 flex items-center justify-between gap-4">
+					<div className="flex items-center gap-3 bg-indigo-100 border border-indigo-200 rounded-lg px-3 py-2 shadow-sm">
+						<span className="text-4xl leading-none">🛒</span>
+						<Title level={2} className="!m-0 !text-slate-900">
+							Shopping List
+						</Title>
+					</div>
+					<div className={"flex gap-2"}>
+						<Button className="pm-button" onClick={handleAddFormVisibleChange}>
+							{addFormVisible ? (
+								<div className={"flex items-center gap-2"}>
+									<CloseCircleOutlined />
+									Close Form
+								</div>
+							) : (
+								<div className={"flex items-center gap-2"}>
+									<PlusCircleOutlined />
+									Add Item
+								</div>
+							)}
+						</Button>
+					</div>
 				</div>
-			</div>
 
-			{addFormVisible && (
-				<Card className="rounded-3xl border border-primary-200 bg-white/90 addFormVisible:bg-black">
-					<Title level={4} className="!mt-0">
-						Add item to database and shopping list
+				{addFormVisible && (
+					<Card className="rounded-3xl border border-blue-300 bg-blue-100/60 shadow-sm">
+						<Title level={4} className="!mt-0">
+							Add item to database and shopping list
+						</Title>
+						<Form form={addForm} layout="vertical" onFinish={handleAddItem}>
+							{/* Row 1: Name & Quantity side-by-side */}
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+								<Form.Item
+									label="Name"
+									name="ingredientName"
+									rules={[
+										{ required: true, message: "Required" },
+										{ whitespace: true, message: "Required" },
+									]}
+								>
+									<AutoComplete
+										options={filteredOptions}
+										onSelect={(value: string) => handleIngredientSelect(value)}
+										onChange={(value: string) => setSearch(value)}
+										placeholder={isLoadingIngredients ? "Loading ingredients..." : "e.g. Tomatoes"}
+									/>
+								</Form.Item>
+
+								<Form.Item
+									label="Quantity"
+									name="quantity"
+									rules={[{ required: true, message: "Required" }]}
+								>
+									<InputNumber min={0.1} step={0.1} className="w-full" placeholder="e.g. 2" />
+								</Form.Item>
+							</div>
+
+							{/* Row 2: Unit & Category side-by-side */}
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+								<Form.Item
+									label="Unit"
+									name="standardUnit"
+									rules={[{ required: true, message: "Required" }]}
+								>
+									<Select className="min-w-28 w-full" options={unitOptions} placeholder="Choose" />
+								</Form.Item>
+
+								<Form.Item
+									label="Category"
+									name="category"
+									rules={[{ required: true, message: "Required" }]}
+								>
+									<Select
+										className="min-w-40 w-full"
+										options={categoryOptions}
+										placeholder="Choose"
+									/>
+								</Form.Item>
+							</div>
+
+							{/* Row 3: Description full width */}
+							<Form.Item label="Description" name="ingredientDescription">
+								<Input placeholder="Short ingredient description" />
+							</Form.Item>
+
+							<Form.Item>
+								<Button className="pm-button" htmlType="submit" loading={isAdding}>
+									Save entry
+								</Button>
+							</Form.Item>
+						</Form>
+					</Card>
+				)}
+
+				<Card className="rounded-3xl border-l-4 border-blue-300 bg-blue-100/40 shadow-sm">
+					<Title level={4} className="!mt-0 text-blue-800">
+						Shopping — Items you want to buy
 					</Title>
-					<Form form={addForm} layout="vertical" onFinish={handleAddItem}>
-						<Form.Item
-							label="Name"
-							name="ingredientName"
-							rules={[
-								{ required: true, message: "Required" },
-								{ whitespace: true, message: "Required" },
-							]}
-						>
-							<AutoComplete
-								options={filteredOptions}
-								onSelect={(value: string) => handleIngredientSelect(value)}
-								onChange={(value: string) => setSearch(value)}
-								placeholder={isLoadingIngredients ? "Loading ingredients..." : "e.g. Tomatoes"}
+					{isLoadingList ? (
+						<div className="flex items-center justify-center py-10">
+							<Spin size="large" />
+						</div>
+					) : (
+						<div className="p-4 bg-blue-50/30 rounded-lg">
+							<Table<ShoppingListItemGetDTO>
+								className="shopping-table bg-transparent"
+								columns={columns}
+								dataSource={items}
+								pagination={{ pageSize: 8 }}
+								rowKey={(record) =>
+									`${record.id ?? record.ingredientId ?? record.ingredientName ?? "temp"}`
+								}
+								rowClassName={(record) => (record.isBought ? "line-through text-slate-400" : "")}
 							/>
-						</Form.Item>
-						<Form.Item label="Description" name="ingredientDescription">
-							<Input placeholder="Short ingredient description" />
+						</div>
+					)}
+				</Card>
+
+				<Modal
+					title="Edit item"
+					open={isEditOpen}
+					onCancel={() => setIsEditOpen(false)}
+					onOk={() => editForm.submit()}
+					confirmLoading={isUpdating}
+					okText="Save"
+				>
+					<Form form={editForm} layout="vertical" onFinish={handleUpdateItem}>
+						<Form.Item
+							label="Ingredient ID"
+							name="ingredientId"
+							rules={[{ required: true, message: "Required" }]}
+						>
+							<InputNumber className="w-full" min={1} />
 						</Form.Item>
 						<Form.Item
 							label="Quantity"
 							name="quantity"
 							rules={[{ required: true, message: "Required" }]}
 						>
-							<InputNumber min={0.1} step={0.1} placeholder="e.g. 2" />
-						</Form.Item>
-						<Form.Item
-							label="Category"
-							name="category"
-						rules={[{ required: true, message: "Required" }]}
-						>
-							<Select className="min-w-40" options={categoryOptions} placeholder="Choose" />
-						</Form.Item>
-						<Form.Item
-							label="Unit"
-							name="standardUnit"
-							rules={[{ required: true, message: "Required" }]}
-						>
-							<Select className="min-w-28" options={unitOptions} placeholder="Choose" />
-						</Form.Item>
-						<Form.Item>
-							<Button className="pm-button" htmlType="submit" loading={isAdding}>
-								Save entry
-							</Button>
+							<InputNumber className="w-full" min={0.1} step={0.1} />
 						</Form.Item>
 					</Form>
-				</Card>
-			)}
-
-			<Card className="rounded-3xl border border-primary-200 bg-white/90">
-				<Title level={4} className="!mt-0">
-					Current items
-				</Title>
-				{isLoadingList ? (
-					<div className="flex items-center justify-center py-10">
-						<Spin size="large" />
-					</div>
-				) : (
-					<Table<ShoppingListItemGetDTO>
-						columns={columns}
-						dataSource={items}
-						pagination={{ pageSize: 8 }}
-						rowKey={(record) =>
-							`${record.id ?? record.ingredientId ?? record.ingredientName ?? "temp"}`
-						}
-					/>
-				)}
-			</Card>
-
-			<Modal
-				title="Edit item"
-				open={isEditOpen}
-				onCancel={() => setIsEditOpen(false)}
-				onOk={() => editForm.submit()}
-				confirmLoading={isUpdating}
-				okText="Save"
-			>
-				<Form form={editForm} layout="vertical" onFinish={handleUpdateItem}>
-					<Form.Item
-						label="Ingredient ID"
-						name="ingredientId"
-						rules={[{ required: true, message: "Required" }]}
-					>
-						<InputNumber className="w-full" min={1} />
-					</Form.Item>
-					<Form.Item
-						label="Quantity"
-						name="quantity"
-						rules={[{ required: true, message: "Required" }]}
-					>
-						<InputNumber className="w-full" min={0.1} step={0.1} />
-					</Form.Item>
-				</Form>
-			</Modal>
+				</Modal>
+			</div>
 		</DashboardShell>
 	);
 };
