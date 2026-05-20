@@ -28,4 +28,5 @@ export interface PantryItemPostDTO {
 export interface PantryItemPutDTO {
 	ingredientId: number;
 	quantity: number;
+	category: IngredientCategory;
 }

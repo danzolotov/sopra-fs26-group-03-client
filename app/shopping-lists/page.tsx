@@ -208,7 +208,9 @@ const ShoppingListsPage: React.FC = () => {
 			const cleanCategory = values.category;
 			const normalizedName = cleanName.toLowerCase();
 			let ingredient = ingredients.find(
-				(item) => (item.ingredientName?.trim().toLowerCase() ?? "") === normalizedName,
+				(item) =>
+					(item.ingredientName?.trim().toLowerCase() ?? "") === normalizedName &&
+					item.standardUnit === cleanUnit,
 			);
 
 			if (!ingredient?.id) {
@@ -314,14 +316,16 @@ const ShoppingListsPage: React.FC = () => {
 			return;
 		}
 		setSelectedItem(item);
-		editForm.setFieldsValue({
-			ingredientId: item.ingredientId,
-			quantity: item.quantity,
-		});
 		setIsEditOpen(true);
 	};
 
-	const handleUpdateItem = async (values: ItemPutDTO) => {
+	const handleQuantityChange = (newQuantity: number) => {
+		if (selectedItem && newQuantity > 0) {
+			setSelectedItem({ ...selectedItem, quantity: newQuantity });
+		}
+	};
+
+	const handleUpdateItem = async () => {
 		if (!selectedItem?.id) {
 			notification.error({
 				message: "Failed to Update Item",
@@ -332,7 +336,11 @@ const ShoppingListsPage: React.FC = () => {
 		}
 		setIsUpdating(true);
 		try {
-			await apiService.put<void>(`/groups/me/shopping-list/items/${selectedItem.id}`, values);
+			const payload: ItemPutDTO = {
+				ingredientId: selectedItem.ingredientId,
+				quantity: selectedItem.quantity,
+			};
+			await apiService.put<void>(`/groups/me/shopping-list/items/${selectedItem.id}`, payload);
 			notification.success({
 				message: "Item Updated",
 				description: "Item updated.",
@@ -693,31 +701,65 @@ const ShoppingListsPage: React.FC = () => {
 					)}
 				</Card>
 
-				<Modal
-					title="Edit item"
-					open={isEditOpen}
-					onCancel={() => setIsEditOpen(false)}
-					onOk={() => editForm.submit()}
-					confirmLoading={isUpdating}
-					okText="Save"
-				>
-					<Form form={editForm} layout="vertical" onFinish={handleUpdateItem}>
-						<Form.Item
-							label="Ingredient ID"
-							name="ingredientId"
-							rules={[{ required: true, message: "Required" }]}
+			<Modal
+				title={selectedItem?.ingredientName ? `Edit Quantity - ${selectedItem.ingredientName}` : "Edit Quantity"}
+				open={isEditOpen}
+				onCancel={() => setIsEditOpen(false)}
+				footer={[
+					<Button key="cancel" onClick={() => setIsEditOpen(false)}>
+						Cancel
+					</Button>,
+					<Button
+						key="submit"
+						type="primary"
+						className="pm-button"
+						loading={isUpdating}
+						onClick={handleUpdateItem}
+					>
+						Save
+					</Button>,
+				]}
+			>
+				{selectedItem && (
+					<div className="flex flex-col items-center justify-center gap-6 py-8">
+						<div className="text-center">
+							<div className="text-sm text-slate-500 mb-2">Current Quantity</div>
+							<div className="text-3xl font-bold text-primary-600">
+								{selectedItem.quantity} {unitOptions.find((opt) => opt.value === selectedItem.unit)?.label}
+							</div>
+						</div>
+					<div className="flex items-center gap-4">
+						<Button
+							size="middle"
+							className="pm-button !h-10 !w-10 !min-w-10 !p-0"
+							onClick={() => handleQuantityChange(selectedItem.quantity - 1)}
+							disabled={selectedItem.quantity <= 0.1}
 						>
-							<InputNumber className="w-full" min={1} />
-						</Form.Item>
-						<Form.Item
-							label="Quantity"
-							name="quantity"
-							rules={[{ required: true, message: "Required" }]}
+							−
+						</Button>
+						<div className="w-24 text-center">
+							<InputNumber
+								className="w-full text-center"
+								size="large"
+								value={selectedItem.quantity}
+								onChange={(value) => handleQuantityChange(value ?? 0.1)}
+								min={0.1}
+								step={0.1}
+								precision={1}
+								controls={false}
+							/>
+						</div>
+						<Button
+							size="middle"
+							className="pm-button !h-10 !w-10 !min-w-10 !p-0"
+							onClick={() => handleQuantityChange(selectedItem.quantity + 1)}
 						>
-							<InputNumber className="w-full" min={0.1} step={0.1} />
-						</Form.Item>
-					</Form>
-				</Modal>
+							+
+						</Button>
+					</div>
+					</div>
+				)}
+			</Modal>
 			</div>
 		</DashboardShell>
 	);
