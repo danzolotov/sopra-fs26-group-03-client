@@ -70,21 +70,29 @@ const ProfilePage: React.FC = () => {
 										<b>Username:</b>
 										<Input
 											value={editedUser?.username || ""}
-											onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value } as User)}
+											onChange={(e) =>
+												setEditedUser({ ...editedUser, username: e.target.value } as User)
+											}
 										/>
 									</div>
 									<div>
 										<b>E-Mail:</b>
 										<Input
 											value={editedUser?.email || ""}
-											onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value } as User)}
+											onChange={(e) =>
+												setEditedUser({ ...editedUser, email: e.target.value } as User)
+											}
 										/>
 									</div>
 								</>
 							) : (
 								<>
-									<div><b>Username:</b> {user.username}</div>
-									<div><b>E-Mail:</b> {user.email}</div>
+									<div>
+										<b>Username:</b> {user.username}
+									</div>
+									<div>
+										<b>E-Mail:</b> {user.email}
+									</div>
 								</>
 							)}
 							<div className={"flex items-center gap-8"}>
@@ -105,7 +113,10 @@ const ProfilePage: React.FC = () => {
 											<EditOutlined />
 											Edit Profile
 										</Button>
-										<Button className={"flex-1 pm-button-primary"} onClick={() => router.push("/profile/ingredients")}>
+										<Button
+											className={"flex-1 pm-button-primary"}
+											onClick={() => router.push("/profile/ingredients")}
+										>
 											<EditOutlined />
 											Edit Ingredients
 										</Button>
@@ -118,6 +129,6 @@ const ProfilePage: React.FC = () => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default ProfilePage;

@@ -5,44 +5,44 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import "@/styles/globals.css";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+	variable: "--font-geist-sans",
+	subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+	variable: "--font-geist-mono",
+	subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Group 3: PlateMate",
-  description: "sopra-fs26-template-client",
-  icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-  },
+	title: "Group 3: PlateMate",
+	description: "sopra-fs26-template-client",
+	icons: {
+		icon: "/favicon.svg",
+		shortcut: "/favicon.svg",
+	},
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ConfigProvider
-				theme={{
-					token: {
-						colorPrimary: "#f97316",
+	return (
+		<html lang="en">
+			<body className={`${geistSans.variable} ${geistMono.variable}`}>
+				<ConfigProvider
+					theme={{
+						token: {
+							colorPrimary: "#f97316",
 						},
 					}}
-					>
-          <AntdRegistry>
-            <AntdApp>{children}</AntdApp>
-          </AntdRegistry>
-        </ConfigProvider>
-      </body>
-    </html>
-  );
+				>
+					<AntdRegistry>
+						<AntdApp>{children}</AntdApp>
+					</AntdRegistry>
+				</ConfigProvider>
+			</body>
+		</html>
+	);
 }

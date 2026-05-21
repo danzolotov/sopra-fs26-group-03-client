@@ -1,321 +1,400 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", "Outfit", system-ui, sans-serif;
+	--font-sans: "Inter", "Outfit", system-ui, sans-serif;
 
-  --color-primary-50: #fff7ed;
-  --color-primary-100: #ffedd5;
-  --color-primary-200: #fed7aa;
-  --color-primary-300: #fdba74;
-  --color-primary-400: #fb923c;
-  --color-primary-500: #f97316;
-  --color-primary-600: #ea580c;
-  --color-primary-700: #c2410c;
+	--color-primary-50: #fff7ed;
+	--color-primary-100: #ffedd5;
+	--color-primary-200: #fed7aa;
+	--color-primary-300: #fdba74;
+	--color-primary-400: #fb923c;
+	--color-primary-500: #f97316;
+	--color-primary-600: #ea580c;
+	--color-primary-700: #c2410c;
 
-  --color-accent-500: #f97316;
+	--color-accent-500: #f97316;
 
-  --color-surface: #ffffff;
-  --color-surface-muted: #f8fafc;
-  --color-border-soft: #f1f5f9;
-  --color-text-main: #0f172a;
-  --color-text-muted: #64748b;
+	--color-surface: #ffffff;
+	--color-surface-muted: #f8fafc;
+	--color-border-soft: #f1f5f9;
+	--color-text-main: #0f172a;
+	--color-text-muted: #64748b;
 }
 
 @layer base {
-  :root {
-    color-scheme: light;
-    --background: var(--color-surface);
-    --foreground: var(--color-text-main);
-  }
+	:root {
+		color-scheme: light;
+		--background: var(--color-surface);
+		--foreground: var(--color-text-main);
+	}
 
-  html,
-  body {
-    max-width: 100vw;
-    overflow-x: hidden;
-  }
+	html,
+	body {
+		max-width: 100vw;
+		overflow-x: hidden;
+	}
 
-  body {
-    background: linear-gradient(180deg, #fff7ed 0%, #ffffff 48%, #eff1f3 100%);
-    background-attachment: fixed;
-    color: var(--foreground);
-    font-family: var(--font-sans), sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+	body {
+		background: linear-gradient(180deg, #fff7ed 0%, #ffffff 48%, #eff1f3 100%);
+		background-attachment: fixed;
+		color: var(--foreground);
+		font-family: var(--font-sans), sans-serif;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
 
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
 }
 
 @layer components {
-  .login-container,
-  .register-container,
-  .card-container {
-    @apply flex min-h-screen items-center justify-center;
-    background: linear-gradient(180deg, #fff7ed 0%, #ffffff 48%, #eff1f3 100%);
-  }
+	.login-container,
+	.register-container,
+	.card-container {
+		@apply flex min-h-screen items-center justify-center;
+		background: linear-gradient(180deg, #fff7ed 0%, #ffffff 48%, #eff1f3 100%);
+	}
 
-  .register-container {
-    @apply min-h-[calc(100dvh-4rem)];
-  }
+	.register-container {
+		@apply min-h-[calc(100dvh-4rem)];
+	}
 
-  .dashboard-container {
-    @apply flex min-h-[50vh] min-w-[50vh] items-center justify-center rounded-[2.5rem] border border-slate-200 bg-white shadow-sm;
-  }
+	.dashboard-container {
+		@apply flex min-h-[50vh] min-w-[50vh] items-center justify-center rounded-[2.5rem] border border-slate-200 bg-white shadow-sm;
+	}
 
-  .login-button,
-  .register-button,
-  .pm-button {
-    @apply rounded-full border border-primary-200 bg-primary-100 text-primary-600 transition-colors hover:bg-primary-200 hover:ring hover:ring-accent-500;
-  }
+	.login-button,
+	.register-button,
+	.pm-button {
+		@apply rounded-full border border-primary-200 bg-primary-100 text-primary-600 transition-colors hover:bg-primary-200 hover:ring hover:ring-accent-500;
+	}
 
-  .login-button,
-  .register-button {
-    @apply w-full;
-  }
+	.login-button,
+	.register-button {
+		@apply w-full;
+	}
 
-  .pm-button {
-    @apply px-5 py-2.5 text-sm font-semibold sm:text-base rounded-2xl transition-all;
-    @apply border-orange-100 bg-orange-50 text-orange-600 hover:bg-orange-100 hover:border-orange-200;
-  }
+	.pm-button {
+		@apply px-5 py-2.5 text-sm font-semibold sm:text-base rounded-2xl transition-all;
+		@apply border-orange-100 bg-orange-50 text-orange-600 hover:bg-orange-100 hover:border-orange-200;
+	}
 
-  .ant-btn.pm-button-primary {
-    @apply !bg-orange-500 !text-white !border-none hover:!bg-orange-600 !h-11 shadow-lg shadow-orange-100;
-  }
+	.ant-btn.pm-button-primary {
+		@apply !bg-orange-500 !text-white !border-none hover:!bg-orange-600 !h-11 shadow-lg shadow-orange-100;
+	}
 
 	.ant-btn.pm-button-secondary {
 		@apply !bg-orange-100 !border-none hover:!bg-orange-200 hover:!text-orange-700 !h-11 shadow-lg shadow-orange-100 !rounded-xl;
 	}
 
-  .ant-btn.login-button,
-  .ant-btn.register-button,
-  .ant-btn.pm-button {
-    background: var(--color-primary-100) !important;
-    border-color: var(--color-primary-200) !important;
-    color: var(--color-primary-600) !important;
-  }
+	.ant-btn.login-button,
+	.ant-btn.register-button,
+	.ant-btn.pm-button {
+		background: var(--color-primary-100) !important;
+		border-color: var(--color-primary-200) !important;
+		color: var(--color-primary-600) !important;
+	}
 
-  .ant-btn.login-button:hover,
-  .ant-btn.register-button:hover,
-  .ant-btn.pm-button:hover,
-  .ant-btn.login-button:focus-visible,
-  .ant-btn.register-button:focus-visible,
-  .ant-btn.pm-button:focus-visible {
-    background: var(--color-primary-200) !important;
-    border-color: var(--color-primary-200) !important;
-    color: var(--color-primary-600) !important;
-    box-shadow: 0 0 0 2px var(--color-accent-500) !important;
-  }
+	.ant-btn.login-button:hover,
+	.ant-btn.register-button:hover,
+	.ant-btn.pm-button:hover,
+	.ant-btn.login-button:focus-visible,
+	.ant-btn.register-button:focus-visible,
+	.ant-btn.pm-button:focus-visible {
+		background: var(--color-primary-200) !important;
+		border-color: var(--color-primary-200) !important;
+		color: var(--color-primary-600) !important;
+		box-shadow: 0 0 0 2px var(--color-accent-500) !important;
+	}
 
-  .register-form .ant-input,
-  .register-form .ant-input-password {
-    border-radius: 40px;
-    padding: 10px 14px;
-  }
+	.register-form .ant-input,
+	.register-form .ant-input-password {
+		border-radius: 40px;
+		padding: 10px 14px;
+	}
 
-  .forgot-password {
-    @apply mt-[-8px] mb-4 block cursor-pointer text-center text-xs text-orange-600 underline;
-  }
+	.forgot-password {
+		@apply mt-[-8px] mb-4 block cursor-pointer text-center text-xs text-orange-600 underline;
+	}
 
-  .sidebar-menu.ant-menu {
-    background: #e2e8f0 !important;
-    border: none !important;
-  }
+	.sidebar-menu.ant-menu {
+		background: #e2e8f0 !important;
+		border: none !important;
+	}
 
-  .sidebar-menu .ant-menu-item {
-    background-color: #e2e8f0 !important;
-    border: 1px solid #cbd5e1 !important;
-    border-radius: 20px !important;
-    height: 45px !important;
-    line-height: 45px !important;
-    margin-bottom: 12px !important;
-  }
+	.sidebar-menu .ant-menu-item {
+		background-color: #e2e8f0 !important;
+		border: 1px solid #cbd5e1 !important;
+		border-radius: 20px !important;
+		height: 45px !important;
+		line-height: 45px !important;
+		margin-bottom: 12px !important;
+	}
 
-  .sidebar-menu .ant-menu-item-selected {
-    background-color: #cbd5e1 !important;
-    border-color: #94a3b8 !important;
-    color: #0f172a !important;
-    font-weight: 700;
-  }
+	.sidebar-menu .ant-menu-item-selected {
+		background-color: #cbd5e1 !important;
+		border-color: #94a3b8 !important;
+		color: #0f172a !important;
+		font-weight: 700;
+	}
 
-  .platemate-mini-calendar.ant-card {
-    background-color: #e2e8f0 !important;
-    border: 1px solid #cbd5e1 !important;
-    border-radius: 15px !important;
-  }
+	.platemate-mini-calendar.ant-card {
+		background-color: #e2e8f0 !important;
+		border: 1px solid #cbd5e1 !important;
+		border-radius: 15px !important;
+	}
 
-  .platemate-mini-calendar .ant-picker-panel,
-  .platemate-mini-calendar .ant-picker-calendar,
-  .platemate-mini-calendar .ant-picker-calendar-full {
-    background: transparent !important;
-    border: none !important;
-  }
+	.platemate-mini-calendar .ant-picker-panel,
+	.platemate-mini-calendar .ant-picker-calendar,
+	.platemate-mini-calendar .ant-picker-calendar-full {
+		background: transparent !important;
+		border: none !important;
+	}
 
-  .platemate-mini-calendar .ant-picker-content thead th {
-    color: #334155 !important;
-    font-size: 13px !important;
-    font-weight: 600 !important;
-  }
+	.platemate-mini-calendar .ant-picker-content thead th {
+		color: #334155 !important;
+		font-size: 13px !important;
+		font-weight: 600 !important;
+	}
 
-  .platemate-mini-calendar .ant-picker-cell-inner {
-    align-items: center !important;
-    border: 1px solid #cbd5e1 !important;
-    border-radius: 20px !important;
-    color: #0f172a !important;
-    display: flex !important;
-    height: 30px !important;
-    justify-content: center !important;
-    margin: 2px auto !important;
-    width: 30px !important;
-  }
+	.platemate-mini-calendar .ant-picker-cell-inner {
+		align-items: center !important;
+		border: 1px solid #cbd5e1 !important;
+		border-radius: 20px !important;
+		color: #0f172a !important;
+		display: flex !important;
+		height: 30px !important;
+		justify-content: center !important;
+		margin: 2px auto !important;
+		width: 30px !important;
+	}
 
-  .platemate-mini-calendar .ant-picker-cell-selected .ant-picker-cell-inner {
-    background-color: #94a3b8 !important;
-    border-color: #94a3b8 !important;
-    color: #ffffff !important;
-  }
+	.platemate-mini-calendar .ant-picker-cell-selected .ant-picker-cell-inner {
+		background-color: #94a3b8 !important;
+		border-color: #94a3b8 !important;
+		color: #ffffff !important;
+	}
 
-  .platemate-mini-calendar
-    .ant-picker-cell-out-of-month
-    .ant-picker-cell-inner {
-    color: #94a3b8 !important;
-    opacity: 0.7;
-  }
+	.platemate-mini-calendar .ant-picker-cell-out-of-month .ant-picker-cell-inner {
+		color: #94a3b8 !important;
+		opacity: 0.7;
+	}
 
-  .platemate-mini-calendar .ant-picker-cell:hover .ant-picker-cell-inner {
-    background-color: #f1f5f9 !important;
-    border-color: #cbd5e1 !important;
-  }
+	.platemate-mini-calendar .ant-picker-cell:hover .ant-picker-cell-inner {
+		background-color: #f1f5f9 !important;
+		border-color: #cbd5e1 !important;
+	}
 
-  .platemate-mini-calendar
-    .ant-picker-cell-selected:hover
-    .ant-picker-cell-inner {
-    background-color: #94a3b8 !important;
-    border-color: #94a3b8 !important;
-  }
+	.platemate-mini-calendar .ant-picker-cell-selected:hover .ant-picker-cell-inner {
+		background-color: #94a3b8 !important;
+		border-color: #94a3b8 !important;
+	}
 
-  .dashboard-sidebar-menu.ant-menu {
-    @apply !bg-transparent !border-none;
-  }
+	.dashboard-sidebar-menu.ant-menu {
+		@apply !bg-transparent !border-none;
+	}
 
-  .dashboard-sidebar-menu .ant-menu-item {
-    @apply !bg-white !border !border-slate-100 !rounded-2xl !h-12 !mb-3 !flex !items-center !transition-all;
-    @apply !text-slate-600 hover:!border-orange-200 hover:!text-orange-500 hover:!bg-orange-50/50;
-  }
+	.dashboard-sidebar-menu .ant-menu-item {
+		@apply !bg-white !border !border-slate-100 !rounded-2xl !h-12 !mb-3 !flex !items-center !transition-all;
+		@apply !text-slate-600 hover:!border-orange-200 hover:!text-orange-500 hover:!bg-orange-50/50;
+	}
 
-  .dashboard-sidebar-menu .ant-menu-item-selected {
-    @apply !bg-orange-500 !border-orange-500 !text-white !font-bold shadow-lg shadow-orange-100;
-  }
+	.dashboard-sidebar-menu .ant-menu-item-selected {
+		@apply !bg-orange-500 !border-orange-500 !text-white !font-bold shadow-lg shadow-orange-100;
+	}
 
-  .dashboard-mini-calendar.ant-card {
-    background-color: #fff7ed !important;
-    border: 1px solid #fed7aa !important;
-    border-radius: 15px !important;
-  }
+	.dashboard-mini-calendar.ant-card {
+		background-color: #fff7ed !important;
+		border: 1px solid #fed7aa !important;
+		border-radius: 15px !important;
+	}
 
-  .dashboard-mini-calendar .ant-picker-panel,
-  .dashboard-mini-calendar .ant-picker-calendar,
-  .dashboard-mini-calendar .ant-picker-calendar-full {
-    background: transparent !important;
-    border: none !important;
-  }
+	.dashboard-mini-calendar .ant-picker-panel,
+	.dashboard-mini-calendar .ant-picker-calendar,
+	.dashboard-mini-calendar .ant-picker-calendar-full {
+		background: transparent !important;
+		border: none !important;
+	}
 
-  .dashboard-mini-calendar .ant-picker-content thead th {
-    color: #9a3412 !important;
-    font-size: 13px !important;
-    font-weight: 600 !important;
-  }
+	.dashboard-mini-calendar .ant-picker-content thead th {
+		color: #9a3412 !important;
+		font-size: 13px !important;
+		font-weight: 600 !important;
+	}
 
-  .dashboard-mini-calendar .ant-picker-cell-inner {
-    align-items: center !important;
-    border: 1px solid #fed7aa !important;
-    border-radius: 20px !important;
-    color: #7c2d12 !important;
-    display: flex !important;
-    height: 30px !important;
-    justify-content: center !important;
-    margin: 2px auto !important;
-    width: 30px !important;
-  }
+	.dashboard-mini-calendar .ant-picker-cell-inner {
+		align-items: center !important;
+		border: 1px solid #fed7aa !important;
+		border-radius: 20px !important;
+		color: #7c2d12 !important;
+		display: flex !important;
+		height: 30px !important;
+		justify-content: center !important;
+		margin: 2px auto !important;
+		width: 30px !important;
+	}
 
-  .dashboard-mini-calendar .ant-picker-cell-today .ant-picker-cell-inner {
-    background-color: #ffe3bf !important;
-    border-color: #fdba74 !important;
-    color: #9a3412 !important;
-  }
+	.dashboard-mini-calendar .ant-picker-cell-today .ant-picker-cell-inner {
+		background-color: #ffe3bf !important;
+		border-color: #fdba74 !important;
+		color: #9a3412 !important;
+	}
 
-  .dashboard-mini-calendar
-    .ant-picker-cell-today
-    .ant-picker-cell-inner::before {
-    display: none !important;
-  }
+	.dashboard-mini-calendar .ant-picker-cell-today .ant-picker-cell-inner::before {
+		display: none !important;
+	}
 
-  .dashboard-mini-calendar .ant-picker-cell-selected .ant-picker-cell-inner,
-  .dashboard-mini-calendar
-    .ant-picker-cell-selected:hover
-    .ant-picker-cell-inner {
-    background-color: #f97316 !important;
-    border-color: #f97316 !important;
-    color: #ffffff !important;
-  }
+	.dashboard-mini-calendar .ant-picker-cell-selected .ant-picker-cell-inner,
+	.dashboard-mini-calendar .ant-picker-cell-selected:hover .ant-picker-cell-inner {
+		background-color: #f97316 !important;
+		border-color: #f97316 !important;
+		color: #ffffff !important;
+	}
 
-  .dashboard-mini-calendar .ant-select-selector {
-    background-color: #ffedd5 !important;
-    border-color: #fdba74 !important;
-    color: #9a3412 !important;
-  }
+	.dashboard-mini-calendar .ant-select-selector {
+		background-color: #ffedd5 !important;
+		border-color: #fdba74 !important;
+		color: #9a3412 !important;
+	}
 
-  .dashboard-mini-calendar .ant-select-selection-item,
-  .dashboard-mini-calendar .ant-select-selection-placeholder,
-  .dashboard-mini-calendar .ant-select-arrow,
-  .dashboard-mini-calendar .ant-select-item-option-content {
-    color: #9a3412 !important;
-  }
+	.dashboard-mini-calendar .ant-select-selection-item,
+	.dashboard-mini-calendar .ant-select-selection-placeholder,
+	.dashboard-mini-calendar .ant-select-arrow,
+	.dashboard-mini-calendar .ant-select-item-option-content {
+		color: #9a3412 !important;
+	}
 
-  /* Glassmorphism Utilities */
-  .glass-effect {
-    @apply bg-white/70 backdrop-blur-md border border-white/20;
-  }
+	/* Glassmorphism Utilities */
+	.glass-effect {
+		@apply bg-white/70 backdrop-blur-md border border-white/20;
+	}
 
-  .glass-card {
-    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl rounded-3xl overflow-hidden;
-  }
+	.glass-card {
+		@apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl rounded-3xl overflow-hidden;
+	}
 
-  /* Animations */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+	/* Animations */
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
 
-  @keyframes float {
-    0% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-    100% {
-      transform: translateY(0px);
-    }
-  }
+	@keyframes float {
+		0% {
+			transform: translateY(0px);
+		}
+		50% {
+			transform: translateY(-10px);
+		}
+		100% {
+			transform: translateY(0px);
+		}
+	}
 
-  .animate-fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
-  }
+	.animate-fade-in-up {
+		animation: fadeInUp 0.8s ease-out forwards;
+	}
 
-  .animate-float {
-    animation: float 4s ease-in-out infinite;
-  }
+	.animate-float {
+		animation: float 4s ease-in-out infinite;
+	}
 
-  .delay-100 { animation-delay: 0.1s; }
-  .delay-200 { animation-delay: 0.2s; }
-  .delay-300 { animation-delay: 0.3s; }
+	.delay-100 {
+		animation-delay: 0.1s;
+	}
+	.delay-200 {
+		animation-delay: 0.2s;
+	}
+	.delay-300 {
+		animation-delay: 0.3s;
+	}
+	/* Table header accents for shopping and pantry */
+	.shopping-table .ant-table-thead > tr > th {
+		background-color: #dbeafe !important; /* blue-100 */
+		color: #1e40af !important; /* blue-900 */
+		font-weight: 700 !important;
+		padding: 12px 16px !important;
+		border-bottom: 2px solid #93c5fd !important;
+	}
+
+	.shopping-table .ant-table-thead > tr > th::before {
+		display: none !important;
+	}
+
+	.pantry-table .ant-table-thead > tr > th {
+		background-color: #ffedd5 !important; /* orange-100 */
+		color: #92400e !important; /* orange-900 */
+		font-weight: 700 !important;
+		padding: 12px 16px !important;
+		border-bottom: 2px solid #fdba74 !important;
+	}
+
+	.pantry-table .ant-table-thead > tr > th::before {
+		display: none !important;
+	}
+
+	/* Shopping page button overrides (blue) */
+	.shopping-page .pm-button,
+	.shopping-page .ant-btn.pm-button {
+		border-color: #93c5fd !important;
+		background-color: #eff6ff !important;
+		color: #2563eb !important;
+	}
+
+	.shopping-page .pm-button:hover,
+	.shopping-page .ant-btn.pm-button:hover {
+		background-color: #dbeafe !important;
+		border-color: #60a5fa !important;
+		color: #1d4ed8 !important;
+	}
+
+	.shopping-page .ant-btn.pm-button-primary {
+		background-color: #2563eb !important;
+		color: white !important;
+		border: none !important;
+		height: 2.75rem !important;
+		box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.2) !important;
+	}
+
+	/* General button color override on shopping page */
+	.shopping-page .ant-btn {
+		border-color: #93c5fd !important;
+		color: #1d4ed8 !important;
+	}
+
+	.shopping-page .ant-btn:hover {
+		color: #1e40af !important;
+	}
+
+	/* Shopping page input field focus color (blue) */
+	.shopping-page .ant-input:focus,
+	.shopping-page .ant-input-focused {
+		border-color: #60a5fa !important;
+		box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1) !important;
+	}
+
+	.shopping-page .ant-input-number:focus,
+	.shopping-page .ant-input-number-focused {
+		border-color: #60a5fa !important;
+		box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1) !important;
+	}
+
+	.shopping-page .ant-select-focused .ant-select-selector {
+		border-color: #60a5fa !important;
+		box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1) !important;
+	}
+
+	.shopping-page .ant-input-password:focus,
+	.shopping-page .ant-input-password-focused {
+		border-color: #60a5fa !important;
+		box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1) !important;
+	}
 }

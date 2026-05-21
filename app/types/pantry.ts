@@ -17,15 +17,17 @@ export interface PantryGetDTO {
 }
 
 export interface PantryItemPostDTO {
-	ingredientId: number;
-	ingredientName: string;
-	ingredientDescription: string;
-	category: IngredientCategory;
-	unit: Unit;
+	ingredientId?: number;
+	ingredientName?: string;
+	ingredientDescription?: string;
+	category?: IngredientCategory;
+	unit?: Unit;
+	standardUnit?: Unit;
 	quantity: number;
 }
 
 export interface PantryItemPutDTO {
 	ingredientId: number;
 	quantity: number;
+	category: IngredientCategory;
 }

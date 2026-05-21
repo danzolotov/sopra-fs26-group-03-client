@@ -2,193 +2,171 @@ import { getApiDomain } from "@/utils/domain";
 import { ApplicationError } from "@/types/error";
 
 export class ApiService {
-  private baseURL: string;
-  private defaultHeaders: HeadersInit = {
-    "Content-Type": "application/json",
-  };
+	private baseURL: string;
+	private defaultHeaders: HeadersInit = {
+		"Content-Type": "application/json",
+	};
 
-  constructor() {
-    this.baseURL = getApiDomain();
-    this.defaultHeaders = {
-      "Content-Type": "application/json",
-    };
-  }
+	constructor() {
+		this.baseURL = getApiDomain();
+		this.defaultHeaders = {
+			"Content-Type": "application/json",
+		};
+	}
 
-  /**
-   * Helper function to check the response, parse JSON,
-   * and throw an error if the response is not OK.
-   *
-   * @param res - The response from fetch.
-   * @param errorMessage - A descriptive error message for this call.
-   * @returns Parsed JSON data.
-   * @throws ApplicationError if res.ok is false.
-   */
-  private async processResponse<T>(
-    res: Response,
-    errorMessage: string,
-  ): Promise<T> {
-    if (!res.ok) {
-      let errorDetail = res.statusText;
-      try {
-        const errorInfo = await res.json();
-        if (errorInfo?.message) {
-          errorDetail = errorInfo.message;
-        } else if (typeof errorInfo === "string") {
-          errorDetail = errorInfo;
-        } else {
-          errorDetail = JSON.stringify(errorInfo);
-        }
-      } catch {
-        // If parsing fails, keep using res.statusText
-      }
+	/**
+	 * Helper function to check the response, parse JSON,
+	 * and throw an error if the response is not OK.
+	 *
+	 * @param res - The response from fetch.
+	 * @param errorMessage - A descriptive error message for this call.
+	 * @returns Parsed JSON data.
+	 * @throws ApplicationError if res.ok is false.
+	 */
+	private async processResponse<T>(res: Response, errorMessage: string): Promise<T> {
+		if (!res.ok) {
+			let errorDetail = res.statusText;
+			try {
+				const errorInfo = await res.json();
+				if (errorInfo?.message) {
+					errorDetail = errorInfo.message;
+				} else if (typeof errorInfo === "string") {
+					errorDetail = errorInfo;
+				} else {
+					errorDetail = JSON.stringify(errorInfo);
+				}
+			} catch {
+				// If parsing fails, keep using res.statusText
+			}
 
-      // If the errorDetail already seems like a full message, don't prefix it with the generic errorMessage
-      const detailedMessage = errorDetail.includes(errorMessage.trim())
-        ? errorDetail
-        : `${errorMessage}${errorDetail}`;
+			// If the errorDetail already seems like a full message, don't prefix it with the generic errorMessage
+			const detailedMessage = errorDetail.includes(errorMessage.trim())
+				? errorDetail
+				: `${errorMessage}${errorDetail}`;
 
-      const error: ApplicationError = new Error(
-        detailedMessage,
-      ) as ApplicationError;
+			const error: ApplicationError = new Error(detailedMessage) as ApplicationError;
 
+			error.info = JSON.stringify({ status: res.status, statusText: res.statusText }, null, 2);
+			error.status = res.status;
+			throw error;
+		}
+		return res.headers.get("Content-Type")?.includes("application/json")
+			? (res.json() as Promise<T>)
+			: Promise.resolve(res as T);
+	}
 
-      error.info = JSON.stringify(
-        { status: res.status, statusText: res.statusText },
-        null,
-        2,
-      );
-      error.status = res.status;
-      throw error;
-    }
-    return res.headers.get("Content-Type")?.includes("application/json")
-      ? (res.json() as Promise<T>)
-      : Promise.resolve(res as T);
-  }
+	private getHeaders(omitContentType = false): HeadersInit {
+		const headers: Record<string, string> = { ...this.defaultHeaders } as Record<string, string>;
 
-  private getHeaders(omitContentType = false): HeadersInit {
-    const headers: Record<string, string> = { ...this.defaultHeaders } as Record<string, string>;
+		if (omitContentType) {
+			delete headers["Content-Type"];
+		}
 
-    if (omitContentType) {
-      delete headers["Content-Type"];
-    }
+		if (typeof window !== "undefined") {
+			const token = localStorage.getItem("token");
+			if (token) {
+				headers["Authorization"] = `Bearer ${token}`;
+			}
+		}
+		return headers;
+	}
 
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
-      }
-    }
-    return headers;
-  }
+	/**
+	 * GET request.
+	 * @param endpoint - The API endpoint (e.g. "/users").
+	 * @returns JSON data of type T.
+	 */
+	public async get<T>(endpoint: string): Promise<T> {
+		const url = `${this.baseURL}${endpoint}`;
+		const res = await fetch(url, {
+			method: "GET",
+			credentials: "include",
+			headers: this.getHeaders(),
+			cache: "no-store",
+		});
+		return this.processResponse<T>(res, "An error occurred while fetching the data.\n");
+	}
 
-  /**
-   * GET request.
-   * @param endpoint - The API endpoint (e.g. "/users").
-   * @returns JSON data of type T.
-   */
-  public async get<T>(endpoint: string): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
-    const res = await fetch(url, {
-      method: "GET",
-      credentials: "include",
-      headers: this.getHeaders(),
-      cache: "no-store",
-    });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while fetching the data.\n",
-    );
-  }
+	/**
+	 * POST request.
+	 * @param endpoint - The API endpoint (e.g. "/users").
+	 * @param data - The payload to post.
+	 * @returns JSON data of type T.
+	 */
+	public async post<T>(endpoint: string, data: unknown): Promise<T> {
+		const url = `${this.baseURL}${endpoint}`;
+		const res = await fetch(url, {
+			method: "POST",
+			credentials: "include",
+			headers: this.getHeaders(),
+			body: JSON.stringify(data),
+		});
+		return this.processResponse<T>(res, "An error occurred while posting the data.\n");
+	}
 
-  /**
-   * POST request.
-   * @param endpoint - The API endpoint (e.g. "/users").
-   * @param data - The payload to post.
-   * @returns JSON data of type T.
-   */
-  public async post<T>(endpoint: string, data: unknown): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
-    const res = await fetch(url, {
-      method: "POST",
-      credentials: "include",
-      headers: this.getHeaders(),
-      body: JSON.stringify(data),
-    });
-    return this.processResponse<T>(res, "An error occurred while posting the data.\n");
-  }
+	/**
+	 * POST request with multipart/form-data payload.
+	 * @param endpoint - The API endpoint (e.g. "/uploads").
+	 * @param data - The FormData payload.
+	 * @returns JSON data of type T.
+	 */
+	public async postFormData<T>(endpoint: string, data: FormData): Promise<T> {
+		const url = `${this.baseURL}${endpoint}`;
+		const res = await fetch(url, {
+			method: "POST",
+			credentials: "include",
+			headers: this.getHeaders(true), // Omit Content-Type to let browser set boundary
+			body: data,
+		});
+		return this.processResponse<T>(res, "An error occurred while posting the form data.\n");
+	}
 
-  /**
-   * POST request with multipart/form-data payload.
-   * @param endpoint - The API endpoint (e.g. "/uploads").
-   * @param data - The FormData payload.
-   * @returns JSON data of type T.
-   */
-  public async postFormData<T>(endpoint: string, data: FormData): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
-    const res = await fetch(url, {
-      method: "POST",
-      credentials: "include",
-      headers: this.getHeaders(true), // Omit Content-Type to let browser set boundary
-      body: data,
-    });
-    return this.processResponse<T>(res, "An error occurred while posting the form data.\n");
-  }
+	/**
+	 * PUT request.
+	 * @param endpoint - The API endpoint (e.g. "/users/123").
+	 * @param data - The payload to update.
+	 * @returns JSON data of type T.
+	 */
+	public async put<T>(endpoint: string, data: unknown): Promise<T> {
+		const url = `${this.baseURL}${endpoint}`;
+		const res = await fetch(url, {
+			method: "PUT",
+			credentials: "include",
+			headers: this.getHeaders(),
+			body: JSON.stringify(data),
+		});
+		return this.processResponse<T>(res, "An error occurred while updating the data.\n");
+	}
 
-  /**
-   * PUT request.
-   * @param endpoint - The API endpoint (e.g. "/users/123").
-   * @param data - The payload to update.
-   * @returns JSON data of type T.
-   */
-  public async put<T>(endpoint: string, data: unknown): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
-    const res = await fetch(url, {
-      method: "PUT",
-      credentials: "include",
-      headers: this.getHeaders(),
-      body: JSON.stringify(data),
-    });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while updating the data.\n",
-    );
-  }
+	/**
+	 * PATCH request.
+	 * @param endpoint - The API endpoint (e.g. "/users/123").
+	 * @param data - The payload to patch.
+	 * @returns JSON data of type T.
+	 */
+	public async patch<T>(endpoint: string, data: unknown): Promise<T> {
+		const url = `${this.baseURL}${endpoint}`;
+		const res = await fetch(url, {
+			method: "PATCH",
+			credentials: "include",
+			headers: this.getHeaders(),
+			body: JSON.stringify(data),
+		});
+		return this.processResponse<T>(res, "An error occurred while patching the data.\n");
+	}
 
-  /**
-   * PATCH request.
-   * @param endpoint - The API endpoint (e.g. "/users/123").
-   * @param data - The payload to patch.
-   * @returns JSON data of type T.
-   */
-  public async patch<T>(endpoint: string, data: unknown): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
-    const res = await fetch(url, {
-      method: "PATCH",
-      credentials: "include",
-      headers: this.getHeaders(),
-      body: JSON.stringify(data),
-    });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while patching the data.\n",
-    );
-  }
-
-  /**
-   * DELETE request.
-   * @param endpoint - The API endpoint (e.g. "/users/123").
-   * @returns JSON data of type T.
-   */
-  public async delete<T>(endpoint: string): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
-    const res = await fetch(url, {
-      method: "DELETE",
-      credentials: "include",
-      headers: this.getHeaders(),
-    });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while deleting the data.\n",
-    );
-  }
+	/**
+	 * DELETE request.
+	 * @param endpoint - The API endpoint (e.g. "/users/123").
+	 * @returns JSON data of type T.
+	 */
+	public async delete<T>(endpoint: string): Promise<T> {
+		const url = `${this.baseURL}${endpoint}`;
+		const res = await fetch(url, {
+			method: "DELETE",
+			credentials: "include",
+			headers: this.getHeaders(),
+		});
+		return this.processResponse<T>(res, "An error occurred while deleting the data.\n");
+	}
 }

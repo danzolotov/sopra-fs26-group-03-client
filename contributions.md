@@ -69,53 +69,52 @@ reason).
 
 ## Contributions Week 5 - 20.04.2026 to 26.04.2026
 
-
-| **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
-| ------------------- | ---------- | ------------------ | --------------- | ------------- |
-| **[@MarcHonegger]** | 22.04.2026 | [PR42](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/42)            | Improve Ingredient Management            | It's an essential part for future improvements           |
-|                     | 24.04.2026 | [b483166](https://github.com/klitvinova/sopra-fs26-group-03-client/commit/b483166193f2c6031029e5eb5d7ea8cfd0863ac1)            | Implement Frontend for API            | The API is a must do           |
-| **[@klitvinova]**   | 23.04.2026 | [a951054](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/74/changes/a95105487af09e15d6471184fb801d9c8645ab39)            | Backend for Meal Planning            | Enabler for key functionality           |
-|                     | 23.04.2026 | [2804c38](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/39/changes/2804c382c52b1068d109dcdddaf742957a0ef526)            | Added Meal planning page            | Enabler for key functionality           |
-|                     | 23.04.2026 | [82fb3f2](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/76/commits)            | Set up Supabase            | Establish permanent DB with recipes           |
+| **Student**         | **Date**   | **Link to Commit**                                                                                                           | **Description**               | **Relevance**                                  |
+| ------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ---------------------------------------------- |
+| **[@MarcHonegger]** | 22.04.2026 | [PR42](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/42)                                                     | Improve Ingredient Management | It's an essential part for future improvements |
+|                     | 24.04.2026 | [b483166](https://github.com/klitvinova/sopra-fs26-group-03-client/commit/b483166193f2c6031029e5eb5d7ea8cfd0863ac1)          | Implement Frontend for API    | The API is a must do                           |
+| **[@klitvinova]**   | 23.04.2026 | [a951054](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/74/changes/a95105487af09e15d6471184fb801d9c8645ab39) | Backend for Meal Planning     | Enabler for key functionality                  |
+|                     | 23.04.2026 | [2804c38](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/39/changes/2804c382c52b1068d109dcdddaf742957a0ef526) | Added Meal planning page      | Enabler for key functionality                  |
+|                     | 23.04.2026 | [82fb3f2](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/76/commits)                                          | Set up Supabase               | Establish permanent DB with recipes            |
 
 ---
 
 ## Contributions Week 6 - 27.04.2026 to 03.05.2026
 
-| **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
-| ------------------- | ---------- | ------------------ | --------------- | ------------- |
-| **[@MarcHonegger]** | 03.05.2026 | [PR46](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/46)            | Let's users change result from API feature and improved code            | Essential feature for API to be useful           |
-|                     | 03.05.2026 | [PR47](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/47)            | Improved ingredients endpoints and more            | Better data usage & fixing category for future sorting           |
-|                     | 03.05.2026 | [PR88](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/88)            | Backend for ingredient fixing            | Needed for frontend           |
-| **[@klitvinova]**   | 03.05.2026 | [fafbd45](https://github.com/klitvinova/sopra-fs26-group-03-server/commit/fafbd45cdbf08dbdffca59a877a13e2ad45e8760)            | Added endpoints for Recipe management            | To allow manual adding/editing of the Recipes           |
-|                     | 03.05.2026 | [aed6a30](https://github.com/klitvinova/sopra-fs26-group-03-client/commit/aed6a305d3592e751a77f1571100a4f55e39aba4)            | Added Recipe editing page            | To allow manual adding/editing of the Recipes            |
-|                     | 03.05.2026 | [e8dde4f](https://github.com/klitvinova/sopra-fs26-group-03-client/commit/e8dde4f00699439870058a389a1350ad5031c50f)            | Fixed the category misalignment for DB-added and interface-added ingredients            | To fix the issue with categories (affected Meal Planning, Shopping list and Pantry)          |
+| **Student**         | **Date**   | **Link to Commit**                                                                                                  | **Description**                                                              | **Relevance**                                                                       |
+| ------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **[@MarcHonegger]** | 03.05.2026 | [PR46](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/46)                                            | Let's users change result from API feature and improved code                 | Essential feature for API to be useful                                              |
+|                     | 03.05.2026 | [PR47](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/47)                                            | Improved ingredients endpoints and more                                      | Better data usage & fixing category for future sorting                              |
+|                     | 03.05.2026 | [PR88](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/88)                                            | Backend for ingredient fixing                                                | Needed for frontend                                                                 |
+| **[@klitvinova]**   | 03.05.2026 | [fafbd45](https://github.com/klitvinova/sopra-fs26-group-03-server/commit/fafbd45cdbf08dbdffca59a877a13e2ad45e8760) | Added endpoints for Recipe management                                        | To allow manual adding/editing of the Recipes                                       |
+|                     | 03.05.2026 | [aed6a30](https://github.com/klitvinova/sopra-fs26-group-03-client/commit/aed6a305d3592e751a77f1571100a4f55e39aba4) | Added Recipe editing page                                                    | To allow manual adding/editing of the Recipes                                       |
+|                     | 03.05.2026 | [e8dde4f](https://github.com/klitvinova/sopra-fs26-group-03-client/commit/e8dde4f00699439870058a389a1350ad5031c50f) | Fixed the category misalignment for DB-added and interface-added ingredients | To fix the issue with categories (affected Meal Planning, Shopping list and Pantry) |
 
 ---
 
 ## Contributions Week 7 - 04.05.2026 to 10.05.2026
 
-| **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
-| ------------------- | ---------- | ------------------ | --------------- | ------------- |
-| **[@MarcHonegger]** | 04.05.2026 | Multiple           | Smaller commits and merges            | Important to continue           |
-|                     | 06.05.2026 | [PR49](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/49)            | Adding profile and ingredients overview            | Important user story, one of the last features           |
-| **[@klitvinova]**   | 08.05.2026 | [69b0f66](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/52/changes/69b0f668f8f58cbf358e6b55d9adbaad78a821fd)            | Improving the error handling on frontend            | To fix buggy registration           |
-|                     | 07.05.2026| [1a35dff](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/91/changes/1a35dfffb494dc65cca7d19e34ee9d59cc2ab7c7)            | Error message and test for duplicating user registration            | To fix buggy registration           |
-|                     | 08.05.2026 | [PR93](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/93)            | Extending Test Suite            | To inrease test coverage           |
+| **Student**         | **Date**   | **Link to Commit**                                                                                                           | **Description**                                          | **Relevance**                                  |
+| ------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------- |
+| **[@MarcHonegger]** | 04.05.2026 | Multiple                                                                                                                     | Smaller commits and merges                               | Important to continue                          |
+|                     | 06.05.2026 | [PR49](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/49)                                                     | Adding profile and ingredients overview                  | Important user story, one of the last features |
+| **[@klitvinova]**   | 08.05.2026 | [69b0f66](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/52/changes/69b0f668f8f58cbf358e6b55d9adbaad78a821fd) | Improving the error handling on frontend                 | To fix buggy registration                      |
+|                     | 07.05.2026 | [1a35dff](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/91/changes/1a35dfffb494dc65cca7d19e34ee9d59cc2ab7c7) | Error message and test for duplicating user registration | To fix buggy registration                      |
+|                     | 08.05.2026 | [PR93](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/93)                                                     | Extending Test Suite                                     | To inrease test coverage                       |
 
 ---
 
 ## Contributions Week 8 - 11.05.2025 to 17.05.2025
 
-| **Student**         | **Date**   | **Link to Commit** | **Description** | **Relevance** |
-| ------------------- | ---------- | ------------------ | --------------- | ------------- |
-| **[@MarcHonegger]** | 12.05.2026 | [PR69](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/69)            | Improve Group Management            | Based on Feedback reveiced from TA & other group           |
-|                     | 12.05.2026 | [PR70](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/70)            | Unifiy Error Messages            | Consistency & better UX           |
-|                     | 12.05.2026 | [Frontend](https://github.com/klitvinova/sopra-fs26-group-03-client/tree/README) & [Backend](https://github.com/klitvinova/sopra-fs26-group-03-server/tree/README)       | Prototype for README            | Criteria for M4           |
-|                     | 12.05.2026 | [PR98](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/98)            | Add Tests            | Improve Test Coverage           |
-| **[@klitvinova]**   | 11.05.2026 | [PR97](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/97)            | Addressing authorisation issues            | To improve reliability and speed for registration           |
-|                     | 13.05.2026 | [833cb53](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/100/changes/8eecb534a1935ae34d5c155cf1ce0007e7091d2a)            | Backend for Real-time updates            | Real-time collaboration           |
-|                     | 14.05.2026 | [8aa2b97](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/71/changes/8aa2b97e4577786e31d6e2b03c4530abf8045b38)         | Frontend part for the Real-time updates            | Real-time collaboration           |
+| **Student**         | **Date**   | **Link to Commit**                                                                                                                                                 | **Description**                         | **Relevance**                                     |
+| ------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------- | ------------------------------------------------- |
+| **[@MarcHonegger]** | 12.05.2026 | [PR69](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/69)                                                                                           | Improve Group Management                | Based on Feedback reveiced from TA & other group  |
+|                     | 12.05.2026 | [PR70](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/70)                                                                                           | Unifiy Error Messages                   | Consistency & better UX                           |
+|                     | 12.05.2026 | [Frontend](https://github.com/klitvinova/sopra-fs26-group-03-client/tree/README) & [Backend](https://github.com/klitvinova/sopra-fs26-group-03-server/tree/README) | Prototype for README                    | Criteria for M4                                   |
+|                     | 12.05.2026 | [PR98](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/98)                                                                                           | Add Tests                               | Improve Test Coverage                             |
+| **[@klitvinova]**   | 11.05.2026 | [PR97](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/97)                                                                                           | Addressing authorisation issues         | To improve reliability and speed for registration |
+|                     | 13.05.2026 | [833cb53](https://github.com/klitvinova/sopra-fs26-group-03-server/pull/100/changes/8eecb534a1935ae34d5c155cf1ce0007e7091d2a)                                      | Backend for Real-time updates           | Real-time collaboration                           |
+|                     | 14.05.2026 | [8aa2b97](https://github.com/klitvinova/sopra-fs26-group-03-client/pull/71/changes/8aa2b97e4577786e31d6e2b03c4530abf8045b38)                                       | Frontend part for the Real-time updates | Real-time collaboration                           |
 
 ---
 
