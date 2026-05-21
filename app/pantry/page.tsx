@@ -995,15 +995,18 @@ const PantryPage: React.FC = () => {
 				}
 			>
 				<div className="space-y-4">
-					<Input
-						type="file"
-						accept="image/*"
-						onChange={(event) => {
-							const file = event.target.files?.[0] ?? null;
-							setSelectedImage(file);
-							setDetectedIngredients([]);
-						}}
-					/>
+					<div>
+						<Input
+							type="file"
+							accept="image/*"
+							onChange={(event) => {
+								const file = event.target.files?.[0] ?? null;
+								setSelectedImage(file);
+								setDetectedIngredients([]);
+							}}
+						/>
+						<div className="text-xs text-slate-500 mt-2">Format: JPG or PNG (MAX: 1MB)</div>
+					</div>
 					{detectedIngredients.length > 0 ? (
 						<Form
 							form={detectedIngredientsForm}
