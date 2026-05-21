@@ -108,6 +108,7 @@ const MealPlanPage: React.FC = () => {
 			const end = dayjs().endOf("month").format("YYYY-MM-DD");
 			await api.post(`/meal-plans/sync-shopping-list?startDate=${start}&endDate=${end}`, {});
 			message.success("Missing ingredients added to shopping list!");
+			fetchAllData();
 		} catch {
 			message.error("Failed to sync with shopping list");
 		} finally {
