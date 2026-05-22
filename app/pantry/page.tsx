@@ -531,6 +531,13 @@ const PantryPage: React.FC = () => {
 			return;
 		}
 		fetchPantry(true);
+
+		// Polling for real-time updates
+		const interval = setInterval(() => {
+			fetchPantry(false);
+		}, 5000);
+
+		return () => clearInterval(interval);
 	}, [fetchPantry, hasGroup]);
 
 	useEffect(() => {
