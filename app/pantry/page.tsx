@@ -406,9 +406,9 @@ const PantryPage: React.FC = () => {
 	const [isEditOpen, setIsEditOpen] = useState(false);
 	const [isDetectOpen, setIsDetectOpen] = useState(false);
 	const [selectedImage, setSelectedImage] = useState<File | null>(null);
-	const [detectedIngredients, setDetectedIngredients] = useState<AutoDetectedIngredientGetDTO[]>(
-		[],
-	);
+	const [detectedIngredients, setDetectedIngredients] = useState<
+		DetectedIngredientFormIngredient[]
+	>([]);
 	const [isDetecting, setIsDetecting] = useState(false);
 	const [isAddingDetected, setIsAddingDetected] = useState(false);
 	const [pantryCheckedIds, setPantryCheckedIds] = useState<number[]>([]);
@@ -753,7 +753,11 @@ const PantryPage: React.FC = () => {
 				"/shoppings-list/auto-detect",
 				formData,
 			);
-			setDetectedIngredients(detected ?? []);
+			const normalizedDetectedIngredients = normalizeDetectedIngredients(
+				detected ?? [],
+				ingredients,
+			);
+			setDetectedIngredients(normalizedDetectedIngredients);
 			if (!detected?.length) {
 				notification.info({
 					message: "No Ingredients Detected",
@@ -895,15 +899,17 @@ const PantryPage: React.FC = () => {
 				</span>
 			),
 		},
-	{
-		title: "Category",
-		key: "category",
-		render: (_, record) => (
-			<span className={pantryCheckedIds.includes(record.id) ? "line-through text-slate-400" : ""}>
-				{record.category ? `${getCategoryEmoji(record.category)} ${formatCategoryName(record.category)}` : "-"}
-			</span>
-		),
-	},
+		{
+			title: "Category",
+			key: "category",
+			render: (_, record) => (
+				<span className={pantryCheckedIds.includes(record.id) ? "line-through text-slate-400" : ""}>
+					{record.category
+						? `${getCategoryEmoji(record.category)} ${formatCategoryName(record.category)}`
+						: "-"}
+				</span>
+			),
+		},
 		{
 			title: "Actions",
 			key: "actions",
@@ -1172,7 +1178,11 @@ const PantryPage: React.FC = () => {
 			</Modal>
 
 			<Modal
-				title={selectedItem?.ingredientName ? `Edit Quantity - ${selectedItem.ingredientName}` : "Edit Quantity"}
+				title={
+					selectedItem?.ingredientName
+						? `Edit Quantity - ${selectedItem.ingredientName}`
+						: "Edit Quantity"
+				}
 				open={isEditOpen}
 				onCancel={() => setIsEditOpen(false)}
 				footer={[
@@ -1195,38 +1205,39 @@ const PantryPage: React.FC = () => {
 						<div className="text-center">
 							<div className="text-sm text-slate-500 mb-2">Current Quantity</div>
 							<div className="text-3xl font-bold text-primary-600">
-								{selectedItem.quantity} {unitOptions.find((opt) => opt.value === selectedItem.unit)?.label}
+								{selectedItem.quantity}{" "}
+								{unitOptions.find((opt) => opt.value === selectedItem.unit)?.label}
 							</div>
 						</div>
-					<div className="flex items-center gap-4">
-						<Button
-							size="middle"
-							className="pm-button !h-10 !w-10 !min-w-10 !p-0"
-							onClick={() => handleQuantityChange(selectedItem.quantity - 1)}
-							disabled={selectedItem.quantity <= 0.1}
-						>
-							−
-						</Button>
-						<div className="w-24 text-center">
-							<InputNumber
-								className="w-full text-center"
-								size="large"
-								value={selectedItem.quantity}
-								onChange={(value) => handleQuantityChange(value ?? 0.1)}
-								min={0.1}
-								step={0.1}
-								precision={1}
-								controls={false}
-							/>
+						<div className="flex items-center gap-4">
+							<Button
+								size="middle"
+								className="pm-button !h-10 !w-10 !min-w-10 !p-0"
+								onClick={() => handleQuantityChange(selectedItem.quantity - 1)}
+								disabled={selectedItem.quantity <= 0.1}
+							>
+								−
+							</Button>
+							<div className="w-24 text-center">
+								<InputNumber
+									className="w-full text-center"
+									size="large"
+									value={selectedItem.quantity}
+									onChange={(value) => handleQuantityChange(value ?? 0.1)}
+									min={0.1}
+									step={0.1}
+									precision={1}
+									controls={false}
+								/>
+							</div>
+							<Button
+								size="middle"
+								className="pm-button !h-10 !w-10 !min-w-10 !p-0"
+								onClick={() => handleQuantityChange(selectedItem.quantity + 1)}
+							>
+								+
+							</Button>
 						</div>
-						<Button
-							size="middle"
-							className="pm-button !h-10 !w-10 !min-w-10 !p-0"
-							onClick={() => handleQuantityChange(selectedItem.quantity + 1)}
-						>
-							+
-						</Button>
-					</div>
 					</div>
 				)}
 			</Modal>

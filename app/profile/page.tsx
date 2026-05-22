@@ -5,7 +5,7 @@ import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import { Button, Input } from "antd";
 import { useRouter } from "next/navigation";
-import { EditOutlined, SaveOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { EditOutlined, SaveOutlined, CloseCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import PageHeader from "@/components/page-header";
 
 const ProfilePage: React.FC = () => {
@@ -110,7 +110,7 @@ const ProfilePage: React.FC = () => {
 								) : (
 									<>
 										<Button className={"flex-1 pm-button-primary"} onClick={handleOpenEdit}>
-											<EditOutlined />
+											<InfoCircleOutlined />
 											Edit Profile
 										</Button>
 										<Button
@@ -118,7 +118,7 @@ const ProfilePage: React.FC = () => {
 											onClick={() => router.push("/profile/ingredients")}
 										>
 											<EditOutlined />
-											Edit Ingredients
+											Show your Ingredients
 										</Button>
 									</>
 								)}
