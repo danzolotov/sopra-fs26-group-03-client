@@ -5,18 +5,20 @@ PlateMate is the Next.js & React frontend client for the PlateMate application, 
 ---
 
 ## 📖 Introduction
-This repository contains the mobile-friendly web interface for PlateMate. It provides household members with a responsive and collaborative dashboard to:
-- Coordinate meals dynamically.
-- View and update the shared pantry in real-time.
-- Check items off the joint shopping list while shopping.
-- Scan physical, handwritten grocery lists and instantly digitize them.
+PlateMate is a collaborative web application designed for shared households to organize grocery shopping, recipe management, and meal planning. The main goal is to simplify recipe organization, shopping lists, and pantry inventories while improving coordination among household members.
+
+### Core Features
+- **Collaborative Household Spaces**: Household members share a real-time collaborative workspace with synchronized access to recipes, pantry items, and shopping lists to coordinate shopping and prevent duplicate purchases.
+- **Pantry & Shopping List Sync**: Maintain a live pantry inventory of available ingredients. Items marked as purchased on the shared shopping list are automatically transferred to the pantry.
+- **Recipe & Meal Planning**: Browse a preset collection of recipes and schedule them on the meal planner. Required ingredients for planned recipes can be automatically added to the shopping list.
+- **Handwritten List Recognition**: Supports handwritten list recognition using external APIs integrated directly within the Pantry management section, allowing users to digitize paper lists and transfer them to the pantry in one step.
 
 ---
 
 ## 🛠️ Technologies Used
 - **Framework**: Next.js (App Router)
 - **UI Library**: React, Ant Design (component framework)
-- **Styling**: TailwindCSS (responsive layouts), Vanilla CSS
+- **Styling**: TailwindCSS, Vanilla CSS
 - **Programming Language**: TypeScript
 - **Quality & Linting**: ESLint, Prettier
 - **Network Client**: Fetch API with custom request wrappers
@@ -76,23 +78,43 @@ Create a `.env.local` file in the root directory (if required) to set the backen
 ---
 
 ## 📱 Illustrations: Core User Flows
-1. **Household Onboarding**: Upon first login, users are greeted with the `GroupRequired` screen. They can input a group token to join a flat/family space, or generate a new group to invite members.
-2. **Pantry Scan & Management**: Users scan physical lists using their phone camera. The scanned list is parsed, and detected items are previewed for confirmation before being saved to the pantry.
-3. **Meal Planning to Shopping List Sync**: Members schedule meals on the calendar. If ingredients are missing, they appear in the "Outstanding Ingredients" sidebar. Clicking "Add to Shopping List" appends them to the shopping list.
-4. **Real-Time Group Shopping**: Users check off items at the grocery store. The checked-off items disappear from the shopping list and are instantly added to the pantry. Polling updates this in real-time for all household members.
+
+### Dashboard Summary
+The central landing page showing today's meals and shopping summary.
+![Dashboard](screenshots/dashboard.png)
+
+### 1. Household Onboarding
+Upon first login, users are greeted with the `GroupRequired` screen. They can input a group token to join a flat/family space, or generate a new group to invite members.
+![Household Onboarding](screenshots/gating_screen.png)
+
+### 2. Pantry Management
+Users can view and update their shared pantry items. They can also scan physical lists using their phone camera (digitized instantly via OCR) or input manually with autocomplete.
+![Pantry Manual Input](screenshots/pantry_manual.png)
+
+### 3. Meal Planning to Shopping List Sync
+Members schedule meals on the calendar. If ingredients are missing, they appear in the "Outstanding Ingredients" sidebar. Clicking "Add to Shopping List" appends them to the shopping list.
+![Meal Planning Calendar](screenshots/meal_planning.png)
+
+### 4. Real-Time Group Shopping
+Users check off items at the grocery store. The checked-off items disappear from the shopping list and are instantly added to the pantry. Polling updates this in real-time for all household members.
+![Real-Time Group Shopping List](screenshots/shopping_list.png)
+
+### 5. Recipe Discovery
+Find and save delicious recipes to cook.
+![Recipes Page](screenshots/recipes.png)
 
 ---
 
 ## 🗺️ Roadmap
 - **Real-Time Meal Voting**: A voting system in the planning page to let group members vote on what they want to eat.
 - **AI Pantry Recipe Suggestions**: Recommend recipes to prepare based on what is close to expiring in the pantry.
-- **Expense tracker**: Integrate split-bill functionality to track grocery shopping expenses across roommates.
+- **Adding and Editing Recipes**: Allow users to manually create, update, or customize recipe details directly from the user interface.
+- **Auto-Deduct Pantry Stock**: Automatically cross off and deduct ingredients from the pantry inventory when a scheduled recipe is marked as cooked.
 
 ---
 
 ## 👥 Authors & Acknowledgments
 - **Marc Honegger** & **Karina Litvinova**
-- Former Teammates: *Dan Zolotov, Ceyda B. Dag & Kishore Sivapathasundaram*
 
 ---
 
